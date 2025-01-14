@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!--AstroStatistics Home page-->
+  <title>Censoring: Planet host stars dataset</title>
+<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html;">
+  <meta name="keywords"
+ content="Center for Astrostatistics, CASt,
+Statcodes, SCMA, VoStat">
+  <link href="../cast.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: rgb(255, 248, 229);" leftmargin="0"
+ topmargin="0">
+<!--body style="background-color: #FFF8E5"-->
+<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+ href="http://www.stat.psu.edu" title=""
+ style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
+ vspace="0"> <map name="Map">
+<area shape="rect" coords="3,12,126,98" href="http://www.psu.edu"
+ target="_blank" alt="Penn State University">
+<area shape="rect" coords="360,0,508,17"
+ href="http://www.science.psu.edu" alt="Eberly College of Science">
+<area shape="rect" coords="508,0,700,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+<area shape="rect" coords="127,18,508,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+</map>
+</p>
+<!-- InstanceBeginEditable name="head" -->
+<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
+| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
+| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
+ href="../statcodes/index.html">StatCodes</a> | <a
+ href="index.html">Data &amp; Tutorials</a> | <a
+ href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
+&nbsp;<!--/font--> </p>
+<p><img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
+<!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
+<table border="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">&nbsp; </td>
+      <td>
+      <h2 style="text-align: center;">Censoring: Planet host stars<br>
+      </h2>
+      <h3>The CASt dataset</h3>
+      <a
+ href="censor.dat"
+ target="_blank">censor.dat</a><br>
+      <br>
+      <p><span style="font-weight: bold;">Astronomical background
+      </span></p>
+      <p>The following is a common situation in observational
+astronomy.  A previously identified sample of objects (stars,
+galaxies, quasars, X-ray sources, etc.) are observed at some new
+wavelength or for some new property.&nbsp; Some of the target objects
+are detected and the value of the new property is measured (with a
+known measurement error), while others are not detected.&nbsp; These
+are assigned an upper limit to the value of the property based on the
+uncertainty of the unsuccessful measurement.&nbsp;&nbsp; The result is
+new column in a multivariate database where the rows represent the
+objects and the columns represent values of various properties.&nbsp;
+The new column has measured values with errors, and upper limits.&nbsp;
+Statisticians call these "left-censored" data points.&nbsp; Many
+astronomical studies encounter such problems, particularly in
+extragalactic astronomy.
+      </p>
+      <p>A large suite of statistical methods have been developed to
+treat right-censored datasets because these frequently arise in
+"survival" studies; that is, examination of how long a population
+"lives" under various situations when the experiment is stopped before
+all members of the population have "died".&nbsp; This situation arises
+in actuarial (where the objects are ordinary people), industrial
+reliability (where the objects are often manufactured products), and
+biomedical studies (where the objects are usually ill people or test
+animal samples).  During the 1980-90s, survival analysis methods
+were adapted for use in astronomical surveys with nondetections.&nbsp;
+The <a href="http://astrostatistics.psu.edu/statcodes/sc_censor.html">ASURV</a>
+code, used in several hundred astronomical studies to date, implements
+a number of survival methods: the Kaplan-Meier univariate maximum
+likelihood estimator; Gehan and other two-sample tests; generalized
+rank correlation coefficients for bivariate problems; and bivariate
+linear regressions.  
+      </p>
+      <p>Astronomical censoring problems often differ from those
+encountered in ordinary survival applications is various ways:
+censoring is not restricted to a single dependent variable but can
+occur anywhere in the multivariate dataset; a point can be
+simultaneously censored in several properties; distance-dependent
+censoring produce non-random censoring patterns; detected points have
+heteroscedastic measurement errors; the censored values are imprecise
+because they are based on the measurement errors.  Despite these
+problems, survival methods are often used because they overcome much of
+the bias due to nondetections. 
+      </p>
+      <p><span style="font-weight: bold;">Dataset</span></p>
+      <p>Here we present a censored dataset from stellar astronomy
+where the authors seek differences in the properties of stars that do
+and do not host extrasolar planetary systems.&nbsp; It had already been
+established that the probability of finding a planet is a steeply
+rising function of the star's metal content, but it was unclear whether
+this arises from the metallicity at birth or from later accretion of
+planetary bodies.&nbsp; This study focuses on the abundances of the
+light elements beryllium (Be) and lithium (Li) that are thought to be
+depleted by internal stellar burning, so that excess Be and Li should
+be present only in the planet accretion scenario of metal
+enrichment. </p>
+      <p>The dataset and figures below are obtained
+from the following paper:
+<ul> Are beryllium abundances anomalous in stars with
+giant planets?  N. C. Santos, G. Israelian, R. J. Garc&iacute;a
+L&oacute;pez, M. Mayor, R. Rebolo, S. Randich, A. Ecuvillon, and C. Dom&iacute;nguez
+Cerde&ntilde;a; Astronomy &amp; Astrophysics, 437, 1086-1096 (2004)</ul>
+      </p>
+      <p> The columns of the dataset are: 
+      </p>
+      <ol>
+         <li>Star name</li>
+        <li>Sample.&nbsp; Type=1 indicates planet-hosting stars.&nbsp;
+Type=2 is the control sample</li>
+        <li>T<sub>eff</sub> (in degrees Kelvin) stellar surface
+temperature</li>
+        <li>log N(Be), log of the abundance of beryllium scaled to the
+Sun's abundance (i.e. the Sun has log N(Be)=0.0).</li>
+        <li>Measurement error to log N(Be) based on model-fitting of
+the observed stellar spectrum</li>
+        <li>log N(Li), log of the abundance of lithium scaled to the
+Sun's abundance<br>
+        </li>
+      </ol>
+      <p>The dataset consists of 39 stars known to host planets
+(plotted as
+filled circles) and 29 stars in a control sample (open circles).&nbsp;
+Due to internal stellar processes, Be abundances are correlated with
+stellar mass which is traced by stellar surface temperature ("effective
+temperature" or T<sub>eff</sub>).&nbsp; Regression lines of the
+detections only
+(top panel) show a slight elevation in Be abundance for planet hosting
+stars, but this difference evaporates when a Buckley-James regression
+line is considered that includes the effects of censoring (bottom
+panel).&nbsp; </p>
+      <p style="text-align: center;"><img alt="Berrylium vs. Teff"
+ src="Santos_Fig6.gif" style="width: 561px; height: 547px;"> 
+      </p>
+      <p>The scatter plot below shows that Be and Li abundances are
+interdependent in a complicated fashion, but little difference is seen
+between the planet-hosting and control samples. 
+      </p>
+      <p style="text-align: center;"><img alt="Beryllium vs. lithium"
+ src="Santos_Fig9.gif" style="width: 540px; height: 526px;"><br>
+      </p>
+      <p><span style="font-weight: bold;">Statistical exercises
+      </span></p>
+      <ul>
+        <li>Use standard univariate survival analysis methods to
+onstruct Kaplan-Meier distributions of Be and Li abundances for the
+planet-hosting and control samples. Find means and medians, and
+apply two-sample tests for differences.  
+        </li>
+        <li>Perform the same but with heteroscedastic weighting for the
+Be abundances. 
+        </li>
+        <li>Apply bivariate correlation tests and linear regressions to
+the Be-vs-Li plots shown above.  Note that ASURV implements the
+Brown, Hollander &amp; Korwar generalized Kendall's tau that permits
+censoring in both variables.  
+        </li>
+        <li>Extend bivariate survival methods to the multivariate
+case.&nbsp; See the Akritas &amp; Siebert trivariate <a
+ href="http://astrostatistics.psu.edu/statcodes/sc_censor.html">partial
+correlation coefficient</a> for multiply censored data based on
+Kendall's tau.  
+        </li>
+      </ul>
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- InstanceEndEditable --><!-- InstanceEnd --><br>
+<img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><br>
+<table style="width: 700px; text-align: left;" border="0"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: top;"><a
+ href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
+ href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ alt="Department of Statistics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
+ href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
+ src="../eberlycol.gif"
+ style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
+ href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ alt="Department of Astronomy and Astrophysics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
+    </tr>
+  </tbody>
+</table>
+<div style="text-align: left;"> </div>
+</body>
+</html>

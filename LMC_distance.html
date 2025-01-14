@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!--AstroStatistics Home page-->
+  <title>CASt: Distance to the Large Magellanic Cloud</title>
+<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html;">
+  <meta name="keywords"
+ content="Center for Astrostatistics, CASt, 
+    Statcodes, SCMA, VoStat">
+  <link href="../cast.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: rgb(255, 248, 229);" leftmargin="0"
+ topmargin="0">
+<!--body style="background-color: #FFF8E5"-->
+<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+ href="http://www.stat.psu.edu" title=""
+ style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
+ vspace="0"> <map name="Map">
+<area shape="rect" coords="3,12,126,98" href="http://www.psu.edu"
+ target="_blank" alt="Penn State University">
+<area shape="rect" coords="360,0,508,17"
+ href="http://www.science.psu.edu" alt="Eberly College of Science">
+<area shape="rect" coords="508,0,700,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+<area shape="rect" coords="127,18,508,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+</map>
+</p>
+<!-- InstanceBeginEditable name="head" -->
+<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
+| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
+| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
+ href="../statcodes/index.html">StatCodes</a> | <a
+ href="index.html">Data &amp; Tutorials</a> | <a
+ href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
+&nbsp;<!--/font--> </p>
+<p><img src="rainbow.gif" border="0" height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
+<!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
+<table border="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">&nbsp; </td>
+      <td>
+      <h2 style="text-align: center;">Distance to the LMC datasets</h2>
+      <h3>The CASt dataset</h3>
+      <a href="LMC_distance.dat" target="_blank">LMC_distance.dat</a><br>
+      <br>
+      <p><span style="font-weight: bold;">Astronomical background
+      </span></p>
+      <p>While it is easy to find the position of astronomical objects
+in the sky (giving two dimensions of their spatial location), it is
+usually very difficult to find their distance (the third
+dimension).&nbsp; Throughout the 20th century, a complicated "cosmic
+distance ladder" was developed.&nbsp; Starting from the nearest objects
+for which distances could be reliably determined, calibrations for
+various classes of luminous objects which serve as "standard candles"
+were established.&nbsp; A complicated combination of these distance
+indicators are applied, each with its own statistical and systematic
+uncertainties.&nbsp; Many fundamental results depend on the cosmic
+distance ladder: the luminosity of stars, the size of our Milky Way
+Galaxy, the expansion rate of the Universe and thus the age of the
+Universe, and much more.&nbsp; By the year 2000, most discrepancies in
+the cosmic distances had been ironed out, and a consensus distance
+scale emerged.&nbsp; However, uncertainties around 5-20% are still
+commonly present and systematic discrepancies remain between some
+methods. 
+      </p>
+      <p>One crucial rung of the cosmic distance ladder is the distance
+to the Large Magellanic Cloud (LMC), the nearest galaxy with a
+significant stellar population.&nbsp; It thus serves as a bridge
+between the scale within our Galaxy to the extragalactic
+distances.  Errors or uncertainties in the LMC distance propagates
+throughout all of extragalactic astronomy.  Thus, a huge effort
+has been made to establish the distance to the LMC.&nbsp; Methods used
+include: Cepheid,  RR Lyrae and Mira variable stars (three types
+of pulsating red giant stars), eclipsing binary stars, horizontal
+branch and red clumpgiant stars, white dwarf stars, and the unique
+supernova of 1987.  The agreement between these methods are
+reasonably satisfactory today.  The figure below, and the
+accompanying dataset give an mean distance modulus of DM = 18.515
+&Acirc;&plusmn;
+0.085 mag (Clementini et al. 2003).&nbsp; Similar contemporaneous
+meta-analyses give DM = 18.52 +/- 0.10 (Walker 2003), 18.55 +/- 0.06
+(Fouque et al., 2003) and 18.48 +/- 0.04 (Feast 2003, all in "Stellar
+Candles for the Extragalactic Distance Scale", Lect Notes in Physics
+vol 635). 
+      </p>
+      <p style="text-align: center;"><img
+ alt="LMC distance (Clementini et al. 2003)" src="LMC_distance.gif"
+ style="width: 600px; height: 637px;"><br>
+      </p>
+     <p> <span style="font-weight: bold;">Dataset</span></p>
+      <p>Statistically, this is a univariate dataset consistent of
+repeated measurements of a single, unchanging physical quantity.&nbsp;
+The quantity is known as the Distance Modulum (DM) with units of
+magnitudes.&nbsp; It can be converted to linear distance in parsecs (1
+parsec ~ 3x10<sup>13</sup> kilometers)&nbsp; with the formula </p>
+      
+      <div style="text-align: center;">DM =
+5*log(Distance) - 5.
+      </div>
+      <p>The distance to the LMC is thus about 50 kiloparsecs, with an
+uncertainty of 5-10%.&nbsp; Each DM measurement is accompanied by an
+individual measurement error; these are heteroscedastic measurement
+errors of diverse origins. 
+      </p>
+      <p>The dataset has 25 rows and the following
+4 columns:</p>   
+      <ol>
+        <li>Distance measurement method</li>
+        <li>DM (in magnitudes)</li>
+        <li>Error in DM (in magnitudes).  This is the estimated
+standard deviation of that measurement assuming Gaussian errors.</li>
+        <li>Astronomical reference for that measurement</li>
+      </ol>
+<p>The dataset was obtained from the paper "Distance
+to the Large
+Magellanic Cloud: The RR Lyrae Stars" by Gisella Clementini, Raffaele
+Gratton, Angela Bragaglia, Eugenio Carretta, Luca Di Fabrizio, and
+Marcella Maio, Astronomical Journal 125, 1309-1329 (2003). </p>
+      <p> <span style="font-weight: bold;">Statistical exercises</span>
+      </p>
+      <ul>
+        <li>Use the DM values to exercise simple parametric
+and nonparametric measures of location and spread.&nbsp; Any method
+that can improve the accuracy and precision of the distance to the LMC
+is scientifically valuable.&nbsp; <br>
+        </li>
+        <li>Use the DM values in the top (Population I distance
+indicators) and bottom (Pop II) portions of the table to exercise
+simple parametric and nonparametric two sample tests.</li>
+        <li>Do the same weighting by the heteroscedastic measurement
+errors in DM.&nbsp;&nbsp; This is not always trivial (e.g. weighted two
+samples tests).</li>
+        <li>Compare the spread in DM values with the
+measurement errors (e.g. using the chi-squared statistic) to evaluate
+whether the errors seem reasonable, or to establish whether some
+measurements are unreliable outliers.&nbsp; <br>
+        </li>
+      </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<img src="../rainbow.gif" border="0" height="4" vspace="2" width="700"><br>
+<table style="width: 700px; text-align: left;" border="0"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: top;"><a
+ href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
+ href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ alt="Department of Statistics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
+ href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
+ src="../eberlycol.gif"
+ style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
+ href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ alt="Department of Astronomy and Astrophysics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
+    </tr>
+  </tbody>
+</table>
+<div style="text-align: left;"> </div>
+</body>
+</html>

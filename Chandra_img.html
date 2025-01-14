@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!--AstroStatistics Home page-->
+  <title>CASt: Chandra Star Cluster dataset</title>
+<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html;">
+  <meta name="keywords"
+ content="Center for Astrostatistics, CASt, 
+    Statcodes, SCMA, VoStat">
+  <link href="../cast.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: rgb(255, 248, 229);" leftmargin="0"
+ topmargin="0">
+<!--body style="background-color: #FFF8E5"-->
+<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+ href="http://www.stat.psu.edu" title=""
+ style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
+ vspace="0"> <map name="Map">
+<area shape="rect" coords="3,12,126,98" href="http://www.psu.edu"
+ target="_blank" alt="Penn State University">
+<area shape="rect" coords="360,0,508,17"
+ href="http://www.science.psu.edu" alt="Eberly College of Science">
+<area shape="rect" coords="508,0,700,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+<area shape="rect" coords="127,18,508,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+</map>
+</p>
+<!-- InstanceBeginEditable name="head" -->
+<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
+| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
+| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
+ href="../statcodes/index.html">StatCodes</a> | <a
+ href="index.html">Data &amp; Tutorials</a> | <a
+ href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
+&nbsp;<!--/font--> </p>
+<p><img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
+<!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
+<table border="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">&nbsp; </td>
+      <td>
+      <h2 style="text-align: center;">Chandra star cluster</h2>
+      <h3>The CASt datasets</h3>
+      <a href="Chandra_img1.dat" target="ImageView">Chandra_img1.dat</a><br>
+      <a href="Chandra_img2.dat" target="ImageView">Chandra_img2.dat</a><br>
+      <a href="Chandra_psf.dat" target="ImageView">Chandra_psf.dat</a><br>
+      <br>
+      <p><span style="font-weight: bold;">Astronomical background
+      </span></p>
+      <p>Some astronomical images are greyscale with (quasi)Gaussian
+statistics.&nbsp; This is typical of visible light and radio
+images.&nbsp; However,instruments observing at high energy X-ray and
+gamma-ray wavelengths typically detect individual photons, producing
+images showing individual photons with Poisson statistics.&nbsp; The
+original datasets are often lists of photon events, and most of the
+pixels in the resulting images have zero or one photon.&nbsp; Many of
+the 1-photon pixels are due to a non-astronomical background, often due
+to cosmic rays hitting the detector.&nbsp; Source detection must thus
+be based on Poisson statistics and, if the background is low, sources
+might be detected with only a handful of photons.   
+      </p>
+      <p>An additional problem in astronomical image analysis is that
+the optics are imperfect.&nbsp; This is particularly true at high
+energies where focusing optics are difficult or impossible to
+construct.&nbsp; The optical performance of a telescope-detector system
+is often summarized by a "point spread function" (PSF), the
+hypothetical appearance of an unresolved astronomical source with
+infinite signal and no background.&nbsp; If the observed field has
+closely-spaced multiple point sources , or structured diffuse emission,
+then image deconvolution using the known PSF is performed to recover an
+improved view of the true sky distribution of light. <br><br>
+       </p>
+      <p><span style="font-weight: bold;">Dataset</span></p>
+      <p>NASA's Chandra X-ray Observatory, launched in 1999, has the
+best-focussing mirror and its Advanced CCD Imaging Spectrometer (ACIS)
+is a very low-noise detector.&nbsp; Chandra thus detects extremely
+faint X-ray sources and can image complex X-ray structures in great
+detail.&nbsp; However, Chandra presents several statistical challenges
+for faint source detection and image deconvolution.<br>
+      </p>
+      <p>The datasets provide here are off-axis portions of a Chandra
+image of the crowded star cluster NGC 6618 which illuminates the bright
+HII region Messier 17.  This cluster is extremely young and is
+studied to help understand the processes of star formation and early
+stellar evolution.  These figures are obtained from a forthcoming
+paper by P. Broos et al. (2006).  We show three images here: 
+      </p>
+      <ol>
+        <li>The entire ACIS field which is about
+17'x17'
+in extent (about half the size of the full Moon).  The shaded area
+shows the portion of the image discussed here.  This is the
+M17-North region with a cluster of protostars embedded deep in the host
+molecular cloud. <br>
+          <img alt="Chandra M17 image" src="Chandra_M17img.jpg"
+ style="width: 522px; height: 469px;"></li>
+        <li>The result of the source detection the
+polygons show the PSFs of the detected sources; note that the PSFs of
+the Chandra mirror are large and distorted far off-axis.  The
+source detection is based on a wavelet decomposition of the image
+(Freeman et al., ApJ Suppl 138, 185 2002) and based on procedures
+implemented in the ACIS Extract and CIAO software packages described in
+Townsley et al. (ApJ 593, 874 2003).  <img
+ alt="Chandra M17 sources" src="Chandra_M17src.jpg"
+ style="width: 512px; height: 487px;"><br>
+        </li>
+        <li>An expanded view of the subimage 
+regions considered here. &nbsp; The pink boxes show the 128x128 pixel
+regions with 1"/pixel (1" = 1 arcsecond).  Chandra_img1.dat
+gives the upper left region and Chandra_img2.dat gives the lower right
+region.&nbsp; The PSF is given in the Chandra_PSF.dat file
+at this location with the same 1"/pixel resolution.  It is given
+as a 17x17 pixel array but can be padded
+with zeros as needed. <br>
+          <img alt="Chandra M17 subimages" src="Chandra_M17subimg.jpg"
+ style="width: 590px; height: 588px;"> </li>
+      </ol>
+      <p><span style="font-weight: bold;">Statistical exercises<br>
+      </span>
+      <ul>
+        <li>Recover the sources found using ACIS Extract</li>
+        <li>Estimate the counts in each source, with confidence
+intervals</li>
+        <li>Deconvolve Chandra_img1.dat with the PSF to reconstruct a
+higher resolution image of the sky.<br>
+        </li>
+      </ul>
+<br>
+      <span
+ style="font-style: italic;">This dataset was generously
+provided by Patrick Broos (Penn State University).</span><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><br>
+<table style="width: 700px; text-align: left;" border="0"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: top;"><a
+ href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
+ href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ alt="Department of Statistics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
+ href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
+ src="../eberlycol.gif"
+ style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
+ href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ alt="Department of Astronomy and Astrophysics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div style="text-align: left;"> </div>
+</body>
+</html>

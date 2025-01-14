@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!--AstroStatistics Home page-->
+  <title>CASt: Exoplanets dataset</title>
+<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html;">
+  <meta name="keywords"
+ content="Center for Astrostatistics, CASt, 
+    Statcodes, SCMA, VoStat">
+  <link href="../cast.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: rgb(255, 248, 229);" leftmargin="0"
+ topmargin="0">
+<!--body style="background-color: #FFF8E5"-->
+<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+ href="http://www.stat.psu.edu" title=""
+ style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
+ vspace="0"> <map name="Map">
+<area shape="rect" coords="3,12,126,98" href="http://www.psu.edu"
+ target="_blank" alt="Penn State University">
+<area shape="rect" coords="360,0,508,17"
+ href="http://www.science.psu.edu" alt="Eberly College of Science">
+<area shape="rect" coords="508,0,700,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+<area shape="rect" coords="127,18,508,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+</map>
+</p>
+<!-- InstanceBeginEditable name="head" -->
+<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
+| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
+| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
+ href="../statcodes/index.html">StatCodes</a> | <a
+ href="index.html">Data &amp; Tutorials</a> | <a
+ href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
+&nbsp;<!--/font--> </p>
+<p><img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
+<!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
+<table border="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">&nbsp; </td>
+      <td>
+      <h2 style="text-align: center;">Extrasolar planet radial
+velocities<br>
+      </h2>
+      <h3>The CASt dataset</h3>
+      <a href="exoplanet_RV.dat" target="_blank">exoplanet_RV.dat</a><br>
+      <br>
+   <p><span style="font-weight: bold;">Astronomical background</span><br>
+      <p>Until 1995, astronomers had direct
+evidence for only one planetary system orbiting a normal star, our
+Solar System.  Protostars were known to have dusty protoplanetary
+disks consistent with the formation mechanism developed for
+our Solar System, but the planets themselves were elusive because they
+are so small and faint.  However, extremely accurate (parts in a
+million) spectroscopy of bright, nearby solar-type stars have recently
+revealed small periodic Doppler (radial velocity) shifts indicating the
+star is wobbling back-and-forth as some unseen object orbits.&nbsp; The
+first case was the wobble of 51 Pegasi reported by Swiss astronomers
+Michel Mayor and Didier Queloz. &nbsp; Knowing the period and velocity
+amplitude of the wobble, and the mass of the primary star, standard
+theory based on Newton's laws are applied to infer the mass and orbit
+of the orbiting object.  Typical inferred masses are around the
+mass of Jupiter --  thus the discovery of exoplanets has
+emerged.</p>
+      <p>Today (mid-2006), nearly
+200 planets have been found around nearby stars, most found using the
+Doppler wobble method.&nbsp; An updated list with inferrred properties
+is provided by <a href="http://exoplanet.eu">The Extrasolar Planets
+Encyclopaedia</a>.&nbsp; Masses range from 0.02 to 15 Jupiters, orbital
+periods range from 1 day to a decade,&nbsp; and eccentricities range
+from zero to 93%.&nbsp;&nbsp; The findings have opened up many new
+astrophysical investigations concerning the origin and evolution of
+planetary systems.&nbsp; Many observational programs are underway,
+including space-based observatories, to detect and characterize more
+exoplanets.</p>
+      <br>
+      <p><span style="font-weight: bold;">Datasets</span><br>
+      <p>The detection of a
+periodicity and estimation of orbital
+parameters from typical radial velocity datasets is statistically
+challenging.&nbsp; The observations are sparse, unevenly spaced, and
+with heteroscedastic measurement errors (of known variance).&nbsp; The
+periodic behavior is non-sinusoidal if the orbital eccentricity is
+non-zero.&nbsp; Methods considered include: simple Fourier analysis,
+the Lomb-Scargle periodogram for unevenly spaced data,
+maximum-likelihood estimation, and Bayesian inference.&nbsp; <br>
+      </p>
+       
+      <p>We give here three radial
+velocity datasets.&nbsp; The following table summarized the
+datasets.&nbsp; HD refers to the 19th century Henry Draper catalog of
+bright stars.&nbsp; Mass estimates assume an edge-on orbit (inclination
+90<sup>o</sup>). N gives the number of radial velocity
+measurements.&nbsp; Period (in days), Mass (in Jupiter masses) and
+Eccentricity give the published derived parameters from The Extrosolar
+Planets Encyclopaedia.&nbsp; Reference gives the discovery paper (see
+the Encyclopaedia for full references).&nbsp; The figure below show a
+periodogram for part of the HD 3651 data, and the radial velocities
+with best-fit orbital model folded with the P=62.23 day period.&nbsp; <br>
+      <br>
+      </p>
+       
+      <div style="text-align: center;">
+      <div style="text-align: center;">
+      </div>
+      <table style="text-align: left; width: 610px; height: 334px;"
+ border="1" cellpadding="2" cellspacing="2">
+        <tbody>
+          <tr>
+            <td style="vertical-align: top; text-align: center;">HD<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">N<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">Per<br>
+            </td>
+            <td style="vertical-align: top;">Mass<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">Ecc<br>
+            </td>
+            <td style="vertical-align: top; text-align: center;">Reference<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; text-align: center;">88133<br>
+            </td>
+            <td style="vertical-align: top; text-align: center;">17<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">3.41<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.22<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.11<br>
+            </td>
+            <td style="vertical-align: top;">Fischer et al. 2005, ApJ 620, 481-486<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; text-align: center;">37124<br>
+            </td>
+            <td style="vertical-align: top; text-align: center;">52<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">154.46<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.61<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.053<br>
+            </td>
+            <td style="vertical-align: top;">Vogt et al. 2005, ApJ 632, 638-658<br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">843.6<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.6<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.14<br>
+            </td>
+            <td style="vertical-align: top;"><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top;"><br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">2295<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.66<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.2<br>
+            </td>
+            <td style="vertical-align: top;"><br>
+            </td>
+          </tr>
+          <tr>
+            <td style="vertical-align: top; text-align: center;">3651<br>
+            </td>
+            <td style="vertical-align: top; text-align: center;">138<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">62.23<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.2<br>
+            </td>
+            <td style="vertical-align: top; text-align: right;">0.63<br>
+            </td>
+            <td style="vertical-align: top;">Fischer et al. 2003, ApJ 590, 1081-1087<br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+       <br>
+      <img alt="HD 3651 periodogram" src="HD3651_periodogram.gif"
+ style="width: 531px; height: 423px;"><br>
+      <br>
+      <img alt="HD 3651 radial velocities &amp; model" src="HD3651_RV.gif"
+ style="width: 542px; height: 385px;"><br>
+      </div>
+       
+      <p>The columns are:<br>
+      </p>
+       
+      <ol>
+         <li>Day of
+observation (in modified Julian days)</li>
+         <li>Radial velocity (RV, in meters/second,
+after
+heliocentric correction)</li>
+         <li>RV standard deviation (in meters/second). This is
+determined from detailed analysis of the spectrum from which the RV is
+measured.</li>
+        <li>For HD 4651, this column gives the observatory at which the
+observation was made<br>
+        </li>
+         
+      </ol>
+       <span
+ style="font-weight: bold;">Statistical exercises
+      </span> <br>
+      <ul>
+      </ul>
+      <ul>
+         <li>Recover the published
+periodicities in the datasets.&nbsp;
+Compare various methods.&nbsp; Estimate the reliability and confidence
+intervals for the periods and eccentricities. Evaluate an optimal
+observational strategy for improving the orbital determinations for
+each system.</li>
+        
+      </ul>
+      <span style="font-style: italic;">These
+datasets were generously provided by Eric Ford (University of Florida)
+for the
+Exoplanets Working Group of the 2006 SAMSI Astrostatistics Program. </span><br>
+      
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- InstanceEndEditable --><!-- InstanceEnd --><br>
+<img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><br>
+<table style="width: 700px; text-align: left;" border="0"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: top;"><a
+ href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
+ href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ alt="Department of Statistics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
+ href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
+ src="../eberlycol.gif"
+ style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
+ href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ alt="Department of Astronomy and Astrophysics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
+    </tr>
+  </tbody>
+</table>
+<div style="text-align: left;"> </div>
+</body>
+</html>

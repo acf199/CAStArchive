@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!--AstroStatistics Home page-->
+  <title>CASt: Shapley galaxy dataset</title>
+<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html;">
+  <meta name="keywords"
+ content="Center for Astrostatistics, CASt, 
+    Statcodes, SCMA, VoStat">
+  <link href="../cast.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: rgb(255, 248, 229);" leftmargin="0"
+ topmargin="0">
+<!--body style="background-color: #FFF8E5"-->
+<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+ href="http://www.stat.psu.edu" title=""
+ style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
+ vspace="0"> <map name="Map">
+<area shape="rect" coords="3,12,126,98" href="http://www.psu.edu"
+ target="_blank" alt="Penn State University">
+<area shape="rect" coords="360,0,508,17"
+ href="http://www.science.psu.edu" alt="Eberly College of Science">
+<area shape="rect" coords="508,0,700,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+<area shape="rect" coords="127,18,508,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+</map>
+</p>
+<!-- InstanceBeginEditable name="head" -->
+<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
+| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
+| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
+ href="../statcodes/index.html">StatCodes</a> | <a
+ href="index.html">Data &amp; Tutorials</a> | <a
+ href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
+&nbsp;<!--/font--> </p>
+<p><img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
+<!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
+<table border="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">&nbsp; </td>
+      <td>
+      <h2 style="text-align: center;">Shapley galaxy dataset</h2>
+      <h3>The CASt dataset</h3>
+      <a href="Shapley_galaxy.dat" target="_blank">Shapley_galaxy.dat</a>
+      <br>
+      <p><span style="font-weight: bold;">Astronomical background 
+      </span></p>
+      <p>The distribution of galaxies in space is strongly
+clustered.  The Milky Way Galaxy resides in its Local Group which
+lies on the outskirts of the Virgo Cluster of galaxies, which in turn
+is part of the Local Supercluster.  Similar structures of galaxies
+are seen at greater distances, and collectively the phenomenon is known
+as the Large Scale Structure (LSS) of the Universe.  The
+clustering is hierarchical, nonlinear, and anisotropic.  The
+latter property is manifested as galaxies concentrating in huge
+flattened, curved superclusters surrounding "voids", resembling a
+collection of soap bubbles. </p>
+      <p>The basic characteristics of the LSS are now understood
+astrophysically
+as arising from the gravitational attraction of matter in the Universe
+expanding from the Big Bang ~14 billion years ago.&nbsp; The particular
+three-dimensional patterns are well-reproduced by simulations requiring
+that attractive Cold Dark Matter and repulsive Dark Energy are present
+in addition to attractive baryonic (ordinary) matter.&nbsp; The
+properties of baryonic and dark components needed to explain LSS agree
+very well with those needed to explain the fluctuations of the cosmic
+microwave background and other results from observational
+cosmology. </p>
+      <p>Despite this fundamental understanding, there is considerable
+interest
+in understanding the details of galaxy clustering; e.g. the processes
+of collision and merging of rich galaxy clusters.&nbsp; The richest
+nearby supercluster of interacting galaxy clusters is called the
+Shapley Concentration.  It includes several clusters from the
+Abell catalog of rich galaxy clusters seen in the optical band, and a
+complex and massive hot gaseous medium seen in the X-ray band.&nbsp;
+Optical measurement of galaxy redshifts provide crucial information but
+represent an uncertain convolution of the galaxy distance and
+gravitational effects of the clusters in which they reside.&nbsp; The
+distance effect comes from the universal expansion from the Big Bang,
+where the recessional velocity (galaxy redshift) follows Hubble's Law
+v=H<sub>o</sub>d, where v is the velocity in km/s, d is the galaxy
+distance from us in Mpc (million parsecs, 1 pc~3 light years), and H<sub>o</sub>
+is Hubble's constant known to be about 72 km/s/Mpc.  The cluster
+gravitational effects must be estimated or simulated for individual
+galaxies. </p>
+      <p><span style="font-weight: bold;">Dataset</span></p>
+      <p>Redshifts (i.e. velocities in km/s with respect to us) are now
+measured
+for 4215 galaxies in the Shapley Concentration regions (<a
+ href="http://arxiv.org/abs/astro-ph/0402362">Drinkwater et al. 2004</a>).&nbsp;
+Below shows a plot of the redshifts as a function of right ascension, a
+positional coordinate in the sky.<br>
+      </p>
+      <div style="text-align: center;"><img
+ alt="Cone diagram for Shapley Concentration of galaxies"
+ src="Shapley_galaxy.jpg" style="width: 532px; height: 443px;"> 
+      </div>
+      <p>The dataset has the following
+columns: </p>
+      <ol>
+        <li>R.A. = Right ascension: Coordinate in the
+sky similar to
+longitude on Earth, 0 to 360 degrees</li>
+        <li>Dec. = Declination: Coordinate in the sky similar to
+latitude on Earth, -90 to +90 degrees </li>
+        <li>Mag = Magnitude: An inverted logarithmic measure of
+galaxy
+brightness in the optical band.&nbsp; A Mag=17 galaxy is 100-times
+fainter than a Mag=12 galaxy.&nbsp; Value is missing for some galaxies.
+        </li>
+        <li>V = Velocity: Speed of the galaxy moving away from Earth,
+after
+various corrections are applied</li>
+        <li>SigV = Sigma of velocity: Heteroscedastic measurement
+error
+known for each individual velocity mesurement</li>
+      </ol>
+      <p><span style="font-weight: bold;">Statistical exercises
+      </span></p>
+      <ul>
+        <li>Apply and compare a variety of multivariate clustering
+algorithms
+to this dataset.  Astronomers often use single-linkage
+nonparametric hierarchical
+agglomeration which they call the `friends-of-friends algorithm'.</li>
+        <li>Examine the effects of non-standard metrics in the
+clustering
+calculation: spherical vs. Euclidean geometry, mass-weighted points
+(log-mass scales with log-luminosity which scales with -2.5*Mag)<br>
+        </li>
+        <li>Apply maximum likelihood mixture models assuming individual
+clusters are multivariate normals; examine penalized likelihoods like
+the Bayesian Information Criterions to choose the `best' model <br>
+        </li>
+        <li>Apply wavelet decomposition, with both standard and
+anisotropic
+bases (e.g. curvelets, ridgelets) to elucidate the hierarchical
+structure</li>
+        <li>Estimate the `void probabiliity distribution' or otherwise
+quantify the regions with low galaxy densities</li>
+        <li>Evaluate the `fingers of God' effect: a distortion in the
+velocity dispersion of the densest regions due in large part to the
+gravitational potential of the Dark Matter and intracluster gaseous
+medium.  
+        </li>
+      </ul>
+      <p style="font-style: italic;">This dataset was generously
+made
+available by Michael Drinkwater, University of Queensland. </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- InstanceEndEditable --><!-- InstanceEnd --><br>
+<img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><br>
+<table style="width: 700px; text-align: left;" border="0"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: top;"><a
+ href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
+ href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ alt="Department of Statistics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
+ href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
+ src="../eberlycol.gif"
+ style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
+ href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ alt="Department of Astronomy and Astrophysics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
+    </tr>
+  </tbody>
+</table>
+<div style="text-align: left;"> </div>
+</body>
+</html>

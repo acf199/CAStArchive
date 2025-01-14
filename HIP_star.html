@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!--AstroStatistics Home page-->
+  <title>CASt: Hipparcos dataset</title>
+<!-- InstanceEndEditable -->
+  <meta http-equiv="Content-Type" content="text/html;">
+  <meta name="keywords"
+ content="Center for Astrostatistics, CASt,
+    Statcodes, SCMA, VoStat">
+  <link href="../cast.css" rel="stylesheet" type="text/css">
+</head>
+<body style="background-color: rgb(255, 248, 229);" leftmargin="0"
+ topmargin="0">
+<!--body style="background-color: #FFF8E5"-->
+<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+ href="http://www.stat.psu.edu" title=""
+ style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
+ vspace="0"> <map name="Map">
+<area shape="rect" coords="3,12,126,98" href="http://www.psu.edu"
+ target="_blank" alt="Penn State University">
+<area shape="rect" coords="360,0,508,17"
+ href="http://www.science.psu.edu" alt="Eberly College of Science">
+<area shape="rect" coords="508,0,700,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+<area shape="rect" coords="127,18,508,98"
+ href="http://astrostatistics.psu.edu" alt="Center for Astrostatistics">
+</map>
+</p>
+<!-- InstanceBeginEditable name="head" -->
+<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
+| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
+| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
+ href="../statcodes/index.html">StatCodes</a> | <a
+ href="index.html">Data &amp; Tutorials</a> | <a
+ href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
+&nbsp;<!--/font--> </p>
+<p><img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
+<!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
+<table border="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td style="vertical-align: top;">&nbsp; </td>
+      <td>
+      <h2 style="text-align: center;">Hipparcos star dataset</h2>
+      <h3>The CASt dataset</h3>
+      <a href="HIP_star.dat" target="_blank">HIP_star.dat</a><br>
+      <br>
+      <p><span style="font-weight: bold;">Astronomical background
+      </span></p>
+<p>The key to understanding the properties and evolution of stars
+is the Hertzsprung-Russell diagram, first studied around 1910.&nbsp; It
+plots the luminosity of stars along the ordinate, and the color of
+stars along the abscissa.&nbsp; When a random selection of bright stars
+is plotted, one sees the "main sequence" of hydrogen-burning stars and
+the later "red giant" stars burning helium and other nuclei.&nbsp; The
+main sequence is most clearly seen when the stars in a coeval (= born
+together), codistant "open cluster" of stars are plotted.&nbsp; The
+nearest open cluster is the Hyades cluster and its HR diagram has been
+carefully studied for many years (e.g. <a
+href="http://www.journals.uchicago.edu/ApJ/journal/issues/ApJ/v504n1/37753/37753.pdf">Pinsonneault
+et al. 1998</a>).  </p>
+ 
+<p>The main difficulty in establishing the HR diagram for a sample of
+stars is determining their distances.&nbsp; For nearby stars, this can
+be done with extremely precise measurements of their positional motion
+every year as the Earth orbits the Sun.&nbsp; This is called the
+parallax.&nbsp; In the 1990s, the European Space Agency launched a
+satellite called Hipparcos that measured stellar parallaxes with more
+precision than previously achieved for ~100,000 stars.&nbsp; The
+Hipparcos catalog is thus often used for HR diagram studies. Bright
+Hyades members have a mean parallax of 22 mas in the Hipparcos database
+corresponding to a distance of 45 pc.&nbsp; A famous study of the
+Hyades cluster using Hipparcos data has been made by <a
+ href="http://aa.springer.de/papers/8331001/2300081.pdf">Perryman et
+al. (1998)</a>. </p>
+      <br>
+      <p><span style="font-weight: bold;">Dataset</span></p>
+<p>We have extracted a subset of 2719 Hipparcos stars which include many
+Hyades members with the selection criterion that the parallax lie
+between 20 and 25 mas (i.e. Hipparcos stars with distances 40-50
+pc).&nbsp; The extraction was made using the <a
+ href="http://vizier.u-strasbg.fr/viz-bin/VizieR?-source=I/239/hip_main">Vizier catalog</a>  service.&nbsp;
+The file was manually edited a bit to give a convenient format &amp;
+header resulting in the tab-separated ASCII file <a href="HIP_star.dat">HIP_star.dat</a>.&nbsp;
+      </p>
+      <p>This dataset has the following columns:<br>
+      <ol>
+        <li>HIP = Hipparcos star number</li>
+        <li>Vmag = Visual band magnitude.&nbsp; This is an
+inverted logarithmic measure of brightness&nbsp;</li>
+        <li>RA = Right Ascension (degrees), positional
+coordinate in the sky equivalent to longitude on the Earth</li>
+        <li>DE = Declination (degrees), positional coordinate in
+the sky equivalent to latitude on the Earth</li>
+        <li>Plx = Parallactic angle (mas = milliarcsseconds).&nbsp;
+1000/Plx gives the distance in parsecs (pc)</li>
+        <li>pmRA = Proper motion in RA (mas/yr).&nbsp; RA
+component of the motion of the star across the sky&nbsp;</li>
+        <li>pmDE = Proper motion in DE (mas/yr). DE component of
+the motion of the star across the sky</li>
+        <li>e_Plx = Measurement error in Plx (mas)</li>
+        <li>B-V = Color of star (mag)<br>
+        </li>
+      </ol>
+</p>
+<p>The HR diagram can be plotted by plotting logL vs. B-V where (roughly)
+the log-luminosity in units of solar luminosity is constructed logL=(15
+- Vmag - 5logPlx)/2.5.&nbsp; All logs are base-10.&nbsp; </p>
+      <div style="text-align: center;"><img alt="Hyades HR diagram"
+ src="Perryman.jpg" style="width: 576px; height: 439px;"> 
+      </div>
+<p>The plot above from <a
+ href="http://aa.springer.de/papers/8331001/2300081.pdf">Perryman et
+al. (1998)</a> shows the HR diagram of the Hyades from Hipparcos data
+once Hyades members are discriminated from background stars.&nbsp; It
+is tricky to select out Hyades members in a reliable and complete
+fashion.&nbsp; Their sky positions are centered around RA=67 degrees
+&amp; DE=+16 degrees, but they also share converging proper motions
+with vector components pmRA and pmDE.  </p>
+ 
+      <p><span style="font-weight: bold;">Statistical exercises 
+      </span><p>
+      <ul>
+        <li>Find Hyades cluster members, and possibly Hyades
+supercluster
+members, by multivariate clustering.  
+        </li>
+        <li> Validate the sample, and reproduce other results of <a
+ href="http://aa.springer.de/papers/8331001/2300081.pdf">Perryman et
+al. (1998)</a> </li>
+        <li> Construct the HR diagram, and discriminate the main
+sequence and red giant branch in the full database and Hyades subset.&nbsp; Can anything be learned about the `red clump' subgiants? 
+        </li>
+        <li> Isolate the Hyades main sequence and fit with
+nonparametric local regressions and with parametric regressions. 
+        </li>
+        <li> Use the heteroscedastic measurement error values e_Plx to
+weight the points in all of the above operations. 
+        </li>
+        <li>Can any unusual outliers be found? (white dwarfs, halo
+stars, runaway stars, ...)<br>
+        </li>
+      </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- InstanceEndEditable --><!-- InstanceEnd --><br>
+<img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
+ height="4" vspace="2" width="700"><br>
+<table style="width: 700px; text-align: left;" border="0"
+ cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td style="text-align: center; vertical-align: top;"><a
+ href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
+ href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ alt="Department of Statistics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
+ href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
+ src="../eberlycol.gif"
+ style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
+ href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ alt="Department of Astronomy and Astrophysics"
+ style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<div style="text-align: left;"> </div>
+</body>
+</html>
