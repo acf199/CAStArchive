@@ -1,0 +1,149 @@
+<html><head><title>R: The Gamma Distribution</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for GammaDist {stats}"><tr><td>GammaDist {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>The Gamma Distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Density, distribution function, quantile function and random
+generation for the Gamma distribution with parameters <code>shape</code> and
+<code>scale</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+dgamma(x, shape, rate = 1, scale = 1/rate, log = FALSE)
+pgamma(q, shape, rate = 1, scale = 1/rate, lower.tail = TRUE,
+       log.p = FALSE)
+qgamma(p, shape, rate = 1, scale = 1/rate, lower.tail = TRUE,
+       log.p = FALSE)
+rgamma(n, shape, rate = 1, scale = 1/rate)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, q</code></td>
+<td>
+vector of quantiles.</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+number of observations. If <code>length(n) &gt; 1</code>, the length
+is taken to be the number required.</td></tr>
+<tr valign="top"><td><code>rate</code></td>
+<td>
+an alternative way to specify the scale.</td></tr>
+<tr valign="top"><td><code>shape, scale</code></td>
+<td>
+shape and scale parameters.</td></tr>
+<tr valign="top"><td><code>log, log.p</code></td>
+<td>
+logical; if TRUE, probabilities p are given as log(p).</td></tr>
+<tr valign="top"><td><code>lower.tail</code></td>
+<td>
+logical; if TRUE (default), probabilities are
+<i>P[X &lt;= x]</i>, otherwise, <i>P[X &gt; x]</i>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If <code>scale</code> is omitted, it assumes the default value of <code>1</code>.
+</p>
+<p>
+The Gamma distribution with parameters <code>shape</code> <i>= a</i>
+and <code>scale</code> <i>= s</i> has density
+</p><p align="center"><i>f(x)= 1/(s^a Gamma(a)) x^(a-1) e^-(x/s)</i></p><p>
+for <i>x &gt; 0</i>, <i>a &gt; 0</i> and <i>s &gt; 0</i>.
+The mean and variance are
+<i>E(X) = a*s</i> and
+<i>Var(X) = a*s^2</i>.
+</p>
+<p>
+<code>pgamma()</code> uses a new algorithm (mainly by Morten Welinder) which
+should be uniformly better or equal to AS 239, see the references.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>dgamma</code> gives the density,
+<code>pgamma</code> gives the distribution function
+<code>qgamma</code> gives the quantile function, and
+<code>rgamma</code> generates random deviates.</p>
+
+<h3>Note</h3>
+
+<p>
+The S parametrization is via <code>shape</code> and <code>rate</code>: S has no
+<code>scale</code> parameter.
+</p>
+<p>
+The cumulative hazard <i>H(t) = - log(1 - F(t))</i>
+is <code>-pgamma(t, ..., lower = FALSE, log = TRUE)</code>.
+</p>
+<p>
+<code>pgamma</code> is closely related to the incomplete gamma function.  As
+defined by Abramowitz and Stegun 6.5.1
+</p><p align="center"><i>P(a,x) =
+1/Gamma(a) integral_0^x t^(a-1) exp(-t) dt</i></p><p>
+<i>P(a, x)</i> is <code>pgamma(x, a)</code>.  Other authors (for example
+Karl Pearson in his 1922 tables) omit the normalizing factor,
+defining the incomplete gamma function as <code>pgamma(x, a) * gamma(a)</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+<p>
+Shea, B. L. (1988)
+Algorithm AS 239,  Chi-squared and Incomplete Gamma Integral,
+<EM>Applied Statistics (JRSS C)</EM> <B>37</B>, 466&ndash;473.
+</p>
+<p>
+Abramowitz, M. and Stegun, I. A. (1972)
+<EM>Handbook of Mathematical Functions.</EM> New York: Dover.
+Chapter 6: Gamma and Related Functions.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../base/html/Special.html">gamma</a></code> for the Gamma function, <code><a href="Beta.html">dbeta</a></code> for
+the Beta distribution and <code><a href="Chisquare.html">dchisq</a></code> for the chi-squared
+distribution which is a special case of the Gamma distribution.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+-log(dgamma(1:4, shape=1))
+p &lt;- (1:9)/10
+pgamma(qgamma(p,shape=2), shape=2)
+1 - 1/exp(qgamma(p, shape=1))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

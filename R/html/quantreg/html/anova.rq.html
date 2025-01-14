@@ -1,0 +1,169 @@
+<html><head><title>R: Anova function for quantile regression fits</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for anova.rq {quantreg}"><tr><td>anova.rq {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Anova function for quantile regression fits</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Compute test statistics for two or more quantile regression fits.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+anova.rq(object, ...)
+anova.rqlist(object, ...,  test = "Wald", joint = TRUE, score = "wilcoxon")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object, ...</code></td>
+<td>
+objects of class `rq', originating from a call to `rq'. </td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+A character string specifying the test statistic to use.
+Can be either `Wald' or `rank'.</td></tr>
+<tr valign="top"><td><code>joint</code></td>
+<td>
+A logical flag indicating whether tests of equality of slopes
+should be done as joint tests on all slope parameters, or whether
+(when joint = FALSE) separate tests on each of the slope parameters
+should be reported.</td></tr>
+<tr valign="top"><td><code>score</code></td>
+<td>
+A character string specifying the score function to use,
+only needed or applicable for the `rank' form of the test.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+There are two (as yet) distinct forms of the test.  In the first the
+fitted objects all have the same specified quantile (tau) and the intent
+is to test the hypothesis that smaller models are adaquete relative to
+the largest specified model.  In this case there are two options for
+the argument `test', by default a Wald test is computed as in 
+Bassett and Koenker (1982).  If test=`rank' is specified, then a rank
+test statistic is computed as described in Gutenbrunner, Jureckova,
+Koenker and Portnoy (1993).  In the latter case one can also specify
+a form for the score function of the rank test, by default the Wilcoxon
+score is used, the other options are score=`sign' for median (sign) scores,
+or score=`normal' for normal (van der Waerden) scores.  A fourth option
+is score=`tau' which is a generalization of median scores to an arbitrary
+quantile, in this case the quantile is assumed to be the one associated
+with the fitting of the specified objects.  The computing of
+the rank form of the test is carried out in the <code><a href="anova.rq.html">rq.test.rank</a></code>
+function, see <code><a href="ranks.html">ranks</a></code> for further details on the score function
+options.
+</p>
+<p>
+The Wald form of the test is local in sense that the null hypothesis
+asserts only that a subset of the covariates are ``insignificant'' at
+the specified quantile of interest.  The rank form of the test can also be
+used to test the global hypothesis that a subset is ``insignificant''
+over an entire range of quantiles.  The use of the score function
+score = "tau" restricts the rank test to the local hypothesis of
+the Wald test.  
+</p>
+<p>
+In the second form of the test the linear predictor of the fits are
+all the same, but the specified quantiles (taus) are different.  In
+this case the hypothesis of interest is that the slope coefficients of
+the models are identical.  The test statistic is a variant of the Wald 
+test described in Koenker and Bassett (1982).
+</p>
+<p>
+By default, the tests return an F-like statistic in the sense that the
+an asymptotically Chi-squared statistic is divided by its degrees of
+freedom and the reported p-value is computed for an F statistic based on 
+the numerator degrees of freedom equal to the rank of the null hypothesis and
+the denominator degrees of freedom is taken to be the sample size
+minus the number of parameters of the maintained model.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+An object of class `"anova"' inheriting from class `"data.frame"'.</p>
+
+<h3>WARNING</h3>
+
+<p>
+An attempt to verify that the models are nested in the first form
+of the test is made, but this relies on checking set inclusion of
+the list of variable names and is subject to obvious ambiguities
+when variable names are generic.
+The comparison between two or more models will only be valid if
+they are fitted to the same dataset. This may be a problem if
+there are missing values and R's default of `na.action = na.omit' is used. 
+The rank version of the nested model tests involves computing the entire
+regression quantile process using parametric linear programming and thus
+can be rather slow and memory intensive on problems with more than 
+several thousand observations.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Roger Koenker
+</p>
+
+
+<h3>References</h3>
+
+<p>
+[1] Bassett, G. and R. Koenker  (1982). Tests of Linear Hypotheses
+and L1 Estimation,
+<EM>Econometrica</EM>, <B>50</B>, 1577&ndash;83.
+</p>
+<p>
+[2] Koenker, R. W. and Bassett, G. W. (1982). Robust Tests for
+Heteroscedasticity based on Regression Quantiles,
+<EM>Econometrica</EM>, <B>50</B>, 43&ndash;61.
+</p>
+<p>
+[3] Gutenbrunner, C., Jureckova, J., Koenker, R, and S. Portnoy  (1993).
+Tests of Linear Hypotheses based on Regression Rank Scores,
+<EM>J. of Nonparametric Statistics</EM>, <B>2</B>, 307&ndash;331.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+The model fitting function  <code><a href="rq.html">rq</a></code>, 
+and the functions for testing hypothesis on the entire quantile
+regression process <code><a href="khmaladze.test.html">khmaladze.test</a></code>.  For further details
+on the rank tests see <code><a href="ranks.html">ranks</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(barro)
+fit0 &lt;- rq(y.net ~  lgdp2 + fse2 + gedy2 , data = barro)
+fit1 &lt;- rq(y.net ~  lgdp2 + fse2 + gedy2 + Iy2 + gcony2, data = barro)
+fit2 &lt;- rq(y.net ~  lgdp2 + fse2 + gedy2 + Iy2 + gcony2, data = barro,tau=.75)
+fit3 &lt;- rq(y.net ~  lgdp2 + fse2 + gedy2 + Iy2 + gcony2, data = barro,tau=.25)
+anova(fit1,fit0)
+anova(fit1,fit2,fit3)
+anova(fit1,fit2,fit3,joint=FALSE)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

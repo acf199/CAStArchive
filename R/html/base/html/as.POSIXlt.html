@@ -1,0 +1,115 @@
+<html><head><title>R: Date-time Conversion Functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for as.POSIX* {base}"><tr><td>as.POSIX* {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Date-time Conversion Functions</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Functions to manipulate objects of classes <code>"POSIXlt"</code> and
+<code>"POSIXct"</code> representing calendar dates and times (to the nearest
+second).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as.POSIXct(x, tz = "")
+as.POSIXlt(x, tz = "")
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+An object to be converted.</td></tr>
+<tr valign="top"><td><code>tz</code></td>
+<td>
+A timezone specification to be used for the conversion,
+<EM>if one is required</EM>.  System-specific, but <code>""</code>
+is the current timezone, and <code>"GMT"</code> is UTC
+(Coordinated Universal Time, in French).</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The <code>as.POSIX*</code> functions convert an object to one of the two
+classes used to represent date/times (calendar dates plus time to the
+nearest second).  They can take convert a wide variety of objects,
+including objects of the other class and of classes <code>"Date"</code>,
+<code>"date"</code> (from package <STRONG><a href="../../date/html/as.date.html">date</a></STRONG> or
+<STRONG><a href="../../survival/html/as.date.html">survival</a></STRONG>), <code>"chron"</code> and
+<code>"dates"</code> (from package <STRONG><a href="../../chron/html/chron.html">chron</a></STRONG>) to these
+classes.  Dates are treated as being at midnight UTC.
+</p>
+<p>
+They can also convert character strings of the formats
+<code>"2001-02-03"</code> and <code>"2001/02/03"</code> optionally followed by
+white space and a time in the format <code>"14:52"</code> or
+<code>"14:52:03"</code>.  (Formats such as <code>"01/02/03"</code> are ambiguous
+but can be converted via a format specification by
+<code><a href="strptime.html">strptime</a></code>.)
+</p>
+<p>
+Logical <code>NA</code>s can be converted to either of the classes, but no
+other logical vectors can be.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>as.POSIXct</code> and <code>as.POSIXlt</code> return an object of the
+appropriate class.  If <code>tz</code> was specified, <code>as.POSIXlt</code>
+will give an appropriate <code>"tzone"</code> attribute.</p>
+
+<h3>Note</h3>
+
+<p>
+If you want to extract specific aspects of a time (such as the day of
+the week) just convert it to class <code>"POSIXlt"</code> and extract the
+relevant component(s) of the list, or if you want a character
+representation (such as a named day of the week) use
+<code><a href="strptime.html">format.POSIXlt</a></code> or <code><a href="strptime.html">format.POSIXct</a></code>.
+</p>
+<p>
+If a timezone is needed and that specified is invalid on your system,
+what happens is system-specific but it will probably be ignored.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<a href="DateTimeClasses.html">DateTimeClasses</a> for details of the classes;
+<code><a href="strptime.html">strptime</a></code> for conversion to and from character
+representations.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(z &lt;- Sys.time())             # the current date, as class "POSIXct"
+unclass(z)                    # a large integer
+floor(unclass(z)/86400)       # the number of days since 1970-01-01
+(z &lt;- as.POSIXlt(Sys.time())) # the current date, as class "POSIXlt"
+unlist(unclass(z))            # a list shown as a named vector
+
+as.POSIXlt(Sys.time(), "GMT") # the current time in GMT
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

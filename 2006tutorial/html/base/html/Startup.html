@@ -1,0 +1,186 @@
+<html><head><title>R: Initialization at Start of an R Session</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Startup {base}"><tr><td>Startup {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Initialization at Start of an R Session</h2>
+
+
+<h3>Description</h3>
+
+<p>
+In <font face="Courier New,Courier" color="#666666"><b>R</b></font>, the startup mechanism is as follows.
+</p>
+<p>
+Unless <SAMP>--no-environ</SAMP> was given on the command line, <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+searches for user and site files to process for setting environment
+variables.  The name of the site file is the one pointed to by the
+environment variable <CODE>R_ENVIRON</CODE>; if this is unset or empty,
+&lsquo;<TT>$R_HOME/etc/Renviron.site</TT>&rsquo; is used (if it exists, which it
+does not in a &ldquo;factory-fresh&rdquo; installation).
+The user files searched for are &lsquo;<TT>.Renviron</TT>&rsquo; in the current or in
+the user's home directory (in that order).
+See <B>Details</B> for how the files are read.
+</p>
+<p>
+Then <font face="Courier New,Courier" color="#666666"><b>R</b></font> searches for the site-wide startup profile unless the command
+line option <SAMP>--no-site-file</SAMP> was given.  The name of this file
+is taken from the value of the <CODE>R_PROFILE</CODE> environment variable.
+If this variable is unset, the default is
+&lsquo;<TT>$R_HOME/etc/Rprofile.site</TT>&rsquo;, which is used if it exists
+(which it does not in a &ldquo;factory-fresh&rdquo; installation).
+This code is loaded into package <STRONG>base</STRONG>.  Users need to be
+careful not to unintentionally overwrite objects in base, and it
+is normally advisable to use <code><a href="eval.html">local</a></code> if code needs to be
+executed: see the examples.
+</p>
+<p>
+Then, unless <SAMP>--no-init-file</SAMP> was given, <font face="Courier New,Courier" color="#666666"><b>R</b></font> searches for a file
+called &lsquo;<TT>.Rprofile</TT>&rsquo; in the current directory or in the user's
+home directory (in that order) and sources it into the user
+workspace.
+</p>
+<p>
+It then loads a saved image of the user workspace from &lsquo;<TT>.RData</TT>&rsquo;
+if there is one (unless <SAMP>--no-restore-data</SAMP> was specified, or
+<SAMP>--no-restore</SAMP>, on the command line).
+</p>
+<p>
+Next, if a function <code>.First</code> is found on the search path,
+it is executed as <code>.First()</code>.
+Finally, function <code>.First.sys()</code> in the <STRONG>base</STRONG> package is run.
+This calls <code><a href="library.html">require</a></code> to attach the default packages
+specified by <code><a href="options.html">options</a>("defaultPackages")</code>.
+</p>
+<p>
+A function <code>.First</code> (and <code><a href="quit.html">.Last</a></code>) can be defined in
+appropriate &lsquo;<TT>.Rprofile</TT>&rsquo; or &lsquo;<TT>Rprofile.site</TT>&rsquo; files or have
+been saved in &lsquo;<TT>.RData</TT>&rsquo;.  If you want a different set of packages
+than the default ones when you start, insert a call to
+<code><a href="options.html">options</a></code> in the &lsquo;<TT>.Rprofile</TT>&rsquo; or &lsquo;<TT>Rprofile.site</TT>&rsquo;
+file.  For example, <code>options(defaultPackages = character())</code> will
+attach no extra packages on startup.  Alternatively, set
+<code>R_DEFAULT_PACKAGES=NULL</code> as an environment variable before
+running <font face="Courier New,Courier" color="#666666"><b>R</b></font>.  Using <code>options(defaultPackages = "")</code> or
+<code>R_DEFAULT_PACKAGES=""</code> enforces the R <EM>system</EM> default.
+</p>
+<p>
+The commands history is read from the file specified by the
+environment variable <CODE>R_HISTFILE</CODE> (default &lsquo;<TT>.Rhistory</TT>&rsquo;)
+unless <SAMP>--no-restore-history</SAMP> was specified (or
+<SAMP>--no-restore</SAMP>).
+</p>
+<p>
+The command-line flag <SAMP>--vanilla</SAMP> implies
+<SAMP>--no-site-file</SAMP>, <SAMP>--no-init-file</SAMP>,
+<SAMP>--no-restore</SAMP> and <SAMP>--no-environ</SAMP>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+.First &lt;- function() { ...... }
+
+.Rprofile &lt;startup file&gt;
+</pre>
+
+
+<h3>Details</h3>
+
+<p>
+Note that there are two sorts of files used in startup:
+<EM>environment files</EM> which contain lists of environment variables
+to be set, and <EM>profile files</EM> which contain <font face="Courier New,Courier" color="#666666"><b>R</b></font> code.
+</p>
+<p>
+Lines in a site or user environment file should be either comment
+lines starting with <code>#</code>, or lines of the form <code>name=value</code>.
+The latter sets the environmental variable <code>name</code> to
+<code>value</code>, overriding an existing value.  If <code>value</code> is of the
+form <code>${foo-bar}</code>, the value is that of the environmental
+variable <code>foo</code> if that exists and is set to a non-empty value,
+otherwise <code>bar</code>.  This construction can be nested, so
+<code>bar</code> can be of the same form (as in <code>${foo-${bar-blah}}</code>).
+</p>
+<p>
+Leading and trailing white space in <code>value</code> are stripped.
+<code>value</code> is processed in a similar way to a Unix shell.  In particular
+quotes are stripped, and backslashes are removed except inside quotes.
+</p>
+
+
+<h3>Historical notes</h3>
+
+<p>
+Prior to <font face="Courier New,Courier" color="#666666"><b>R</b></font> version 1.4.0, the environment files searched were
+&lsquo;<TT>.Renviron</TT>&rsquo; in the current directory, the file pointed to by
+<CODE>R_ENVIRON</CODE> if set, and &lsquo;<TT>.Renviron</TT>&rsquo; in the user's home
+directory.
+</p>
+<p>
+Prior to <font face="Courier New,Courier" color="#666666"><b>R</b></font> version 1.2.1, &lsquo;<TT>.Rprofile</TT>&rsquo; was sourced after
+&lsquo;<TT>.RData</TT>&rsquo; was loaded, although the documented order was as here.
+</p>
+<p>
+The format for site and user environment files was changed in version
+1.2.0.  Older files are quite likely to work but may generate warnings
+on startup if they contained unnecessary <code>export</code> statements.
+</p>
+<p>
+Values in environment files were not processed prior to version
+1.4.0.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="quit.html">.Last</a></code> for final actions before termination.
+</p>
+<p>
+For profiling code, see <code><a href="../../utils/html/Rprof.html">Rprof</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# Example ~/.Renviron on Unix
+R_LIBS=~/R/library
+PAGER=/usr/local/bin/less
+
+# Example .Renviron on Windows
+R_LIBS=C:/R/library
+MY_TCLTK=yes
+TCL_LIBRARY=c:/packages/Tcl/lib/tcl8.4
+
+# Example of .Rprofile
+options(width=65, digits=5)
+options(show.signif.stars=FALSE)
+ps.options(horizontal=FALSE)
+set.seed(1234)
+.First &lt;- function() cat("\n   Welcome to R!\n\n")
+.Last &lt;- function()  cat("\n   Goodbye!\n\n")
+
+# Example of Rprofile.site
+local({
+  old &lt;- getOption("defaultPackages")
+  options(defaultPackages = c(old, "MASS"))
+})
+
+## if .Renviron contains
+FOOBAR="coo\bar"doh\ex"abc\"def'"
+
+## then we get
+&gt; cat(Sys.getenv("FOOBAR"), "\n")
+coo\bardoh\exabc"def'
+## End(Not run)</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

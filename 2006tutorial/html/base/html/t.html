@@ -1,0 +1,71 @@
+<html><head><title>R: Matrix Transpose</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for t {base}"><tr><td>t {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Matrix Transpose</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Given a matrix or <code><a href="data.frame.html">data.frame</a></code> <code>x</code>,
+<code>t</code> returns the transpose of <code>x</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+t(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+a matrix or data frame, typically.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+A data frame is first coerced to a matrix: see <code><a href="matrix.html">as.matrix</a></code>.
+When <code>x</code> is a vector, it is treated as &ldquo;column&rdquo;, i.e., the
+result is a 1-row matrix.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="aperm.html">aperm</a></code> for permuting the dimensions of arrays.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+a &lt;- matrix(1:30, 5,6)
+ta &lt;- t(a) ##-- i.e.,  a[i, j] == ta[j, i] for all i,j :
+for(j in seq(ncol(a)))
+  if(! all(a[, j] == ta[j, ])) stop("wrong transpose")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

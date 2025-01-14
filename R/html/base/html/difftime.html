@@ -1,0 +1,114 @@
+<html><head><title>R: Time Intervals</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for difftime {base}"><tr><td>difftime {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Time Intervals</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Create, print and round time intervals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+time1 - time2
+
+difftime(time1, time2, tz = "",
+         units = c("auto", "secs", "mins", "hours", "days", "weeks"))
+
+as.difftime(tim, format = "%X")
+
+## S3 method for class 'difftime':
+round(x, digits = 0)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>time1, time2</code></td>
+<td>
+date-time objects.</td></tr>
+<tr valign="top"><td><code>tz</code></td>
+<td>
+a timezone specification to be used for the conversion.
+System-specific, but <code>""</code> is the current time zone, and
+<code>"GMT"</code> is UTC.</td></tr>
+<tr valign="top"><td><code>units</code></td>
+<td>
+character.  Units in which the results are desired. Can
+be abbreviated.</td></tr>
+<tr valign="top"><td><code>tim</code></td>
+<td>
+character string specifying a time interval.</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+character specifying the format of <code>tim</code>.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+an object inheriting from class <code>"difftime"</code>.</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+integer.  Number of significant digits to retain.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Function <code>difftime</code> takes a difference of two date/time objects
+(of either class) and returns an object of class <code>"difftime"</code>
+with an attribute indicating the units.  There is a <code><a href="Round.html">round</a></code>
+method for objects of this class, as well as methods for the
+group-generic (see <code><a href="Ops.html">Ops</a></code>) logical and
+arithmetic operations.
+</p>
+<p>
+If <code>units = "auto"</code>, a suitable set of units is chosen, the largest
+possible (excluding <code>"weeks"</code>) in which all the absolute
+differences are greater than one.
+</p>
+<p>
+Subtraction of two date-time objects gives an object of this class,
+by calling <code>difftime</code> with <code>units="auto"</code>.  Alternatively,
+<code>as.difftime()</code> works on character-coded time intervals.
+</p>
+<p>
+Limited arithmetic is available on <code>"difftime"</code> objects: they can
+be added or subtracted, and multiplied or divided by a numeric vector.
+In addition, adding or subtracting a numeric vector implicitly
+converts the numeric vector to a <code>"difftime"</code> object with the
+same units as the <code>"difftime"</code> object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="DateTimeClasses.html">DateTimeClasses</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(z &lt;- Sys.time() - 3600)
+Sys.time() - z                # just over 3600 seconds.
+
+## time interval between releases of 1.2.2 and 1.2.3.
+ISOdate(2001, 4, 26) - ISOdate(2001, 2, 26)
+
+as.difftime(c("0:3:20", "11:23:15"))
+as.difftime(c("3:20", "23:15", "2:"), format= "%H:%M")# 3rd gives NA
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

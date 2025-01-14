@@ -1,0 +1,70 @@
+<html><head><title>R: Draw a Box around a Plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for box {graphics}"><tr><td>box {graphics}</td><td align="right">R Documentation</td></tr></table>
+<h2>Draw a Box around a Plot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function draws a box around the current plot in the given color
+and linetype.  The <code>bty</code> parameter determines
+the type of box drawn.  See <code><a href="par.html">par</a></code> for details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+box(which = "plot", lty = "solid", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>which</code></td>
+<td>
+character, one of <code>"plot"</code>, <code>"figure"</code>,
+<code>"inner"</code> and <code>"outer"</code>.</td></tr>
+<tr valign="top"><td><code>lty</code></td>
+<td>
+line type of the box.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further graphical parameters, such as
+<code>bty</code>, <code>col</code>, or <code>lwd</code>, see <code><a href="par.html">par</a></code>.</td></tr>
+</table>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="rect.html">rect</a></code> for drawing of arbitrary rectangles.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+plot(1:7,abs(rnorm(7)), type='h', axes = FALSE)
+axis(1, labels = letters[1:7])
+box(lty='1373', col = 'red')
+</pre>
+
+
+
+<hr><div align="center">[Package <em>graphics</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

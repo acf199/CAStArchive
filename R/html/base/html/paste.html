@@ -1,0 +1,92 @@
+<html><head><title>R: Concatenate Strings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for paste {base}"><tr><td>paste {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Concatenate Strings</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Concatenate vectors after converting to character.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+paste(..., sep = " ", collapse = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+one or more <font face="Courier New,Courier" color="#666666"><b>R</b></font> objects, to be coerced to character vectors.</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+a character string to separate the terms.</td></tr>
+<tr valign="top"><td><code>collapse</code></td>
+<td>
+an optional character string to separate the results.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>paste</code> converts its arguments to character strings, and
+concatenates them (separating them by the string given by <code>sep</code>).
+If the arguments are vectors, they are concatenated term-by-term to
+give a character vector result.
+</p>
+<p>
+If a value is specified for <code>collapse</code>, the values in the result
+are then concatenated into a single string, with the elements being
+separated by the value of <code>collapse</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A character vector of the concatenated values.  This will be of length
+zero if all the objects are, unless <code>collapse</code> is non-NULL, in
+which case it is a single empty string.</p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+String manipulation with
+<code><a href="character.html">as.character</a></code>, <code><a href="substr.html">substr</a></code>, <code><a href="nchar.html">nchar</a></code>,
+<code><a href="strsplit.html">strsplit</a></code>; further, <code><a href="cat.html">cat</a></code> which concatenates and
+writes to a file, and <code><a href="sprintf.html">sprintf</a></code> for C like string
+construction.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+paste(1:12) # same as as.character(1:12)
+paste("A", 1:6, sep = "")
+paste("Today is", date())
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

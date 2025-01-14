@@ -1,0 +1,363 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>CASt R: Bootstrapping and Monte Carlo methods</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Bootstrapping
+ and Monte Carlo methods</span>
+ <br>
+</span></span></big></big></div> <br> 
+A Monte Carlo method generally refers to a method that relies on simulated 
+random numbers in some way.  For instance, bootstrapping may be considered to be
+a particular case of a Monte Carlo method, since it relies on random resampling.<br>
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Monte
+ Carlo integration and importance sampling</span></small></span></span></big></big><br> 
+<br>
+Most of this module will focus on bootstrapping, but we begin with a toy example
+illustrating Monte Carlo methods in general.<br>
+<br>
+Quite often a quantity of interest in statistics may be expressed as an integral
+that we wish to evaluate.  For instance, in Bayesian analysis, one is often interested
+in the posterior mean of a particular parameter, which may be expressed as an integral.
+<br>
+For purely illustrative purposes, suppose that we wish to integrate the following
+function over the integral (0,1):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y=function(x) sin(x*(1-x))/(1+x+sqrt(x))</span><br>
+<br>
+There does not appear to be any closed-form solution, so we turn to numerical methods.<br>
+<br>
+R does have a function, 
+<a href="html/stats/html/integrate.html">integrate</a>,
+that performs adaptive quadrature of functions of one variable:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">integrate(y,0,1)</span><br>
+<br>
+To approximate this integral using Monte Carlo methods, we note that it may be
+written as E(f(U)), the expectation of f(U), where U is a uniform random variable 
+on the integral (0,1).  As is typical in statistics, we will use a sample mean
+to approximate the true mean E(f(U)):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">u=runif(10000)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(y(u))</span><br>
+<br>
+To get a sense of how precise our estimate is (pretending for the purpose of illustration
+that we do not know the correct value of the integral), we can estimate the standard deviation
+of this sample mean as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sqrt(var(y(u))/10000)</span><br>
+<br>
+By the central limit theorem, we know that our sample mean will be roughly normally
+distributed, so we can give a 95% confidence interval for the correct value by
+adding and subtracting 1.96 times the above standard deviation.<br>
+<br>
+Next, we consider a method for reducing the variance of our
+estimator known as importance sampling.  Suppose we have a random variable Z
+with density function f(z).  Then the integral of y(x) that we wish to find may
+be rewritten as the expectation of y(Z)/f(Z).  (To see why, recall that to find
+the expectation of a function of Z, we multiply by the density f(Z) and then 
+integrate.)  In our toy example, suppose that Z has a beta density with parameters
+(2, 2.5):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">z=rbeta(10000,2,2.5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(y(z)/dbeta(z,2,2.5))</span><br>
+<br>
+Now for the standard deviation calculation:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sqrt(var(y(z)/dbeta(z,2,2.5))/10000)</span><br>
+<br>
+Note that this standard deviation is roughly one third of the original standard deviation.
+The reason for this is that the beta(2,2.5) density happens to be somewhat close in shape to
+a constant times the function y(x) that we are trying to integrate, as seen in the following plot:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=seq(0,1,len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y(x),type="l",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; main="Solid line: y(x)")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">k = y(.5)/dbeta(.5,2,2.5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(x,k*dbeta(x,2,2.5),lty=2,col=2)</span><br>
+<br>
+The intuition behind importance sampling, therefore, is that y(z)/dbeta(z,2,2.5) is much closer
+to a constant (and therefore has smaller variance) than y(z) itself.  In this toy example,
+importance sampling reduces the standard deviation to about one third of its original size.
+Stated differently, we need a sample roughly nine times as large without importance sampling
+as we do with importance sampling in this example 
+in order to obtain a result of comparable precision.<br>
+<br>
+
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Nonparametric bootstrapping
+of regression standard errors</span></small></span></span></big></big><br> 
+<br>
+Here, we revisit the 
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.html">Hipparcos</a>
+data set and the 92 stars identified as Hyades stars in the
+<a href="EDA.html">exploratory data analysis and regression</a>
+module:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip = read.table("http://astrostatistics.psu.edu/datasets/HIP_star.dat",
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T,fill=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x1=(RA>50 & RA<100)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x2=(pmRA>90 & pmRA<130)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x3=(pmDE>-60 & pmDE< -10) # Space in '< -' is necessary!</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x4=x1&x2&x3</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x5=x4 & (DE>0) & (e_Plx<5)</span><br>
+<br>
+Earlier, we considered a linear model for the relationship
+between DE and pmDE among these 92 stars:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(DE[x5],pmDE[x5],pch=20)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m=lm(pmDE[x5] ~ DE[x5])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m,lwd=2,col=2)</span><br>
+<br>
+The red line on the plot is the usual least-squares line, for which estimation is 
+easy and asymptotic theory gives easy-to-calculate standard errors for the 
+coefficients:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(m)$coef</span><br>
+<br>
+However, suppose we wish to use a resistant regression method such as 
+<a href="html/MASS/html/lqs.html">lqs</a>.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(MASS)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2=lqs(pmDE[x5] ~ DE[x5])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m2,lwd=2,col=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2</span><br>
+<br>
+In this case, it is not so easy to obtain standard errors for the coefficients.
+Thus, we will turn to bootstrapping.  In a standard, or nonparametric, bootstrap,
+we repeatedly draw samples of size 92 from the empirical distribution of the data, which
+in this case consist of the (DE, pmDE) pairs.  We use 
+<a href="html/MASS/html/lqs.html">lqs</a>
+to fit a line to each sample, then compute the sample covariance of the resulting
+coefficient vectors.  The procedure works like this:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=DE[x5]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y=pmDE[x5]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2B=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for (i in 1:200) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; s=sample(92,replace=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; m2B=rbind(m2B, lqs(y[s]~x[s])$coef)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+We may now find the sample covariance matrix for m2B.  The (marginal) standard errors
+of the coefficients are obtained as the square roots of the diagonal entries of this matrix:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cov(m2B)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">se=sqrt(diag(cov(m2B)))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">se</span><br>
+<br>
+The logic of the bootstrap procedure is that we are estimating an approximation
+of the true standard errors.  The approximation involves replacing the true distribution
+of the data (unknown) with the empirical distribution of the data.  This approximation
+may be estimated with arbitrary accuracy by a Monte Carlo approach, since the empirical
+distribution of the data is known and in principle
+we may sample from it as many times as we wish.  In other words, as the bootstrap sample
+size increases, we get a better estimate of the true value of the <i>approximation</i>.
+On the other hand, the quality of this approximation depends on the original sample size (92, in 
+our example) and
+there is nothing we can do to change it.<br>
+<br>
+An alternative way to generate a bootstrap sample 
+in this example is by generating a new value of each response variable (y) by adding the predicted
+value from the original lqs model to a randomly selected residual from the original set of residuals.
+Thus, we resample not the entire bivariate structure but merely the residuals.  As an exercise, you
+might try implementing this approach in R.  Note that this approach is not a good idea if you have reason
+to believe that the distribution of residuals is not the same for all points.  For instance, if there is
+heteroscedasticity or if the residuals contain structure not explained by the model, this residual resampling
+approach is not warranted.<br>
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Using the 
+ <a href="html/boot/html/00Index.html">boot</a>
+ package in R</span></small></span></span></big></big><br> 
+<br>
+There is a 
+<a href="html/boot/html/00Index.html">boot</a>
+package in R that contains many functions relevant to bootstrapping.
+As a quick example, we will show here how to obtain the same kind of bootstrap example
+obtained above (for the lqs model of pmDE regressed on DE for the Hyades stars.)<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(boot)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mystat=function(a,b)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; lqs(a[b,2]~a[b,1])$coef</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2B2 = boot(cbind(DE[x5],pmDE[x5]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; mystat, 200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(m2B2)</span><br>
+<br>
+As explained in the help file, the
+<a href="html/boot/html/boot.html">boot</a>
+function requires as input a function that accepts as arguments the whole dataset
+and an index that references an observation from that dataset.  This is why we defined
+the mystat function above.
+To see the output that is similar to that obtained earlier for the m2B object, look in
+m2B2$t:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cov(m2B2$t)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sqrt(diag(cov(m2B2$t)))</span><br>
+<br>
+Compare with the output provided by 
+<a href="html/boot/html/boot.html">print.boot</a> and the plot produced by
+<a href="html/boot/html/plot.boot.html">plot.boot</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2B2</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(m2B2)</span><br>
+<br>
+Another related function, for producing bootstrap confidence intervals, is
+<a href="html/boot/html/boot.ci.html">boot.ci</a>.<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Parametric bootstrapping
+of regression standard errors</span></small></span></span></big></big><br> 
+<br>
+We now return to the regression problem studied earlier.<br>
+<br>
+Sometimes, resampling is done from a theoretical distribution rather than 
+from the original sample.  For instance, if simple linear regression is applied to the
+regression of pmDE on DE, we obtain a parametric estimate of the distribution of the residuals,
+namely, normal with mean zero and standard deviation estimated from the regression:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(m)</span><br>
+<br>
+Remember that m was defined above as lm(pmDE[x5]~DE[x5]).  We observe a residual standard
+error of 4.449.  <br>
+<br>
+A parametric bootstrap scheme proceeds by simulating a new set of pmDE (or y) values using the
+model<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y = 21.9 - 3.007*DE[x5] + 4.449*rnorm(92)</span><br>
+<br>
+Then, we refit a linear model using y as the new response, 
+obtaining slightly different values of the regression coefficients.  
+If this is repeated, we obtain an approximation of the joint distribution of the regression coefficients
+for this model.<br>
+<br>
+Naturally, the same approach could be tried with other regression methods such as those discussed
+in the 
+<a href="EDA.html">EDA and regression</a> module,
+but careful thought should be
+given to the parametric model used to generate the new residuals.  In the normal case discussed here,
+the parametric bootstrap is simple, but it is really not necessary 
+because standard linear regression already gives a very good approximation to the joint distribution
+of the regression coefficients when errors are heteroscedastic and normal.
+One possible use of this method is in a model that assumes the absolute residuals are exponentially
+distributed, in which case least absolute deviation regression as discussed in the
+<a href="EDA.html">EDA and regression</a> module can be justified.  The reader is encouraged to
+implement a parametric bootstrap using the
+<a href="html/quantreg/html/rq.html">rq</a>
+function found in the "quantreg" package.  <br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Estimating
+a p-value (parametric bootstrap for Kolmogorov-Smirnov)</span></small></span></span></big></big><br> 
+<br>
+In the 
+<a href="Tests.html">hypothesis testing</a>
+module, we conducted a permutation test of the null hypothesis that
+the 92 Hyades stars have the same distribution of B minus V as the 2586
+non-Hyades stars.  Because there are 2678!/(92!2586!)=3.78x10<sup>142</sup>
+different ways to select 92 objects from 2678 objects, we had to depend on a 
+random sample of reassignments:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">H=B.V[x5]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">nH=B.V[!x5 & !is.na(B.V)]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tlist=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">all=c(H,nH)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:5000) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; s=sample(2586,92) # choose a sample</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; tlist=c(tlist, t.test(all[s],all[-s],</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp; var.eq=T)$stat) # add t-stat to list</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Even though the sample in tlist appears to be very close to standard normal according to a 
+histogram and a Q-Q plot, the
+Kolmogorov-Smirnov test rejects the null hypothesis of standard normality:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(tlist,"pnorm")</span><br>
+<br>
+However, if we use a Kolmogorov-Smirnov test in which we allow the mean of the theoretical
+normal distribution to be estimated from the sample, we see no evidence of a departure from
+normality according to the usual output:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">newkstest=ks.test(tlist,"pnorm",mean=mean(tlist))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">newkstest</span><br>
+<br>
+Note in the above function call that 
+<a href="html/stats/html/ks.test.html">ks.test</a>
+passes the "mean=" option directly to the 
+<a href="html/stats/html/Normal.html">pnorm</a>
+function.  The
+<a href="html/stats/html/ks.test.html">ks.test</a>
+function does not know beforehand how many, if any, options might be passed
+to the function it requires; therefore, the function definition of
+<a href="html/stats/html/ks.test.html">ks.test</a>
+uses three dots (...) in its option list to stand for some unspecified number of options.<br>
+<br>
+Unfortunately, the Kolmogorov-Smirnov test is not quite valid if the theoretical distribution
+against which we are testing depends upon estimates derived from the data.  (Imagine the extreme
+case:  We could test the sample distribution against itself, which is simply an estimate derived from
+the data!)  Therefore, we can get a better sense of how valid the second p-value is by using a 
+Monte Carlo approach.  <br>
+<br>
+To carry out the Monte Carlo test, observe that the stat statistic for our K-S test by typing<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">newkstest$stat</span><br>
+<br>
+The value that we seek is the probability that X is at least as large as this observed statistic,
+where X is the random test statistic generated when we select a sample of size 5000 from the null 
+distribution:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ksstat=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:1000) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; x=rnorm(5000)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; ksstat=c(ksstat,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; &nbsp;&nbsp; ks.test(x,pnorm,mean=mean(x))$stat)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Now let's look at a histogram of the test statistics and estimate a p-value:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(ksstat,nclass=40)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ns=newkstest$stat</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(v=ns,lty=2,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(ksstat>=ns)</span><br>
+<br>
+Note that the approximate p-value above is smaller than the original 
+p-value reported by newkstest, 
+though it is still not small enough to provide strong evidence that the
+tlist sample is not normal with unit variance.<br>
+<br>
+We conclude this section by briefly explaining the parenthetical
+remark "parametric bootstrap for Kolmogorov-Smirnov" in its title and
+discussing a related nonparametric bootstrap method.
+The above procedure is equivalent to a parametric bootstrap procedure
+in which we draw samples not from a standard normal, but from a normal
+distribution with mean equal to mean(tlist).  This is because the "mean=mean(x)"
+option implies that we are applying
+a particular K-S test that is invariant to the mean of the distribution.<br>
+<br>
+An interesting exercise is to implement a <i>nonparametric</i> bootstrap
+in this example that would be based only on resampling.  In this case, 
+we cannot merely repeatedly use<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">s=sample(5000,replace=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(tlist[s],pnorm,mean=mean(tlist[s]))$stat</span><br>
+<br>
+The reason is because this statistic is biased.  Therefore, it is necessary to correct for
+the bias.  Unfortunately, this is not a trivial correction and it essentially requires 
+a modified version of ks.test:  Whereas the ordinary ks.test statistic is based on the maximum
+distance between the EDF of the sample and the theoretical CDF, the modified version must 
+subtract off the bias <i>before</i> finding the maximum.<br>
+<br>
+<br>
+ 
+</body>
+</html>

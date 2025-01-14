@@ -1,0 +1,96 @@
+<html><head><title>R: Create a skeleton for a new package</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for package.skeleton {utils}"><tr><td>package.skeleton {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Create a skeleton for a new package</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>package.skeleton</code> automates some of the setup for a new
+package.  It creates directories, saves functions and data to
+appropriate places, and creates skeleton help files and &lsquo;<TT>README</TT>&rsquo;
+files describing further steps in packaging.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+package.skeleton(name = "anRpackage", list, environment = .GlobalEnv,
+                 path = ".", force = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>name</code></td>
+<td>
+character string: the directory name for your package.</td></tr>
+<tr valign="top"><td><code>list</code></td>
+<td>
+character vector naming the <font face="Courier New,Courier" color="#666666"><b>R</b></font> objects to put in the package.</td></tr>
+<tr valign="top"><td><code>environment</code></td>
+<td>
+if <code>list</code> is omitted, the contents of this
+environment are packaged.</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+path to put the package directories in.</td></tr>
+<tr valign="top"><td><code>force</code></td>
+<td>
+If <code>FALSE</code> will not overwrite an existing directory.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This tries to create filenames valid for all OSes known to run R.
+Invalid characters are replaced by <code>_</code>, invalid names are
+preceeded by <code>zz</code>, and finally the converted names are made
+unique by <code><a href="../../base/html/make.unique.html">make.unique</a>(sep = "_")</code>.  This can be done for
+code and help files but not data files (which are looked for by name).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+used for its side-effects.</p>
+
+<h3>References</h3>
+
+<p>
+Read the <EM>Writing R Extensions</EM> manual for more details.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="prompt.html">prompt</a></code>, <code><a href="update.packages.html">install.packages</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ ## two functions and two "data sets" :
+ f &lt;- function(x,y) x+y
+ g &lt;- function(x,y) x-y
+ d &lt;- data.frame(a=1, b=2)
+ e &lt;- rnorm(1000)
+
+ package.skeleton(list=c("f","g","d","e"), name="mypkg")
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

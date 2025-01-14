@@ -1,0 +1,134 @@
+<html><head><title>R: Install Add-on Packages from Sources</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for INSTALL {utils}"><tr><td>INSTALL {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Install Add-on Packages from Sources</h2>
+
+
+<h3>Description</h3>
+
+<p>
+To install packages into the default library tree (which is rooted at
+&lsquo;<TT>$R_HOME/library</TT>&rsquo;), do <code>R CMD INSTALL pkgs</code>.
+</p>
+<p>
+To install into the library tree <code>lib</code> instead of the default
+one, use <code>R CMD INSTALL -l lib pkgs</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>R CMD INSTALL [options] [-l lib] pkgs</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkgs</code></td>
+<td>
+A space-separated list with the path names of the sources of the
+packages to be installed.</td></tr>
+<tr valign="top"><td><code>lib</code></td>
+<td>
+the path name of the <font face="Courier New,Courier" color="#666666"><b>R</b></font> library tree to install to.</td></tr>
+<tr valign="top"><td><code>options</code></td>
+<td>
+a space-separated list of options through which in
+particular the process for building the help files can be
+Options should only be given once, and paths including spaces should
+be quoted.
+Use <code>R CMD INSTALL --help</code> for the current list of options.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Windows Perl and the files for installing from source packages need to
+be installed.
+</p>
+<p>
+Both <code>lib</code> and the elements of <code>pkgs</code> may be absolute or
+relative path names of directories.  <code>pkgs</code> may also contain
+names of package archive files of the form &lsquo;<TT>pkg_version.tar.gz</TT>&rsquo;
+as obtained from CRAN (these are then extracted in a temporary
+directory &lsquo;<TT>R.INSTALL</TT>&rsquo; of the current directory).
+</p>
+<p>
+If the option <SAMP>--save</SAMP> is used, the installation procedure
+creates a binary image of the package code, which is then loaded when
+the package is attached, rather than evaluating the package source at
+that time.  Having a file &lsquo;<TT>install.R</TT>&rsquo; in the package directory
+makes this the default behavior for the package (option
+<SAMP>--no-save</SAMP> overrides).  You may need  <SAMP>--save</SAMP> if your
+package requires other packages to evaluate its own source.  If the
+file &lsquo;<TT>install.R</TT>&rsquo; is non-empty, it should contain R expressions to
+be executed when the package is attached, after loading the saved
+image.  Options to be passed to R when creating the save image can be
+specified via <SAMP>--save=ARGS</SAMP>.
+</p>
+<p>
+Options <SAMP>--lazy</SAMP>, <SAMP>--no-lazy</SAMP>, <SAMP>--lazy-data</SAMP> and
+<SAMP>--no-lazy-data</SAMP> control where the <font face="Courier New,Courier" color="#666666"><b>R</b></font> objects and the datasets
+are made available for lazy loading.  (These options are overridden by
+any values set in the DESCRIPTION file.)  The default is
+<SAMP>--no-lazy --no-lazy-data</SAMP> except that lazy-loading is used for
+package with more than 25kB of <font face="Courier New,Courier" color="#666666"><b>R</b></font> code and no saved image.
+</p>
+<p>
+Which forms of help are produced is controlled by the <SAMP>--docs</SAMP>
+option which takes values <code>none</code> or <code>normal</code> (text and HTML)
+or <code>chm</code> (the default, text, HTML and CHTML).
+</p>
+<p>
+If the attempt to install the package fails, leftovers are removed.
+If the package was already installed, the old version is restored.
+</p>
+<p>
+Use <code>R CMD INSTALL --help</code> for more usage information.
+</p>
+
+
+<h3>Packages using the methods package</h3>
+
+<p>
+Packages that require the methods package, and that use functions such
+as <code><a href="../../methods/html/setMethod.html">setMethod</a></code> or <code><a href="../../methods/html/setClass.html">setClass</a></code>,
+should be installed by creating a binary image.
+</p>
+<p>
+The presence of a file named
+&lsquo;<TT>install.R</TT>&rsquo; in the package's main directory causes an image to
+be saved.  Note that the file is not in the &lsquo;<TT>R</TT>&rsquo; subdirectory: all
+the code in that subdirectory is used to construct the binary image.
+</p>
+<p>
+Normally, the file &lsquo;<TT>install.R</TT>&rsquo; will be empty; if it does contain
+R expressions
+these will be evaluated when the package is attached, e.g. by a call to
+the function <code><a href="../../base/html/library.html">library</a></code>.  (Specifically, the source code
+evaluated for a package with a saved image consists of a suitable
+definition of <code>.First.lib</code> to ensure loading of the saved
+image, followed by the R code in file &lsquo;<TT>install.R</TT>&rsquo;, if any.)
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="REMOVE.html">REMOVE</a></code> and <code><a href="../../base/html/library.html">library</a></code> for information on
+using several library trees;
+<code><a href="update.packages.html">update.packages</a></code> for automatic update of packages using
+the internet;
+the chapter on &ldquo;Creating R packages&rdquo; in &ldquo;Writing <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+Extensions&rdquo; (see the &lsquo;<TT>doc/manual</TT>&rsquo; subdirectory of the <font face="Courier New,Courier" color="#666666"><b>R</b></font> source
+tree).
+</p>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

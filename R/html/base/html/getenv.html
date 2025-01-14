@@ -1,0 +1,69 @@
+<html><head><title>R: Get Environment Variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Sys.getenv {base}"><tr><td>Sys.getenv {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Get Environment Variables</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>Sys.getenv</code> obtains the values of the environment variables named by
+<code>x</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+Sys.getenv(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+a character vector, or missing</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+A vector of the same length as <code>x</code>, with the variable names as
+its <code>names</code> attribute.  Each element holds the value of the
+environment variable named by the corresponding component of <code>x</code>
+(or <code>""</code> if no environment variable with that name was found).
+<br>
+On most platforms <code>Sys.getenv()</code> will return a named vector giving
+the values of all the environment variables.</p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="putenv.html">Sys.putenv</a></code>,
+<code><a href="locales.html">Sys.getlocale</a></code> for the locale &ldquo;environment&rdquo;,
+<code><a href="getwd.html">getwd</a></code> for the working directory.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## whether HOST is set will be shell-dependent e.g. Solaris' csh does not.
+Sys.getenv(c("R_HOME", "R_PAPERSIZE", "R_PRINTCMD", "HOST"))
+
+str(s &lt;- Sys.getenv()) # all settings (rather do not print)
+
+## Language and Locale settings -- but rather use Sys.getlocale()
+s[grep("^L(C|ANG)", names(s))]
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

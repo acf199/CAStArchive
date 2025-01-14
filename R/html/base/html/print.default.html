@@ -1,0 +1,148 @@
+<html><head><title>R: Default Printing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for print.default {base}"><tr><td>print.default {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Default Printing</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>print.default</code> is the <EM>default</EM> method of the generic
+<code><a href="print.html">print</a></code> function which prints its argument.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## Default S3 method:
+print(x, digits = NULL, quote = TRUE, na.print = NULL,
+      print.gap = NULL, right = FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+the object to be printed.</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+a non-null value for <code>digits</code> specifies the minimum
+number of significant digits to be printed in values.  If
+<code>digits</code> is <code>NULL</code>, the value of <code>digits</code> set by
+<code>options</code> is used.</td></tr>
+<tr valign="top"><td><code>quote</code></td>
+<td>
+logical, indicating whether or not strings
+(<code><a href="character.html">character</a></code>s) should be printed with surrounding quotes.</td></tr>
+<tr valign="top"><td><code>na.print</code></td>
+<td>
+a character string which is used to indicate
+<code><a href="NA.html">NA</a></code> values in printed output, or <code>NULL</code> (see Details)</td></tr>
+<tr valign="top"><td><code>print.gap</code></td>
+<td>
+a non-negative integer <i>&lt;= 1024</i>,
+giving the spacing between adjacent &ldquo;columns&rdquo; in printed
+vectors, matrices and arrays, or <code>NULL</code> meaning 1.</td></tr>
+<tr valign="top"><td><code>right</code></td>
+<td>
+logical, indicating whether or not strings should be
+right-aligned. The default is left-alignment.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments to be passed to or from other
+methods. They are ignored in this function.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The default for printing <code>NA</code>s is to print <code>NA</code> (without
+quotes) unless this is a character <code>NA</code> <EM>and</EM> <code>quote =
+    FALSE</code>, when <code>&lt;NA&gt;</code> is printed.
+</p>
+<p>
+The same number of decimal places is used throughout a vector,  This
+means that <code>digits</code> specifies the minimum number of significant
+digits to be used, and that at least one entry will be printed with
+that minimum number.
+</p>
+<p>
+Attributes are printed respecting their class(es), using the values of
+<code>digits</code> to <code>print.default</code>, but using the default values
+(for the methods called) of the other arguments.
+</p>
+<p>
+When the <STRONG>methods</STRONG> package is attached, <code>print</code> will call
+<code><a href="../../methods/html/show.html">show</a></code> for <font face="Courier New,Courier" color="#666666"><b>R</b></font> objects with formal classes if called
+with no optional arguments.
+</p>
+<p>
+If a non-printable character is encountered during output, it is
+represented as one of the ANSI escape sequences (<code>\a</code>, <code>\b</code>,
+<code>\f</code>, <code>\n</code>, <code>\r</code>, <code>\t</code>, <code>\v</code> and <code>\0</code>),
+or failing that as a 3-digit octal code: for example the UK currency
+pound in the C locale (if implemented correctly) is printed as
+<code>\243</code>.  Which characters are non-printable depends on the locale.
+(Because some versions of Windows get this wrong, all 8-bit characters
+are regarded as printable on Windows.)
+</p>
+
+
+<h3>Unicode  and other multi-byte locales</h3>
+
+<p>
+In a Unicode (UTF-8) locale, characters <code>0x00</code> to <code>0x1F</code> and
+<code>0x7f</code> (the ASCII non-printing characters) are printed in the
+same way, via ANSI escape sequences or 3-digit octal escapes.
+Multi-byte non-printing characters are printed with as an escape
+sequence of the form <code>\uxxxx</code> or <code>\Uxxxxxxxx</code> (in hexadecimal).
+</p>
+<p>
+It is possible to have a character string in an object that is not
+valid UTF-8.  If a byte is encountered that is not part of an
+encoded Unicode character it is printed in hex in the form <code>&lt;xx&gt;</code>
+and the next character is tried.
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+<code>print.matrix</code> is currently identical to <code>print.default</code>,
+but was prior to <code>1.7.0</code> did not print attributes and did not
+have a <code>digits</code> argument.  It is provided only because some
+packages call it explicitly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+The generic <code><a href="print.html">print</a></code>, <code><a href="options.html">options</a></code>.
+The <code>"<a href="noquote.html">noquote</a>"</code> class and print method.
+</p>
+<p>
+<code><a href="encodeString.html">encodeString</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+pi
+print(pi, digits = 16)
+LETTERS[1:16]
+print(LETTERS, quote = FALSE)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

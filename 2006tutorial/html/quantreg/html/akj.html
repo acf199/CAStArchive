@@ -1,0 +1,86 @@
+<html><head><title>R: Density estimation using adaptive kernel method</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for akj {quantreg}"><tr><td>akj {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Density estimation using adaptive kernel method</h2>
+
+
+<h3>Description</h3>
+
+<p>
+univariate adaptive kernel density estimation a la Silverman.  As used
+by Portnoy and Koenker (1989)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+akj(x, z, p, h, alpha, kappa, iker1, iker2)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+points used for centers of kernel assumed to be sorted</td></tr>
+<tr valign="top"><td><code>z</code></td>
+<td>
+points at which density is calculated; default to seq( min(x), max(x), 2*length(x) )</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+vector of probabilities associated with x's; default to 1/len(x) for each x.</td></tr>
+<tr valign="top"><td><code>h</code></td>
+<td>
+initial window size (overall); default to Silverman's normal reference</td></tr>
+<tr valign="top"><td><code>alpha</code></td>
+<td>
+a sensitivity parameter that determines the sensitivity of the local bandwidth to variations in the pilot density; default to .5</td></tr>
+<tr valign="top"><td><code>kappa</code></td>
+<td>
+constant determining initial (default) window width</td></tr>
+<tr valign="top"><td><code>iker1</code></td>
+<td>
+kernel indicator, 0 for normal kernel (default) while 1 for cauchy kernel</td></tr>
+<tr valign="top"><td><code>iker2</code></td>
+<td>
+xxx</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+a R structure is returned
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>dens</code></td>
+<td>
+the vector of estimated density</td></tr>
+<tr valign="top"><td><code>psi</code></td>
+<td>
+a vector of <i>psi=-f'/f</i> function</td></tr>
+<tr valign="top"><td><code>score</code></td>
+<td>
+a vector of score <i>(f'/f)^2-f''/f</i> function</td></tr>
+<tr valign="top"><td><code>h</code></td>
+<td>
+same as the input argument h</td></tr>
+</table>
+
+<h3>References</h3>
+
+<p>
+Portnoy, S and R Koenker, (1989) Adaptive L Estimation of Linear Models, Annals, 17, 362-81.
+Silverman, B. (1986) Density Estimation, pp100-104.
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,69 @@
+<html><head><title>R: Plotting Factor Variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for plot.factor {graphics}"><tr><td>plot.factor {graphics}</td><td align="right">R Documentation</td></tr></table>
+<h2>Plotting Factor Variables</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This functions implements a &ldquo;scatterplot&rdquo; method for
+<code><a href="../../base/html/factor.html">factor</a></code> arguments of the <EM>generic</EM>
+<code><a href="plot.html">plot</a></code> function.
+Actually, <code><a href="boxplot.html">boxplot</a></code> or <code><a href="barplot.html">barplot</a></code> are used when
+appropriate.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'factor':
+plot(x, y, legend.text = levels(y), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,y</code></td>
+<td>
+numeric or factor.  <code>y</code> may be missing.</td></tr>
+<tr valign="top"><td><code>legend.text</code></td>
+<td>
+a vector of text used to construct a legend for
+the plot. Only used if <code>y</code> is present and a factor.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Further arguments to <code><a href="plot.html">plot</a></code>, see also
+<code><a href="par.html">par</a></code>.</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="plotdefault.html">plot.default</a></code>, <code><a href="plotformula.html">plot.formula</a></code>,
+<code><a href="barplot.html">barplot</a></code>, <code><a href="boxplot.html">boxplot</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+plot(PlantGrowth)                                # -&gt; plot.data.frame
+plot(weight ~ group, data = PlantGrowth)         # numeric vector ~ factor
+plot(cut(weight, 2) ~ group, data = PlantGrowth) # factor ~ factor
+## passing "..." to barplot() eventually:
+plot(cut(weight, 3) ~ group, data = PlantGrowth, density = 16*(1:3),col=NULL)
+
+plot(PlantGrowth$group, axes=FALSE, main="no axes")# extremly silly
+</pre>
+
+
+
+<hr><div align="center">[Package <em>graphics</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

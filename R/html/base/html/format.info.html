@@ -1,0 +1,96 @@
+<html><head><title>R: format(.) Information</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for format.info {base}"><tr><td>format.info {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>format(.) Information</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Information is returned on how <code><a href="format.html">format</a>(x, digits =
+    options("digits"))</code> would be formatted.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format.info(x, nsmall = 0)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+(numeric) vector; potential argument of
+<code><a href="format.html">format</a>(x,...)</code>.</td></tr>
+<tr valign="top"><td><code>nsmall</code></td>
+<td>
+(see <code><a href="format.html">format</a>(*, nsmall)</code>).</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+An <code><a href="integer.html">integer</a></code> <code><a href="vector.html">vector</a></code> of length 3, say
+<code>r</code>.
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>r[1]</code></td>
+<td>
+width (number of characters) used for <code>format(x)</code></td></tr>
+<tr valign="top"><td><code>r[2]</code></td>
+<td>
+number of digits after decimal point.</td></tr>
+<tr valign="top"><td><code>r[3]</code></td>
+<td>
+in <code>0:2</code>; if <i>&gt;=</i><code>1</code>, <EM>exponential</EM>
+representation would be used, with exponent length of <code>r[3]+1</code>.</td></tr>
+</table>
+
+<h3>Note</h3>
+
+<p>
+The result <B>depends</B> on the value of
+<code><a href="options.html">options</a>("digits")</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="format.html">format</a></code>, <code><a href="formatc.html">formatC</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+dd &lt;- options("digits") ; options(digits = 7) #-- for the following
+format.info(123) # 3 0 0
+format.info(pi)  # 8 6 0
+format.info(1e8) # 5 0 1 - exponential "1e+08"
+format.info(1e222)#6 0 2 - exponential "1e+222"
+
+x &lt;- pi*10^c(-10,-2,0:2,8,20)
+names(x) &lt;- formatC(x,w=1,dig=3,format="g")
+cbind(sapply(x,format))
+t(sapply(x, format.info))
+
+## using at least 8 digits right of "."
+t(sapply(x, format.info, nsmall = 8))
+
+# Reset old options:
+options(dd)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

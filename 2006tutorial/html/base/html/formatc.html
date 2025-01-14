@@ -1,0 +1,168 @@
+<html><head><title>R: Formatting Using C-style Formats</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for formatC {base}"><tr><td>formatC {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Formatting Using C-style Formats</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Formatting numbers individually and flexibly, using <code>C</code> style
+format specifications.  <code>format.char</code> is a helper function for
+<code>formatC</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+formatC(x, digits = NULL, width = NULL,
+        format = NULL, flag = "", mode = NULL,
+        big.mark = "", big.interval = 3,
+      small.mark = "", small.interval = 5,
+    decimal.mark = ".")
+
+format.char(x, width = NULL, flag = "-")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+an atomic numerical or character object, typically a vector
+of real numbers.</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+the desired number of digits after the decimal
+point (<code>format = "f"</code>) or <EM>significant</EM> digits
+(<code>format = "g"</code>, <code>= "e"</code> or <code>= "fg"</code>).
+<br>
+Default: 2 for integer, 4 for real numbers.  If less than 0,
+the C default of 6 digits is used.</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+the total field width; if both <code>digits</code> and
+<code>width</code> are unspecified, <code>width</code> defaults to 1,
+otherwise to <code>digits + 1</code>.  <code>width = 0</code> will use
+<code>width = digits</code>, <code>width &lt; 0</code> means left
+justify the number in this field (equivalent to <code>flag ="-"</code>).
+If necessary, the result will have more characters than <code>width</code>.</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+equal to <code>"d"</code>  (for integers), <code>"f"</code>,
+<code>"e"</code>, <code>"E"</code>, <code>"g"</code>, <code>"G"</code>, <code>"fg"</code> (for
+reals), or <code>"s"</code> (for strings). Default is <code>"d"</code> for
+integers, <code>"g"</code> for reals.
+<br>
+<code>"f"</code> gives numbers in the usual
+<code>xxx.xxx</code> format;  <code>"e"</code> and <code>"E"</code> give <code>n.ddde+nn</code> or
+<code>n.dddE+nn</code> (scientific format); <code>"g"</code> and <code>"G"</code> put
+<code>x[i]</code> into scientific format only if it saves space to do so.
+<br>
+<code>"fg"</code> uses fixed format as <code>"f"</code>, but <code>digits</code> as
+the minimum number of <EM>significant</EM> digits.  That this can lead
+to quite long result strings, see examples below.  Note that unlike
+<code><a href="Round.html">signif</a></code> this prints large numbers with
+more significant digits than <code>digits</code>.</td></tr>
+<tr valign="top"><td><code>flag</code></td>
+<td>
+format modifier as in Kernighan and Ritchie (1988, page 243).
+<code>"0"</code>  pads leading zeros; <code>"-"</code> does left adjustment,
+others are <code>"+"</code>, <code>" "</code>, and <code>"#"</code>.  There can be
+more than one of these, in any order.</td></tr>
+<tr valign="top"><td><code>mode</code></td>
+<td>
+<code>"double"</code> (or <code>"real"</code>), <code>"integer"</code> or
+<code>"character"</code>.
+Default: Determined from the storage mode of <code>x</code>.</td></tr>
+<tr valign="top"><td><code>big.mark, big.interval,
+small.mark, small.interval,
+decimal.mark</code></td>
+<td>
+used for prettying longer decimal sequences, passed to
+<code><a href="format.html">prettyNum</a></code>: that help page explains the details.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If you set <code>format</code> it overrides the setting of <code>mode</code>, so
+<code>formatC(123.45, mode="double", format="d")</code> gives <code>123</code>.
+</p>
+<p>
+The rendering of scientific format is platform-dependent: some systems
+use <code>n.ddde+nnn</code> or <code>n.dddenn</code> rather than <code>n.ddde+nn</code>.
+</p>
+<p>
+<code>formatC</code> does not necessarily align the numbers on the decimal
+point, so <code>formatC(c(6.11, 13.1), digits=2, format="fg")</code> gives
+<code>c("6.1", " 13")</code>.  If you want common formatting for several
+numbers, use <code><a href="format.html">format</a></code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A character object of same size and attributes as <code>x</code>.
+Unlike <code><a href="format.html">format</a></code>, each number is formatted individually.
+Looping over each element of <code>x</code>, <code>sprintf(...)</code> is
+called (inside the C function <code>str_signif</code>).
+<br>
+<code>format.char(x)</code> and <code>formatC</code>, for character <code>x</code>, do
+simple (left or right) padding with white space.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Originally written by Bill Dunlap, later much improved by Martin Maechler,
+it was first adapted for <font face="Courier New,Courier" color="#666666"><b>R</b></font> by Friedrich Leisch.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Kernighan, B. W. and Ritchie, D. M. (1988)
+<EM>The C Programming Language.</EM>  Second edition. Prentice Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="format.html">format</a></code>, <code><a href="sprintf.html">sprintf</a></code> for more general C like
+formatting.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+xx  &lt;- pi * 10^(-5:4)
+cbind(format(xx, digits=4), formatC(xx))
+cbind(formatC(xx, wid = 9, flag = "-"))
+cbind(formatC(xx, dig = 5, wid = 8, format = "f", flag = "0"))
+cbind(format(xx, digits=4), formatC(xx, dig = 4, format = "fg"))
+
+format.char(c("a", "Abc", "no way"), wid = -7)  # &lt;=&gt; flag = "-"
+formatC(    c("a", "Abc", "no way"), wid = -7)  # &lt;=&gt; flag = "-"
+formatC(c((-1:1)/0,c(1,100)*pi), wid=8, dig=1)
+
+xx &lt;- c(1e-12,-3.98765e-10,1.45645e-69,1e-70,pi*1e37,3.44e4)
+##       1        2             3        4      5       6
+formatC(xx)
+formatC(xx, format="fg")       # special "fixed" format.
+formatC(xx, format="f", dig=80)#&gt;&gt; also long strings
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

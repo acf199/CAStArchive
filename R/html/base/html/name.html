@@ -1,0 +1,89 @@
+<html><head><title>R: Variable Names or Symbols, respectively</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for name {base}"><tr><td>name {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Variable Names or Symbols, respectively</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>as.symbol</code> coerces its argument to be a <EM>symbol</EM>, or
+equivalently, a <EM>name</EM>.  The argument must be of mode
+<code>"character"</code>.  <code>as.name</code> is an alias for <code>as.symbol</code>.
+</p>
+<p>
+<code>is.symbol</code> (and <code>is.name</code> equivalently) returns <code>TRUE</code>
+or <code>FALSE</code> depending on whether its argument is a symbol (i.e.,
+name) or not.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as.symbol(x)
+is.symbol(y)
+
+as.name(x)
+is.name(y)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+objects to be coerced or tested.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>is.symbol</code> is generic: you can write methods to handle
+specific classes of objects, see <a href="zMethods.html">InternalMethods</a>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+The term &ldquo;symbol&rdquo; is from the LISP background of <font face="Courier New,Courier" color="#666666"><b>R</b></font>, whereas
+&ldquo;name&rdquo; has been the standard S term for this.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="call.html">call</a></code>, <code><a href="is.language.html">is.language</a></code>.
+For the internal object mode, <code><a href="typeof.html">typeof</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+an &lt;- as.name("arrg")
+is.name(an) # TRUE
+mode(an)   # name
+typeof(an) # symbol
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,69 @@
+<html><head><title>R: Trigonometric Functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Trig {base}"><tr><td>Trig {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Trigonometric Functions</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These functions give the obvious trigonometric functions.  They
+respectively compute the cosine, sine, tangent, arc-cosine, arc-sine,
+arc-tangent, and the two-argument arc-tangent.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cos(x)
+sin(x)
+tan(x)
+acos(x)
+asin(x)
+atan(x)
+atan2(y, x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+numeric vector</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The arc-tangent of two arguments <code>atan2(y,x)</code> returns the angle
+between the x-axis and the vector from the origin to <i>(x,y)</i>,
+i.e., for positive arguments <code>atan2(y,x) == atan(y/x)</code>.
+</p>
+<p>
+Angles are in radians, not degrees (i.e., a right angle is
+<i>&pi;/2</i>).
+</p>
+<p>
+All except <code>atan2</code> are generic functions: methods can be defined
+for them individually or via the <code><a href="groupGeneric.html">Math</a></code> group generic.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

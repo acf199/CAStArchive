@@ -1,0 +1,108 @@
+<html><head><title>R: Lattice Replacements of base graphics functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for llines {lattice}"><tr><td>llines {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Lattice Replacements of base graphics functions</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These functions are intended to replace some commonly used base R
+graphics functions in panel functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+larrows(x0, y0, x1, y1, length = 0.25, unit = "inches", ...)
+llines(x, y, ...)
+lplot.xy(xy, ...)
+lpoints(x, ...)
+lsegments(x0, y0, x1, y1, ...)
+lsegments(x1, y1, x2, y2, ...)
+ltext(x, ...)
+panel.arrows(...)
+panel.lines(...)
+panel.points(...)
+panel.segments(...)
+panel.text(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code> x, y, x0, y0, x1, y1, x2, y2, xy</code></td>
+<td>
+locations. x2, y2 present
+for S compatibility
+</td></tr>
+<tr valign="top"><td><code>length, unit</code></td>
+<td>
+determines extent of arrow head.  <code>length</code> specifies the length
+in terms of <code>unit</code>, which can be any valid grid unit as long as
+it doesn't need a <code>data</code> argument.  <code>unit</code> defaults to
+inches, which is the only option in the base version of the
+function, <code><a href="../../graphics/html/arrows.html">arrows</a></code>.
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+other arguments, including ones to control graphical parameters like
+color, line type, etc. For devices that support alpha-transparency,
+a numeric argument <code>alpha</code> between 0 and 1 can be supplied. Be
+careful with this, since for devices that do not support
+alpha-transparency, nothing will be drawn at all if this is set to
+anything other than 0.
+</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+These functions are meant to be grid replacements of the corresponding
+base R graphics functions, to allow existing Trellis code to be used
+with minimal modification.  The functions <code>panel.*</code> are
+essentally identical to the <code>l*</code> versions, are recommended for
+use in new code (as opposed to ported code) as they have more readable
+names.
+</p>
+<p>
+See the documentation of the base functions for usage. Not all
+arguments are always supported. All these correspond to the default
+methods only. For <code>ltext</code>, only values 0, .5 and 1 for <code>adj</code>
+have any effect.
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+There's a new <code>type="H"</code> option wherever appropriate, which is
+similar to <code>type="h"</code>, but with horizontal lines.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../graphics/html/points.html">points</a></code>, <code><a href="../../graphics/html/lines.html">lines</a></code>,
+<code><a href="../../graphics/html/text.html">text</a></code>, <code><a href="../../graphics/html/segments.html">segments</a></code>, <code><a href="../../graphics/html/arrows.html">arrows</a></code>,
+<code><a href="Lattice.html">Lattice</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

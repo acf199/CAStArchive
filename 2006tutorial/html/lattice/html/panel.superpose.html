@@ -1,0 +1,104 @@
+<html><head><title>R: Panel Function for Display Marked by groups</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for panel.superpose {lattice}"><tr><td>panel.superpose {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Panel Function for Display Marked by groups</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These are panel functions for Trellis displays useful when a grouping
+variable is specified for use within panels. The <code>x</code> (and
+<code>y</code> where appropriate) variables are plotted with different
+graphical parameters for each distinct value of the grouping variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+panel.superpose(x, y, panel.groups = "panel.xyplot",
+                subscripts, groups, type="p", ...)
+panel.superpose.2(x, y, panel.groups = "panel.xyplot",
+                  subscripts, groups, type="p", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,y</code></td>
+<td>
+coordinates of the points to be displayed</td></tr>
+<tr valign="top"><td><code>panel.groups</code></td>
+<td>
+the panel function to be used for each group of points. Defaults to
+<code>panel.xyplot</code> (behaviour in S)
+</td></tr>
+<tr valign="top"><td><code>subscripts</code></td>
+<td>
+subscripts giving indices in original data frame </td></tr>
+<tr valign="top"><td><code>groups</code></td>
+<td>
+a grouping variable. Different graphical parameters
+will be used to plot the subsets of observations given by each
+distinct value of <code>groups</code>. The default graphical parameters
+are obtained from <code>superpose.symbol</code> and <code>superpose.line</code>
+using <code><a href="trellis.par.get.html">trellis.par.get</a></code> wherever appropriate
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+usually a character vector specifying what should be drawn for each
+group, passed on to the <code>panel.groups</code> function, which must
+know what to do with it.  By default, this is
+<code><a href="panel.xyplot.html">panel.xyplot</a></code>, whose help page describes the admissible
+values.
+<br>
+The two functions <code>panel.superpose</code> and
+<code>panel.superpose.2</code> differ only in the way the <code>type</code>
+argument is interpreted.  For the former, the interpretation is the
+same as for <code>panel.xyplot</code> for each of the unique groups.  In
+other words, if <code>type</code> is a vector, all the individual
+components are honoured concurrently.  For the latter, <code>type</code>
+is replicated to be as long as the number of unique values in
+<code>groups</code>, and one component used for the points corresponding
+to the each different group.  Even in this case, it is possible to
+request multiple types per group, specifying <code>type</code> as a list,
+each component being the desired <code>type</code> vector for the
+corresponding plot.
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+other arguments (mostly graphical parameters, replicated
+to be as long as the number of groups), ultimately passed down to
+<code>panel.xyplot</code>. In particular, colour can be specified using 3
+arguments (<code>col</code>, <code>col.line</code> and <code>col.symbol</code>), as
+described in <code><a href="panel.xyplot.html">panel.xyplot</a></code>.
+</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+(<code>panel.superpose.2</code> originally contributed by Neil Klepeis)
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+Different functions when used as <code>panel.groups</code> gives different
+types of plots, for example <code><a href="panel.xyplot.html">panel.xyplot</a></code>,
+<code><a href="panel.dotplot.html">panel.dotplot</a></code> and <code><a href="panel.functions.html">panel.linejoin</a></code> (This can
+be used to produce interaction plots).
+</p>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

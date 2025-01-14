@@ -1,0 +1,54 @@
+<html><head><title>R: Invoke a Pager on an R Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for page {utils}"><tr><td>page {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Invoke a Pager on an R Object</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Displays a representation of the object named by <code>x</code> in a pager.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+page(x, method = c("dput", "print"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+the name of an <font face="Courier New,Courier" color="#666666"><b>R</b></font> object.</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+The default method is to dump the object <EM>via</EM>
+<code><a href="../../base/html/dput.html">dput</a></code>. An alternative is to print to a file.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+additional arguments for <code><a href="../../base/html/file.show.html">file.show</a></code>.
+Intended for setting <code>pager</code> as <code>title</code> and
+<code>delete.file</code> are already used.</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../base/html/file.show.html">file.show</a></code>, <code><a href="edit.html">edit</a></code>, <code><a href="fix.html">fix</a></code>.
+</p>
+<p>
+To go to a new page when graphing, see <code><a href="../../graphics/html/frame.html">frame</a></code>.
+</p>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

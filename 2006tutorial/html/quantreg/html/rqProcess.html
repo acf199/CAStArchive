@@ -1,0 +1,86 @@
+<html><head><title>R: Compute Quantile Regression Process</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for rqProcess {quantreg}"><tr><td>rqProcess {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Compute Quantile Regression Process</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Computes the quantile regression process for the model
+specified by the formula on the grid specified by the
+taus argument.  Intended for use in <code><a href="khmaladze.test.html">khmaladze.test</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rqProcess(formula, data, taus = seq(0.2, 0.8, by = 0.1))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+model formula  </td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+data frame to be used to interpret formula </td></tr>
+<tr valign="top"><td><code>taus</code></td>
+<td>
+quantiles at which the process is to be evaluated</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The process computes point estimates and also returns an array
+with the J and Hinv matrices needed to compute standardizations.
+</p>
+
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>coefs</code></td>
+<td>
+Point estimates of the coefs of the model</td></tr>
+<tr valign="top"><td><code>J</code></td>
+<td>
+J matrix of the usual qr sandwich formula, without
+any tau(1-tau) factor </td></tr>
+<tr valign="top"><td><code>Hinv</code></td>
+<td>
+Hinv matrices of the usual qr sandwich formula,
+this is an array of dimension (p,p,m) </td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+R. Koenker
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="table.rq.html">table.rq</a></code>, <code><a href="khmaladze.test.html">khmaladze.test</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre></pre>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

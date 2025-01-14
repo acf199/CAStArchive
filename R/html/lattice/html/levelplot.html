@@ -1,0 +1,217 @@
+<html><head><title>R: Level Plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for levelplot {lattice}"><tr><td>levelplot {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Level Plots</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Draw Level Plots and Contour plots.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+levelplot(formula, data,
+          at,
+          contour = FALSE,
+          cuts = 15,
+          pretty = FALSE,
+          region = TRUE,
+          ...,
+          col.regions = trellis.par.get("regions")$col,
+          colorkey = region)
+contourplot(formula, data, at,
+            contour = TRUE,
+            labels = format(at),
+            cuts = 7,
+            pretty = TRUE,
+            ...)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+a formula of the form <code>z ~ x * y | g1 * g2 * ...</code>,
+where <code>z</code> is a numeric response, and <code>x</code>, <code>y</code> are
+numeric values evaluated on a rectangular grid.  <code>g1, g2, ...</code>
+are optional conditional variables, and must be either factors or
+shingles if present.
+<br>
+Calculations are based on the assumption that all x and y values are
+evaluated on a grid (defined by their unique values). The function
+will not return an error if this is not true, but the display might
+not be meaningful.  However, the x and y values need not be equally
+spaced.
+<br>
+As an extension to partially support the form used in
+<code>filled.contour</code> and <code>image</code>, <code>formula</code> can be a
+matrix.
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+optional data frame in which variables are to be evaluated 
+</td></tr>
+<tr valign="top"><td><code>at</code></td>
+<td>
+numeric vector giving breaks along the range of <code>z</code>. Contours
+(if any) will be drawn at these heights, and the regions in between
+would be colored using <code>col.regions</code>.
+</td></tr>
+<tr valign="top"><td><code>col.regions</code></td>
+<td>
+color vector to be used if regions is TRUE. The
+general idea is that this should be a color vector of moderately
+large length (longer than the number of regions. By default this is
+100). It is expected that this vector would be gradually varying in
+color (so that nearby colors would be similar). When the colors are
+actually chosen, they are chosen to be equally spaced along this
+vector. When there are more regions than col.regions, the colors are
+recycled.
+</td></tr>
+<tr valign="top"><td><code>colorkey</code></td>
+<td>
+logical specifying whether a color key is to be drawn
+alongside the plot, or a list describing the color key. The list may
+contain the following components:
+<br>
+<dl>
+<br>
+<dt><code>space</code>:</dt><dd>location of the colorkey, can be one of ``left'', ``right'',
+``top'' and ``bottom''. Defaults to ``right''.
+</dd>
+<br>
+<dt><code>x</code>, <code>y</code>:</dt><dd>location, currently unused </dd>
+<br>
+<dt><code>col</code>:</dt><dd>vector of colors </dd>
+<br>
+<dt><code>at</code>:</dt><dd>numeric vector specifying where the colors change. must be of
+length 1 more than the col vector.
+</dd>
+<br>
+<dt><code>labels</code>:</dt><dd>a character vector for labelling the <code>at</code> values, or more
+commonly, a list of components <code>labels, at, cex, col,
+          font</code> describing label positions.
+</dd>
+<br>
+<dt><code>tick.number</code>:</dt><dd>approximate number of ticks. </dd>
+<br>
+<dt><code>corner</code>:</dt><dd>interacts with x, y; unimplemented </dd>
+<br>
+<dt><code>width</code>:</dt><dd>width of the key </dd>
+<br>
+<dt><code>height</code>:</dt><dd>length of key w.r.t side of plot. </dd>
+</dl>
+</td></tr>
+<tr valign="top"><td><code>contour</code></td>
+<td>
+logical, whether to draw contour lines.
+</td></tr>
+<tr valign="top"><td><code>cuts</code></td>
+<td>
+number of levels the range of <code>z</code> would be divided into
+</td></tr>
+<tr valign="top"><td><code>labels</code></td>
+<td>
+logical specifying whether contour lines should be labelled, or
+character vector of labels for contour lines. The type of labelling
+can be controlled by the <code>label.style</code> argument, which is
+passed on to <code><a href="panel.levelplot.html">panel.levelplot</a></code>
+</td></tr>
+<tr valign="top"><td><code>pretty</code></td>
+<td>
+logical, whether to use pretty cut locations and labels
+</td></tr>
+<tr valign="top"><td><code>region</code></td>
+<td>
+logical, whether regions between contour lines should be filled
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+other arguments</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+These and all other high level Trellis functions have several
+arguments in common. These are extensively documented only in the
+help page for <code>xyplot</code>, which should be consulted to learn more
+detailed usage.
+</p>
+<p>
+Other useful arguments are mentioned in the help page for the default
+panel function <code><a href="panel.levelplot.html">panel.levelplot</a></code> (these are formally
+arguments to the panel function, but can be specified in the high
+level calls directly).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+An object of class ``trellis''. The `update' method can be used to
+update components of the object and the `print' method (usually called
+by default) will plot it on an appropriate plotting device.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="xyplot.html">xyplot</a></code>, <code><a href="Lattice.html">Lattice</a></code>,
+<code><a href="panel.levelplot.html">panel.levelplot</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- seq(pi/4, 5 * pi, length = 100)
+y &lt;- seq(pi/4, 5 * pi, length = 100)
+r &lt;- as.vector(sqrt(outer(x^2, y^2, "+")))
+grid &lt;- expand.grid(x=x, y=y)
+grid$z &lt;- cos(r^2) * exp(-r/(pi^3))
+levelplot(z~x*y, grid, cuts = 50, scales=list(log="e"), xlab="",
+          ylab="", main="Weird Function", sub="with log scales",
+          colorkey = FALSE, region = TRUE)
+
+#S-PLUS example
+require(stats)
+attach(environmental)
+ozo.m &lt;- loess((ozone^(1/3)) ~ wind * temperature * radiation,
+       parametric = c("radiation", "wind"), span = 1, degree = 2)
+w.marginal &lt;- seq(min(wind), max(wind), length = 50)
+t.marginal &lt;- seq(min(temperature), max(temperature), length = 50)
+r.marginal &lt;- seq(min(radiation), max(radiation), length = 4)
+wtr.marginal &lt;- list(wind = w.marginal, temperature = t.marginal,
+        radiation = r.marginal)
+grid &lt;- expand.grid(wtr.marginal)
+grid[, "fit"] &lt;- c(predict(ozo.m, grid))
+contourplot(fit ~ wind * temperature | radiation, data = grid,
+            cuts = 10, region = TRUE,
+            xlab = "Wind Speed (mph)",
+            ylab = "Temperature (F)",
+            main = "Cube Root Ozone (cube root ppb)")
+detach()
+</pre>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

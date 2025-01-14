@@ -1,0 +1,70 @@
+<html><head><title>R: Recursive Least Squares</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for lm.fit.recursive {quantreg}"><tr><td>lm.fit.recursive {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Recursive Least Squares</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function fits a linear model by recursive least squares.  It is
+a utility routine for the <code><a href="khmaladzize.html">khmaladzize</a></code> function of the quantile regression
+package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lm.fit.recursive(X, y, int=TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>X</code></td>
+<td>
+Design Matrix </td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+Response Variable</td></tr>
+<tr valign="top"><td><code>int</code></td>
+<td>
+if TRUE then append intercept to X</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+return p by n matrix of fitted parameters, where p. The
+ith column gives the solution up to "time" i.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+R. Koenker
+</p>
+
+
+<h3>References</h3>
+
+<p>
+A. Harvey, (1993) Time Series Models, MIT
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+khmaladzize
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

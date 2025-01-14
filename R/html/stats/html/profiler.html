@@ -1,0 +1,109 @@
+<html><head><title>R: Constructor for Profiler Objects for Nonlinear Models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for profiler {stats}"><tr><td>profiler {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Constructor for Profiler Objects for Nonlinear Models</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Create a profiler object for the model object <code>fitted</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+profiler(fitted, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fitted</code></td>
+<td>
+the original fitted model object.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Additional parameters. See documentation on individual
+methods.</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+An object of class <code>"profiler"</code> which is a list with function
+elements
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>getFittedPars()</code></td>
+<td>
+the parameters in <code>fitted</code>
+</td></tr>
+<tr valign="top"><td><code>setDefault(varying, params)</code></td>
+<td>
+this is used for changing the default settings for
+profiling. In absence of both parameters, the default is set
+to the original fitted parameters with all parameters
+varying. The arguments are
+<br>
+<code>varying</code>: a logical, integer or character vector
+giving parameters to be varied.
+<code>params</code>: the default value at which profiling is to
+take place.
+</td></tr>
+<tr valign="top"><td><code>getProfile(varying, params)</code></td>
+<td>
+this can be used in conjunction with <code>setDefault</code>
+without any arguments. Alternatively, the parameters to be
+varied and the values for fixed parameters can be specified
+using the arguments. The arguments are
+<br>
+<code>varying</code>: a logical vector giving parameters to be
+varied. This can be omitted if params is a named list or
+numeric vector.
+<br>
+<code>params</code>: values for parameters to be held fixed.
+<br>
+It returns a list with elements
+<br>
+<code>parameters</code>: the parameter values for the profiled
+optimum.
+<br>
+<code>fstat</code>: a profile statistics. See individual methods
+for details.
+<br>
+<code>varying</code>: a logical vector indicating parameters
+which were varied.
+</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Douglas M. Bates and Saikat DebRoy
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="profiler.nls.html">profiler.nls</a></code>, <code><a href="profile.html">profile</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# see documentation on individual methods
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

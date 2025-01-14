@@ -1,0 +1,87 @@
+<html><head><title>R: Write text files and code to read them.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for write.foreign {foreign}"><tr><td>write.foreign {foreign}</td><td align="right">R Documentation</td></tr></table>
+<h2>Write text files and code to read them.</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function exports data frames to other statistical packages by
+writing the data as free-format text and writing a separate file of
+instructions for the other package to read the data.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+write.foreign(df, datafile, codefile, package = c("SPSS","Stata"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>df</code></td>
+<td>
+A data frame</td></tr>
+<tr valign="top"><td><code>datafile</code></td>
+<td>
+Name of file for data output</td></tr>
+<tr valign="top"><td><code>codefile</code></td>
+<td>
+Name of file for code output</td></tr>
+<tr valign="top"><td><code>package</code></td>
+<td>
+Name of package</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Other arguments for the individual <code>writeForeign</code> functions</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The work for this function is done by <code>foreign:::writeForeignStata</code> and
+<code>foreign:::writeForeignSPSS</code>. To add support for another package,
+eg SAS, create a function <code>writeForeignSAS</code> with the same first
+three arguments as <code>write.foreign</code>. This will be called from
+<code>write.foreign</code> when <code>package="SAS"</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+None</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Thomas Lumley
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+datafile&lt;-tempfile()
+codefile&lt;-tempfile()
+write.foreign(esoph,datafile,codefile,package="SPSS")
+file.show(datafile)
+file.show(codefile)
+unlink(datafile)
+unlink(codefile)
+## End(Not run)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>foreign</em> version 0.8-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

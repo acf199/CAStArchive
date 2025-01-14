@@ -1,0 +1,138 @@
+<html><head><title>R: Lists - Generic and Dotted Pairs</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for list {base}"><tr><td>list {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Lists - Generic and Dotted Pairs</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Functions to construct, coerce and check for all kinds of <font face="Courier New,Courier" color="#666666"><b>R</b></font> lists.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+list(...)
+pairlist(...)
+
+as.list(x, ...)
+as.pairlist(x)
+as.list.environment(x, all.names=FALSE, ...)
+
+is.list(x)
+is.pairlist(x)
+
+alist(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+objects.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+object to be coerced or tested.</td></tr>
+<tr valign="top"><td><code>all.names</code></td>
+<td>
+a logical indicating whether to copy all values in
+<code>as.list.environment</code>/</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Most lists in <font face="Courier New,Courier" color="#666666"><b>R</b></font> internally are <EM>Generic
+Vectors</EM>, whereas traditional <EM>dotted pair</EM> lists (as in LISP)
+are still available.
+</p>
+<p>
+The arguments to <code>list</code> or <code>pairlist</code> are of the form
+<code>value</code> or <code>tag=value</code>.
+The functions return a list composed of its arguments
+with each value either tagged or untagged,
+depending on how the argument was specified.
+</p>
+<p>
+<code>alist</code> is like <code>list</code>, except in the handling of tagged
+arguments with no value. These are handled as if they described
+function arguments with no default (cf. <code><a href="formals.html">formals</a></code>), whereas
+<code>list</code> simply ignores them.
+</p>
+<p>
+<code>as.list</code> attempts to coerce its argument to list type.
+For functions, this returns the concatenation of the list of formals
+arguments and the function body. For expressions, the list of
+constituent calls is returned.
+</p>
+<p>
+<code>is.list</code> returns <code>TRUE</code> iff its argument
+is a <code>list</code> <EM>or</EM> a <code>pairlist</code> of <code>length</code> <i>&gt; 0</i>,
+whereas <code>is.pairlist</code> only returns <code>TRUE</code> in the latter case.
+</p>
+<p>
+<code>is.list</code> and <code>is.pairlist</code> are generic: you can write
+methods to handle specific classes of objects, see <a href="zMethods.html">InternalMethods</a>.
+</p>
+<p>
+<code>as.list.environment</code> copies the named values from an environment to a list. The 
+user can request that all named objects are copied (normally names that begin with a dot 
+are not). The output is not sorted and no parent environments are searched.
+</p>
+<p>
+An empty pairlist, <code>pairlist()</code> is the same as <code>NULL</code>.  This
+is different from <code>list()</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="vector.html">vector</a>(., mode="list")</code>, <code><a href="c.html">c</a></code>, for concatenation;
+<code><a href="formals.html">formals</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# create a plotting structure
+pts &lt;- list(x=cars[,1], y=cars[,2])
+plot(pts)
+
+# Argument lists
+f &lt;- function()x
+# Note the specification of a "..." argument:
+formals(f) &lt;- al &lt;- alist(x=, y=2, ...=)
+f
+al
+
+##environment-&gt;list coercion
+
+e1 &lt;- new.env()
+e1$a &lt;- 10
+e1$b &lt;- 20
+as.list(e1)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

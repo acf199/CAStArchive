@@ -1,0 +1,61 @@
+<html><head><title>R: Batch Execution of R</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for BATCH {utils}"><tr><td>BATCH {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Batch Execution of R</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Run <font face="Courier New,Courier" color="#666666"><b>R</b></font> non-interactively with input from <code>infile</code> and
+send output (stdout/stderr) to another file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>R CMD BATCH [options] infile [outfile]</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>infile</code></td>
+<td>
+the name of a file with <font face="Courier New,Courier" color="#666666"><b>R</b></font> code to be executed.</td></tr>
+<tr valign="top"><td><code>options</code></td>
+<td>
+a list of <font face="Courier New,Courier" color="#666666"><b>R</b></font> command line options, e.g., for setting the
+amount of memory available and controlling the load/save process.
+If <code>infile</code> starts with a <SAMP>-</SAMP>, use <SAMP>--</SAMP> as the final
+option.  The default options are <SAMP>--restore --save</SAMP>.</td></tr>
+<tr valign="top"><td><code>outfile</code></td>
+<td>
+the name of a file to which to write output.  If not
+given, the name used is that of <code>infile</code>, with a possible
+&lsquo;<TT>.R</TT>&rsquo; extension stripped, and &lsquo;<TT>.Rout</TT>&rsquo; appended.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Use <code>R CMD BATCH --help</code> to be reminded of the usage.
+</p>
+<p>
+By default, the input commands are printed along with the output.  To
+suppress this behavior, add <code>options(echo = FALSE)</code> at the
+beginning of <code>infile</code>.
+</p>
+<p>
+Files with an incomplete last line (no end of line mark) are now
+accepted.
+</p>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

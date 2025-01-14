@@ -8,12 +8,12 @@
   <meta name="keywords"
  content="Center for Astrostatistics, CASt,
 Statcodes, SCMA, VoStat">
-  <link href="../cast.css" rel="stylesheet" type="text/css">
+  <link href="assets/cast.css" rel="stylesheet" type="text/css">
 </head>
 <body style="background-color: rgb(255, 248, 229);" leftmargin="0"
  topmargin="0">
 <!--body style="background-color: #FFF8E5"-->
-<p><img src="../HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
+<p><img src="assets/HmPg_Ban.gif" alt="Astrostatistics Image" usemap="#Map"
  href="http://www.stat.psu.edu" title=""
  style="border: 0px solid ; width: 700px; height: 107px;" hspace="0"
  vspace="0"> <map name="Map">
@@ -28,13 +28,7 @@ Statcodes, SCMA, VoStat">
 </map>
 </p>
 <!-- InstanceBeginEditable name="head" -->
-<p>&nbsp;<!--center--><a href="http://astrostatistics.psu.edu">Home</a>
-| <a href="../people.html">People</a> | <a href="../partners.html">Partners</a>
-| <a href="http://astrostatistics.psu.edu/vostat/">VOStat</a> | <a
- href="../statcodes/index.html">StatCodes</a> | <a
- href="index.html">Data &amp; Tutorials</a> | <a
- href="../events.html">Events</a> | <a href="../biblio.html">Bibliographies</a><br>
-&nbsp;<!--/font--> </p>
+<p>&nbsp;<!--center--><a href="index.html">Home</a></p>
 <p><img src="http://astrostatistics.psu.edu/rainbow.gif" border="0"
  height="4" vspace="2" width="700"><!-- InstanceBeginEditable name="PageTitle" -->
 <!-- InstanceEndEditable --><!-- InstanceBeginEditable name="body" --></p>
@@ -82,7 +76,7 @@ code, used in several hundred astronomical studies to date, implements
 a number of survival methods: the Kaplan-Meier univariate maximum
 likelihood estimator; Gehan and other two-sample tests; generalized
 rank correlation coefficients for bivariate problems; and bivariate
-linear regressions.  
+linear regressions.
       </p>
       <p>Astronomical censoring problems often differ from those
 encountered in ordinary survival applications is various ways:
@@ -93,7 +87,7 @@ censoring produce non-random censoring patterns; detected points have
 heteroscedastic measurement errors; the censored values are imprecise
 because they are based on the measurement errors.  Despite these
 problems, survival methods are often used because they overcome much of
-the bias due to nondetections. 
+the bias due to nondetections.
       </p>
       <p><span style="font-weight: bold;">Dataset</span></p>
       <p>Here we present a censored dataset from stellar astronomy
@@ -114,7 +108,7 @@ giant planets?  N. C. Santos, G. Israelian, R. J. Garc&iacute;a
 L&oacute;pez, M. Mayor, R. Rebolo, S. Randich, A. Ecuvillon, and C. Dom&iacute;nguez
 Cerde&ntilde;a; Astronomy &amp; Astrophysics, 437, 1086-1096 (2004)</ul>
       </p>
-      <p> The columns of the dataset are: 
+      <p> The columns of the dataset are:
       </p>
       <ol>
          <li>Star name</li>
@@ -142,11 +136,11 @@ stars, but this difference evaporates when a Buckley-James regression
 line is considered that includes the effects of censoring (bottom
 panel).&nbsp; </p>
       <p style="text-align: center;"><img alt="Berrylium vs. Teff"
- src="Santos_Fig6.gif" style="width: 561px; height: 547px;"> 
+ src="Santos_Fig6.gif" style="width: 561px; height: 547px;">
       </p>
       <p>The scatter plot below shows that Be and Li abundances are
 interdependent in a complicated fashion, but little difference is seen
-between the planet-hosting and control samples. 
+between the planet-hosting and control samples.
       </p>
       <p style="text-align: center;"><img alt="Beryllium vs. lithium"
  src="Santos_Fig9.gif" style="width: 540px; height: 526px;"><br>
@@ -157,21 +151,21 @@ between the planet-hosting and control samples.
         <li>Use standard univariate survival analysis methods to
 onstruct Kaplan-Meier distributions of Be and Li abundances for the
 planet-hosting and control samples. Find means and medians, and
-apply two-sample tests for differences.  
+apply two-sample tests for differences.
         </li>
         <li>Perform the same but with heteroscedastic weighting for the
-Be abundances. 
+Be abundances.
         </li>
         <li>Apply bivariate correlation tests and linear regressions to
 the Be-vs-Li plots shown above.  Note that ASURV implements the
 Brown, Hollander &amp; Korwar generalized Kendall's tau that permits
-censoring in both variables.  
+censoring in both variables.
         </li>
         <li>Extend bivariate survival methods to the multivariate
 case.&nbsp; See the Akritas &amp; Siebert trivariate <a
  href="http://astrostatistics.psu.edu/statcodes/sc_censor.html">partial
 correlation coefficient</a> for multiply censored data based on
-Kendall's tau.  
+Kendall's tau.
         </li>
       </ul>
       </div>
@@ -187,15 +181,15 @@ Kendall's tau.
   <tbody>
     <tr>
       <td style="text-align: center; vertical-align: top;"><a
- href="http://www.nsf.gov/"><img src="../nsflogo.gif" alt="NSF"
+ href="http://www.nsf.gov/"><img src="assets/nsflogo.gif" alt="NSF"
  style="border: 0px solid ; width: 65px; height: 65px;" align="middle"></a><a
- href="http://www.stat.psu.edu/"><img src="../statistics.jpg"
+ href="http://www.stat.psu.edu/"><img src="assets/statistics.jpg"
  alt="Department of Statistics"
  style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a><a
  href="http://www.science.psu.edu/"><img alt="Eberly College of Science"
- src="../eberlycol.gif"
+ src="assets/eberlycol.gif"
  style="border: 0px solid ; height: 58px; width: 363px;" align="middle"></a><a
- href="http://www.astro.psu.edu/"><img src="../astronomy.jpg"
+ href="http://www.astro.psu.edu/"><img src="assets/astronomy.jpg"
  alt="Department of Astronomy and Astrophysics"
  style="border: 0px solid ; width: 68px; height: 58px;" align="middle"></a></td>
     </tr>

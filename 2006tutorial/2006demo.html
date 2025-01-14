@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Quick R demo for astrostatistics</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+
+<a href="http://www.r-project.org">R</a> is the 
+  most comprehensive public-domain statistical software available today.&nbsp; 
+  An implementation of the S language for statistical analysis, it is 
+  increasingly popular in the statistical community. It takes only a few minutes 
+  to obtain:&nbsp; go to <a href="http://www.R-project.org">
+  http://www.R-project.org</a> , choose a CRAN mirror site, and download the 
+  executable appropriate for your operating system.
+<p>
+The following demonstration is a series of excerpts from a weeklong set of tutorials
+presented at the Summer School in Statistics for Astronomers and Physicists
+at Penn State University (<a href="http://astrostatistics.psu.edu/su06/index.html">http://astrostatistics.psu.edu/su06/index.html</a>).
+When this demo is 
+viewed online, the bolded, indented lines<br>
+<br> 
+&nbsp;&nbsp; <span style="font-weight: 
+bold;"># like this one</span><br> 
+<br> 
+are meant to be copied and pasted directly into R at the command prompt.<br>
+
+<p>
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">
+ Quick R demo</span>
+ <br>
+</span></span></big></big></div> <br>   
+Load the Hipparcos dataset described at 
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.html">
+http://astrostatistics.psu.edu/datasets/HIP_star.html</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip  &lt;-  read.table("http://astrostatistics.psu.edu/datasets/HIP_star.dat",
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T,fill=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(hip)</span><br>
+<br>
+Create a fancy boxplot. <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(Vmag~cut(B.V,breaks=(-1:6)/2),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; notch=T, varwidth=T, las=1, tcl=.5,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; xlab=expression("B minus V"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; ylab=expression("V magnitude"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; main="Can you find the red giants?",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; cex=1, cex.lab=1.4, cex.axis=.8, cex.main=1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">axis(2, labels=F, at=0:12, tcl=-.25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">axis(4, at=3*(0:4))</span><br>
+<br>
+Now for a scatterplot.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(RA,DE,pch=".")</span><br>
+<br>
+Let's find the Hyades.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter1 &lt;-  (RA&gt;50 &amp; RA&lt;100 
+&amp; DE&gt;0 &amp; DE&lt;25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(pmRA[filter1],pmDE[filter1],pch=20)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rect(0,-150,200,50,border=2)</span><br>
+<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(pmRA[filter1],pmDE[filter1],pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+xlim=c(0,200),ylim=c(-150,50))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rect(90,-60,130,-10,border=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter2 &lt;- (pmRA>90 &amp; pmRA<130 
+&amp; pmDE>-60 & pmDE< -10) # Space in 'pmDE< -10' is necessary!</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter  &lt;-  filter1 &amp; filter2</span><br>
+<br>
+Let's have a final look.<br> 
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(hip[filter,-c(1,5)],pch=20)</span><br>
+<br>
+There is one outlying star in the e_Plx variable.  Get rid of it:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter &lt;- filter &amp; (e_Plx<5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(filter)</span><br>
+<br>
+A final look at the HR plot, with the Hyades highlighted:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V,pch=c(46,20)[1+filter], 
+col=1+filter,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp; 
+ xlim=range(Vmag[filter]), ylim=range(B.V[filter]))</span><br>
+<br>
+Next, a regression example involving the dataset
+<a href="http://astrostatistics.psu.edu/datasets/GRB_afterglow.html">
+http://astrostatistics.psu.edu/datasets/GRB_afterglow.html</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">grb &lt;- read.table
+("http://astrostatistics.psu.edu/datasets/GRB_afterglow.dat", </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;header=T, skip=1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x &lt;- log10(grb[,1])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y &lt;- log10(grb[,2])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+<br>
+The relationship looks roughly linear, so let's try a 
+<a href="html/stats/html/lm.html">linear model</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model1 &lt;- lm(y~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1, col=2, lwd=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model1 # same as print(model1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(model1)</span><br>
+<br>
+We can look at a confidence ellipse for the slope and intercept using the
+"car" package, available from CRAN 
+(<a href="http://cran.r-project.org/mirrors.html">http://cran.r-project.org/mirrors.html</a>).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(car)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">confidence.ellipse(model1)</span><br>
+<br>
+Next up, a quadratic fit (which is still linear regression, by the way):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2 &lt;- lm(y~x+I(x^2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(model2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1, col=2, lwd=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xx &lt;- seq(min(x),max(x),len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">yy &lt;- model2$coef %*% 
+rbind(1,xx,xx^2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx,yy,lwd=2,col=3)</span><br>
+<br>
+Let's check AIC for the two models:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model2)</span><br>
+<br>
+And here is the BIC:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">n &lt;- length(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model1, k=log(n))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model2, k=log(n))</span><br>
+<br>
+Let's try a nonparametric 
+<a href="html/stats/html/lowess.html">lowess</a> fit.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">npmodel1 &lt;- lowess(y~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(npmodel1, col=4, lwd=2)</span><br>
+<br>
+It is hard to see the pattern of the lowess curve in the plot.  Let's replot it with
+no other distractions. <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux",
+type="n")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(npmodel1, col=4, lwd=2)</span><br>
+<br>
+What about nonlinear fit?<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">flux &lt;- grb[,2]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">nlsmodel1 &lt;- nls(flux ~ I(10^(a+b*x)),
+start=list(a=0,b=0))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">nlsmodel1</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">npmodel2 &lt;- lowess(flux~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x, flux, xlab="log time",
+ylab="flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx, 10^(4.1085-.9674*xx), col=2, lwd=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(npmodel2, col=3, lwd=2)</span><br>
+<br>
+Finally, resistant regression using the
+<a href="html/MASS/html/lqs.html">lqs</a> 
+function in the MASS package.<br> 
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(MASS)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lqsmodel1 &lt;- lqs(y~x, method="lts")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(lqsmodel1,col=3)</span><br>
+<br>
+
+
+
+
+Here is a model-based clustering example applied to the 
+COMBO-17 dataset
+(<a href="http://astrostatistics.psu.edu/datasets/COMBO17.html">http://astrostatistics.psu.edu/datasets/COMBO17.html</a>).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">combo &lt;- read.csv(</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+"http://astrostatistics.psu.edu/datasets/COMBO17.csv", </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+na.strings="")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(combo)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xy &lt;- cbind(BjMAG, S280MAG-BjMAG)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xy &lt;- xy[Mcz>.7 & 
+Mcz<.9,]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xy &lt;- na.omit(xy)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(xy[,1],xy[,2], pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;xlab=expression(M[B]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;ylab=
+expression("(280-B)"[rest]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;main="z between 0.7 and 0.9",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;cex.lab=1.5)</span><br>
+<br>
+The mclust package will do the clustering.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(mclust)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc2 &lt;- Mclust(xy, minG=2, maxG=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">r &lt;- sqrt(qchisq(.5,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:2) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+ellipse(mc2$mu[,i], mc2$sigma[,,i], r, col=1+i)</span><br>
+<br>
+Is two components the "best" solution?  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc &lt;- Mclust(xy)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc$G</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(xy[,1],xy[,2], pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;xlab=expression(M[B]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;ylab=
+expression("(280-B)"[rest]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;main="z between 0.7 and 0.9",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;cex.lab=1.5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:mc$G) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+ellipse(mc$mu[,i], mc$sigma[,,i], r, col=1+i)</span><br>
+<br>
+
+
+
+
+</body>
+</html>

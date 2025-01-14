@@ -1,0 +1,60 @@
+<html><head><title>R: Banking</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for banking {lattice}"><tr><td>banking {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Banking</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Calculates `banking' slope
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+banking(dx, dy)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dx, dy</code></td>
+<td>
+vector of consecutive x, y differences. </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>banking</code> is a crude banking function used when aspect="xy" in
+high level Trellis functions. Its usually not very menaingful except
+for <code>xyplot</code>. It just orders the absolute slopes and returns a value
+which when adjusted by the panel scale limits will make the median of
+the above absolute slopes a 45 degree line.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Lattice.html">Lattice</a></code>, <code><a href="xyplot.html">xyplot</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

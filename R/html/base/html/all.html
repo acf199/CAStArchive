@@ -1,0 +1,95 @@
+<html><head><title>R: Are All Values True?</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for all {base}"><tr><td>all {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Are All Values True?</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Given a set of logical vectors, are all of the values true?
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+all(..., na.rm = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+one or more logical vectors.  Other objects are coerced in
+a similar way as <code>as.logical.default</code>.</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+logical.  If true <code>NA</code> values are removed before
+the result is computed.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This is a generic function: methods can be defined for it
+directly or via the <code><a href="groupGeneric.html">Summary</a></code> group generic.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Given a sequence of logical arguments, a logical value indicating
+whether or not all of the elements of <code>x</code> are <code>TRUE</code>.
+<br>
+The value returned is <code>TRUE</code> if all the values in <code>x</code>
+are <code>TRUE</code>, and <code>FALSE</code> if any the values in <code>x</code>
+are <code>FALSE</code>.
+<br>
+If <code>na.rm = FALSE</code> and <code>x</code> consists of a mix of <code>TRUE</code>
+and <code>NA</code> values, the value is <code>NA</code>.</p>
+
+<h3>Note</h3>
+
+<p>
+Prior to <font face="Courier New,Courier" color="#666666"><b>R</b></font> 2.1.0, only <code>NULL</code> and logical, integer, numeric
+and complex vectors were accepted.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="any.html">any</a></code>, the &ldquo;complement&rdquo; of <code>all</code>, and
+<code><a href="stopifnot.html">stopifnot</a>(*)</code> which is an <code>all(*)</code>
+&ldquo;insurance&rdquo;.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+range(x &lt;- sort(round(rnorm(10) - 1.2, 1)))
+if(all(x &lt; 0)) cat("all x values are negative\n")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

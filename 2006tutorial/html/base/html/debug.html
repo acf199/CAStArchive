@@ -1,0 +1,68 @@
+<html><head><title>R: Debug a function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for debug {base}"><tr><td>debug {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Debug a function</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Set or unset the debugging flag on a function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+debug(fun)
+undebug(fun)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fun</code></td>
+<td>
+any interpreted <font face="Courier New,Courier" color="#666666"><b>R</b></font> function.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+When a function flagged for debugging is entered, normal execution
+is suspended and the body of function is executed one statement at a time.
+A new browser context is initiated for each step (and the previous one
+destroyed).
+You take the next step by typing carriage return, <code>n</code> or <code>next</code>.
+You can see the values of variables by typing their names.
+Typing <code>c</code> or <code>cont</code> causes the debugger to continue to the
+end of the function (or loop if within a loop).
+You can <code>debug</code> new functions before you step in to them from inside
+the debugger.
+Typing <code>Q</code> quits the current execution and returns you to the
+top&ndash;level prompt.
+Typing <code>where</code> causes the debugger to print out the current
+stack trace (all functions that are active).
+If you have variables with names that are identical to the controls
+(eg. <code>c</code> or <code>n</code> ) then you need to use <code>print(c)</code> and
+<code>print(n)</code> to evaluate them.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="browser.html">browser</a></code>, <code><a href="traceback.html">traceback</a></code> to see the stack after
+an <code>Error: ...</code> message; <code><a href="../../utils/html/recover.html">recover</a></code> for another
+debugging approach.
+</p>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

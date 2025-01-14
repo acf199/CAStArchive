@@ -1,0 +1,148 @@
+<html><head><title>R: Function to compute nonlinear quantile regression estimates</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for nlrq {quantreg}"><tr><td>nlrq {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Function to compute nonlinear quantile regression estimates</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function implements an R version of an interior point method
+for computing the solution to quantile regression problems which
+are nonlinear in the parameters.  The algorithm is based on interior
+point ideas described in Koenker and Park (1994).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+nlrq(formula, data=parent.frame(), start, tau=0.5, 
+        control, trace=FALSE,method="L-BFGS-B")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+formula for model in nls format; accept self-starting models </td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+an optional data frame in which to evaluate the variables in
+`formula' </td></tr>
+<tr valign="top"><td><code>start</code></td>
+<td>
+a named list or named numeric vector of starting estimates </td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+a vector of quantiles to be estimated</td></tr>
+<tr valign="top"><td><code>control</code></td>
+<td>
+an optional list of control settings.  See `nlrq.control' for
+the names of the settable control values and their effect.</td></tr>
+<tr valign="top"><td><code>trace</code></td>
+<td>
+logical value indicating if a trace of the iteration progress
+should be printed.  Default is `FALSE'.  If `TRUE' intermediary results
+are printed at the end of each iteration. </td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+method passed to optim for line search, default is "L-BFGS-B"
+but for some problems "BFGS" may be preferable.  See <code><a href="../../stats/html/optim.html">optim</a></code> for
+further details.  Note that the algorithm wants to pass
+upper and lower bounds for the line search to optim, which is fine for
+the L-BFGS-B method.  Use of other methods will produce warnings about
+these arguments &ndash; so users should proceed at their own risk.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+An `nlrq' object is a type of fitted model object.  It has methods
+for the generic functions `coef' (parameters estimation at best solution),
+`formula' (model used), `deviance' (value of the objective function at best 
+solution), `print', `summary', `fitted' (vector of fitted variable according
+to the model), `predict' (vector of data points predicted by the model, using
+a different matrix for the independent variables) and also for the function
+`tau' (quantile used for fitting the model, as the tau argument of the
+function). Further help is also available for the method `residuals'.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A list consisting of: 
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>m</code></td>
+<td>
+an `nlrqModel' object similar to an `nlsModel' in package nls</td></tr>
+<tr valign="top"><td><code>data </code></td>
+<td>
+the expression that was passed to `nlrq' as the data argument.
+The actual data values are present in the environment of the
+`m' component. </td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Based on S code by Roger Koenker modified for R and to accept models
+as specified by nls by Philippe Grosjean.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Koenker, R. and Park, B.J. (1994). An Interior Point Algorithm for
+Nonlinear Quantile Regression, Journal of Econometrics, 71(1-2): 265-283.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="nlrq.control.html">nlrq.control</a></code> , <code><a href="residuals.nlrq.html">residuals.nlrq</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# build artificial data with multiplicative error
+Dat &lt;- NULL; Dat$x &lt;- rep(1:25, 20)
+set.seed(1)
+Dat$y &lt;- SSlogis(Dat$x, 10, 12, 2)*rnorm(500, 1, 0.1)
+plot(Dat)
+# fit first a nonlinear least-square regression
+Dat.nls &lt;- nls(y ~ SSlogis(x, Asym, mid, scal), data=Dat); Dat.nls
+lines(1:25, predict(Dat.nls, newdata=list(x=1:25)), col=1)
+# then fit the median using nlrq
+Dat.nlrq &lt;- nlrq(y ~ SSlogis(x, Asym, mid, scal), data=Dat, tau=0.5, trace=TRUE)
+lines(1:25, predict(Dat.nlrq, newdata=list(x=1:25)), col=2)
+# the 1st and 3rd quartiles regressions
+Dat.nlrq &lt;- nlrq(y ~ SSlogis(x, Asym, mid, scal), data=Dat, tau=0.25, trace=TRUE)
+lines(1:25, predict(Dat.nlrq, newdata=list(x=1:25)), col=3)
+Dat.nlrq &lt;- nlrq(y ~ SSlogis(x, Asym, mid, scal), data=Dat, tau=0.75, trace=TRUE)
+lines(1:25, predict(Dat.nlrq, newdata=list(x=1:25)), col=3)
+# and finally "external envelopes" holding 95 percent of the data
+Dat.nlrq &lt;- nlrq(y ~ SSlogis(x, Asym, mid, scal), data=Dat, tau=0.025, trace=TRUE)
+lines(1:25, predict(Dat.nlrq, newdata=list(x=1:25)), col=4)
+Dat.nlrq &lt;- nlrq(y ~ SSlogis(x, Asym, mid, scal), data=Dat, tau=0.975, trace=TRUE)
+lines(1:25, predict(Dat.nlrq, newdata=list(x=1:25)), col=4)
+leg &lt;- c("least squares","median (0.5)","quartiles (0.25/0.75)",".95 band (0.025/0.975)")
+legend(1, 12.5, legend=leg, lty=1, col=1:4)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

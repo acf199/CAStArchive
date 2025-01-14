@@ -1,0 +1,107 @@
+<html><head><title>R: Version Information</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for R.Version {base}"><tr><td>R.Version {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Version Information</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>R.Version()</code> provides detailed information about the version of
+<font face="Courier New,Courier" color="#666666"><b>R</b></font> running. <br>
+<code>R.version</code> is a variable (a <code><a href="list.html">list</a></code>) holding this
+information (and <code>version</code> is a copy of it for
+S compatibility), whereas <code>R.version.string</code> is a simple
+<code><a href="character.html">character</a></code> string, useful for plotting, etc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+R.Version()
+R.version
+R.version.string
+</pre>
+
+
+<h3>Value</h3>
+
+<p>
+<code>R.Version</code> returns a list with components
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>platform</code></td>
+<td>
+the platform for which <font face="Courier New,Courier" color="#666666"><b>R</b></font> was built.  Under Unix, a
+triplet of the form CPU-VENDOR-OS, as determined by the configure
+script.  E.g, <code>"i586-unknown-linux"</code>.</td></tr>
+<tr valign="top"><td><code>arch</code></td>
+<td>
+the architecture (CPU) <font face="Courier New,Courier" color="#666666"><b>R</b></font> was built on/for.</td></tr>
+<tr valign="top"><td><code>os</code></td>
+<td>
+the underlying operating system</td></tr>
+<tr valign="top"><td><code>system</code></td>
+<td>
+CPU and OS.</td></tr>
+<tr valign="top"><td><code>status</code></td>
+<td>
+the status of the version (e.g., <code>"Alpha"</code>)</td></tr>
+<tr valign="top"><td><code>status.rev</code></td>
+<td>
+the status revision level</td></tr>
+<tr valign="top"><td><code>major</code></td>
+<td>
+the major version number</td></tr>
+<tr valign="top"><td><code>minor</code></td>
+<td>
+the minor version number</td></tr>
+<tr valign="top"><td><code>year</code></td>
+<td>
+the year the version was released</td></tr>
+<tr valign="top"><td><code>month</code></td>
+<td>
+the month the version was released</td></tr>
+<tr valign="top"><td><code>day</code></td>
+<td>
+the day the version was released</td></tr>
+<tr valign="top"><td><code>language</code></td>
+<td>
+always <code>"R"</code>.</td></tr>
+</table>
+
+<h3>Note</h3>
+
+<p>
+Do <EM>not</EM> use <code>R.version$os</code> to test the platform the
+code is running on: use <code>.Platform$OS.type</code> instead.  Slightly
+different versions of the OS may report different values of
+<code>R.version$os</code>, as may different versions of <font face="Courier New,Courier" color="#666666"><b>R</b></font>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="package_version.html">getRversion</a></code>
+<code><a href="Platform.html">.Platform</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+R.version$os # to check how lucky you are ...
+plot(0) # any plot
+mtext(R.version.string, side=1,line=4,adj=1)# a useful bottom-right note
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

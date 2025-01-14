@@ -1,0 +1,149 @@
+<html><head><title>R: File and Directory Manipulation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for files {base}"><tr><td>files {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>File and Directory Manipulation</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These functions provide a low-level interface to the computer's
+file system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+file.create(...)
+file.exists(...)
+file.remove(...)
+file.rename(from, to)
+file.append(file1, file2)
+file.copy(from, to, overwrite = FALSE)
+file.symlink(from, to)
+dir.create(path, showWarnings = TRUE, recursive = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>..., file1, file2, from, to</code></td>
+<td>
+character vectors,
+containing file names.</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+a character vector containing a single path name.</td></tr>
+<tr valign="top"><td><code>overwrite</code></td>
+<td>
+logical; should the destination files be overwritten?</td></tr>
+<tr valign="top"><td><code>showWarnings</code></td>
+<td>
+logical; should the warnings on failure be shown?</td></tr>
+<tr valign="top"><td><code>recursive</code></td>
+<td>
+logical: should elements of the path other than the
+last be created?  If true, like Unix's <code>mkdir -p</code>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The <code>...</code> arguments are concatenated to form one character
+string: you can specify the files separately or as one vector.
+All of these functions expand path names: see <code><a href="path.expand.html">path.expand</a></code>.
+</p>
+<p>
+<code>file.create</code> creates files with the given names if they
+do not already exist and truncates them if they do.
+</p>
+<p>
+<code>file.exists</code> returns a logical vector indicating whether
+the files named by its argument exist.
+</p>
+<p>
+<code>file.remove</code> attempts to remove the files named in its
+argument.
+</p>
+<p>
+<code>file.rename</code> attempts to rename a single file.
+On Windows 9x/ME rename is not atomic, so it is possible that
+<code>to</code> will be deleted but <code>from</code> will not be renamed.
+</p>
+<p>
+<code>file.append</code> attempts to append the files named by its
+second argument to those named by its first.  The <font face="Courier New,Courier" color="#666666"><b>R</b></font> subscript
+recycling rule is used to align names given in vectors
+of different lengths.
+</p>
+<p>
+<code>file.copy</code> works in a similar way to <code>file.append</code> but with
+the arguments in the natural order for copying. Copying to existing
+destination files is skipped unless <code>overwrite = TRUE</code>.
+The <code>to</code> argument can specify a single existing directory.
+</p>
+<p>
+<code>file.symlink</code> makes symbolic links on those Unix-like platforms
+which support them.  The <code>to</code> argument can specify a single
+existing directory.
+</p>
+<p>
+<code>dir.create</code> creates the last element of the path, unless
+<code>recursive = TRUE</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>dir.create</code> and <code>file.rename</code> return a logical,
+true for success.
+<br>
+The remaining functions return a logical vector indicating which
+operation succeeded for each of the files attempted.
+<br>
+<code>dir.create</code> will return failure if the directory already exists.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Ross Ihaka, Brian Ripley
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="file.info.html">file.info</a></code>, <code><a href="file.access.html">file.access</a></code>, <code><a href="file.path.html">file.path</a></code>,
+<code><a href="file.show.html">file.show</a></code>, <code><a href="list.files.html">list.files</a></code>,
+<code><a href="unlink.html">unlink</a></code>, <code><a href="basename.html">basename</a></code>, <code><a href="path.expand.html">path.expand</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cat("file A\n", file="A")
+cat("file B\n", file="B")
+file.append("A", "B")
+file.create("A")
+file.append("A", rep("B", 10))
+if(interactive()) file.show("A")
+file.copy("A", "C")
+dir.create("tmp")
+file.copy(c("A", "B"), "tmp")
+list.files("tmp")
+unlink("tmp", recursive=TRUE)
+file.remove("A", "B", "C")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

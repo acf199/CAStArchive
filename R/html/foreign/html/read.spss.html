@@ -1,0 +1,107 @@
+<html><head><title>R: Read an SPSS data file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for read.spss {foreign}"><tr><td>read.spss {foreign}</td><td align="right">R Documentation</td></tr></table>
+<h2>Read an SPSS data file</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>read.spss</code> reads a file stored by the SPSS <code>save</code> and
+<code>export</code> commands and returns a list.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+read.spss(file, use.value.labels=TRUE, to.data.frame=FALSE,
+          max.value.labels=Inf, trim.factor.names=FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+character variable with the name of the file to read.</td></tr>
+<tr valign="top"><td><code>use.value.labels</code></td>
+<td>
+Convert variables with value labels into <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+factors with those levels?</td></tr>
+<tr valign="top"><td><code>to.data.frame</code></td>
+<td>
+return a data frame?</td></tr>
+<tr valign="top"><td><code>max.value.labels</code></td>
+<td>
+Only variables with at most this many unique
+values will be converted to factors</td></tr>
+<tr valign="top"><td><code>trim.factor.names</code></td>
+<td>
+Trim trailing spaces from factor levels?</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This uses modified code from the PSPP project for reading the SPSS
+formats.  Files written by recent versions of SPSS, which allow longer
+variable names, will give a warning of "Unrecognized record type 7,
+subtype 13". As far as we can tell, this is harmless.
+</p>
+<p>
+Occasionally in SPSS value labels will be added to some values of a
+continuous variable (eg to distinguish different types of missing
+data), and you will not want these variables converted to factors.  By
+setting <code>max.val.labels</code> you can specify that variables with a
+large number of distinct values are not converted to factors even if
+they have value labels. In addition, variables will not be converted
+to factors if there are non-missing values that have no value label.
+The value labels are then returned in the <code>"value.labels"</code>
+attribute of the variable.
+</p>
+<p>
+If SPSS variable labels are present, they are returned as the
+<code>"variable.labels"</code> attribute of the answer.
+</p>
+<p>
+Fixed length strings (including value labels) are padded on the right
+with spaces by SPSS, and so are read that way by R.   See the examples
+for <code><a href="../../base/html/grep.html">sub</a></code> for ways to remove trailing spaces in string data.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A list (or data frame) with one component for each variable in the saved data set.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Saikat DebRoy
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+read.spss("datafile")
+## don't convert value labels to factor levels
+read.spss("datafile",use.value.labels=FALSE)
+## convert value labels to factors for variables with at most
+## ten distinct values.
+read.spss("datafile",max.val.labels=10)
+## End(Not run)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>foreign</em> version 0.8-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

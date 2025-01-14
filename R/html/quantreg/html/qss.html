@@ -1,0 +1,123 @@
+<html><head><title>R: Additive Nonparametric Terms for rqss Fitting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for qss {quantreg}"><tr><td>qss {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Additive Nonparametric Terms for rqss Fitting</h2>
+
+
+<h3>Description</h3>
+
+<p>
+In the formula specification of <code>rqss</code> nonparametric terms 
+are specified with <code>qss</code>.  Both univariate and bivariate
+specifications are possible, and qualitative constraints may also be specified
+for the qss terms.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+qss(x, constraint = "N", lambda = 1, ndum = 0, dummies = NULL, w = rep(1, length(x)))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+The covariate determining the nonparametric component, if
+x is a matrix with two columns then  the qss
+function will construct a penalized triogram term.</td></tr>
+<tr valign="top"><td><code>lambda</code></td>
+<td>
+The smoothing parameter governing the tradeoff between
+fidelity and the penalty component for this term.  In future
+versions there should be an automatic mechanism for default
+choice of the lambdas.  For now, this is the responsibility
+of the user.</td></tr>
+<tr valign="top"><td><code>constraint</code></td>
+<td>
+Optional specification of qualitative constraints 
+on the fitted univariate qss functions, take the values: "N","I","D","U","C"
+"UI","UD","CI","CD" for none, increasing, decreasing, convex,
+concave, convex and increasing, etc.  And for bivariate qss
+components can take the values "N","U","C" for none, convex, and concave.</td></tr>
+<tr valign="top"><td><code>ndum</code></td>
+<td>
+number of dummy vertices: this is only relevant for qss2
+terms.  In addition to vertices at the observed (x,y) points
+ndum dummy vertices are generated &ndash; distributed uniformly over
+the rectangle given by the Cartesian product of the ranges of
+x and y &ndash; observations that fall in the convex hull of the 
+observations are retained. So the actual number of dummy
+vertices used is smaller than ndum.  The values of these 
+vertices are returned in the list dummies, so that they can
+be reused.</td></tr>
+<tr valign="top"><td><code>dummies</code></td>
+<td>
+list of dummy vertices as generated, for example by
+triogram.fidelity when ndum &gt; 0.  Should be a list with x
+and y components.  These points should lie inside the convex
+hull of the real xy points, but no explicit checking of this
+assertion is currently done.</td></tr>
+<tr valign="top"><td><code>w</code></td>
+<td>
+weights not yet unimplemented </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The various pieces returned are stored in sparse matrix.csr form.
+See <code>rqss</code> for details on how they are assembled.  To preserve the
+sparsity of the design matrix the first column of each qss term is dropped.
+This differs from the usual convention that would have forced qss terms
+to have mean zero.  This convention has implications for prediction that need to be
+recognized.  The penalty components for qss terms are based on total
+variation penalization of the first derivative (and gradient, for bivariate x)
+as described in the references appearing in the help for <code>rqss</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>F</code></td>
+<td>
+Fidelity component of the design matrix</td></tr>
+<tr valign="top"><td><code>dummies</code></td>
+<td>
+List of dummy vertices</td></tr>
+<tr valign="top"><td><code>A</code></td>
+<td>
+Penalty component of the design matrix</td></tr>
+<tr valign="top"><td><code>R</code></td>
+<td>
+Constraint component of the design matrix</td></tr>
+<tr valign="top"><td><code>r</code></td>
+<td>
+Constraint component of the rhs</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Roger Koenker
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="rqss.html">rqss</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

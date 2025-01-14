@@ -1,0 +1,166 @@
+<html><head><title>R: P-IRLS GAM estimation with GCV & UBRE derivative calculation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for gam.fit2 {mgcv}"><tr><td>gam.fit2 {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>P-IRLS GAM estimation with GCV & UBRE derivative calculation</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Estimation of GAM smoothing parameters is most stable if
+optimization of the UBRE or GCV score is outer to the penalized iteratively
+re-weighted least squares scheme used to estimate the model given smoothing 
+parameters.
+</p>
+<p>
+This routine estimates a GAM given log smoothing paramaters, and evaluates the
+first derivative of the GCV and UBRE scores of the model with respect to the
+log smoothing parameters. Calculation of exact derivatives is generally faster
+than approximating them by finite differencing, as well as generally improving
+the reliability of GCV/UBRE score minimization.
+</p>
+<p>
+Not normally called directly, but rather a service routine for <code><a href="gam.html">gam</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+gam.fit2(x, y, sp, S=list(),rS=list(),off, H=NULL, 
+         weights = rep(1, nobs), start = NULL, etastart = NULL, 
+         mustart = NULL, offset = rep(0, nobs), family = gaussian(), 
+         control = gam.control(), intercept = TRUE,deriv=TRUE,
+         gamma=1,scale=1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+The model matrix for the GAM.</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+The response variable.</td></tr>
+<tr valign="top"><td><code>sp</code></td>
+<td>
+The log smoothing parameters.</td></tr>
+<tr valign="top"><td><code>S</code></td>
+<td>
+A list of penalty matrices. Typically penalty matrices contain only a
+smallish square sub-matrix which is non-zero: this is what is actually
+stored. <code>off[i]</code> indicates which parameter is the first one penalized
+by <code>S[[i]]</code>.</td></tr>
+<tr valign="top"><td><code>rS</code></td>
+<td>
+List of square roots of penalty matrices, each having as few columns
+as possible, but as many rows as there are parameters.</td></tr>
+<tr valign="top"><td><code>off</code></td>
+<td>
+<code>off[i]</code> indicates which parameter <code>S[[i]][1,1]</code> relates to.</td></tr>
+<tr valign="top"><td><code>H</code></td>
+<td>
+The fixed penalty matrix for the model.</td></tr>
+<tr valign="top"><td><code>weights</code></td>
+<td>
+prior weights for fitting.</td></tr>
+<tr valign="top"><td><code>start</code></td>
+<td>
+optional starting parameter guesses.</td></tr>
+<tr valign="top"><td><code>etastart</code></td>
+<td>
+optional starting values for the linear predictor.</td></tr>
+<tr valign="top"><td><code>mustart</code></td>
+<td>
+optional starting values for the mean.</td></tr>
+<tr valign="top"><td><code>offset</code></td>
+<td>
+the model offset</td></tr>
+<tr valign="top"><td><code>family</code></td>
+<td>
+the family - actually this routine would never be called with <code>gaussian()</code></td></tr>
+<tr valign="top"><td><code>control</code></td>
+<td>
+control list as returned from <code><a href="../../stats/html/glm.control.html">glm.control</a></code></td></tr>
+<tr valign="top"><td><code>intercept</code></td>
+<td>
+does the model have and intercept, <code>TRUE</code> or
+<code>FALSE</code></td></tr>
+<tr valign="top"><td><code>deriv</code></td>
+<td>
+Should derivatives of the GCV and UBRE scores be calculated?
+<code>TRUE</code> or <code>FALSE</code></td></tr>
+<tr valign="top"><td><code>gamma</code></td>
+<td>
+The weight given to each degree of freedom in the GCV and UBRE
+scores can be varied (usually increased) using this parameter.</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+The scale parameter - needed for the UBRE score.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This routine is basically <code><a href="../../stats/html/glm.html">glm.fit</a></code> with some
+modifications to allow (i) for quadratic penalties on the log likelihood;
+(ii) derivatives of the model coefficients with respect to
+log smoothing parameters to be obtained (by updating alongside the P-IRLS
+iteration) and (iii) derivatives of the GAM GCV and UBRE scores to be
+evaluated at convergence. 
+</p>
+<p>
+In addition the routine applies step halving to any step that increases the
+penalized deviance substantially.
+</p>
+<p>
+The most costly parts of the calculation are performed by calls to compiled C
+code (which in turn calls LAPACK routines) in place of the compiled code that
+would usually perform least squares estimation on the working model in the
+IRLS iteration. 
+</p>
+<p>
+Estimation of smoothing parameters by optimizing GCV scores obtained at
+convergence of the P-IRLS iteration was proposed by O'Sullivan et al. (1986),
+and is here termed `outer' iteration.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+<p>
+The routine has been modified from <code>glm.fit</code> in R 2.0.1, written
+by the R core (see <code><a href="../../stats/html/glm.html">glm.fit</a></code> for further credits).
+</p>
+
+
+<h3>References</h3>
+
+<p>
+O 'Sullivan, Yandall &amp; Raynor (1986) Automatic smoothing of regression
+functions in generalized linear models. J. Amer. Statist. Assoc. 81:96-103.
+</p>
+<p>
+<a href="http://www.stats.gla.ac.uk/~simon/">http://www.stats.gla.ac.uk/~simon/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="gam.fit.html">gam.fit</a></code>,  <code><a href="gam.html">gam</a></code>, <code><a href="mgcv.html">mgcv</a></code>, <code><a href="magic.html">magic</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

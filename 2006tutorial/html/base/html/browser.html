@@ -1,0 +1,76 @@
+<html><head><title>R: Environment Browser</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for browser {base}"><tr><td>browser {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Environment Browser</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Interrupt the execution of an expression and allow the inspection of
+the environment where <code>browser</code> was called from.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+browser()
+</pre>
+
+
+<h3>Details</h3>
+
+<p>
+A call to <code>browser</code> causes a pause in the execution of the
+current expression and runs a copy of the <font face="Courier New,Courier" color="#666666"><b>R</b></font> interpreter which has
+access to variables local to the environment where the call took
+place.
+</p>
+<p>
+Local variables can be listed with <code>ls</code>, and manipulated with <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+expressions typed to this sub-interpreter.  The sub-interpreter can be
+exited by typing <code>c</code>.  Execution then resumes at the statement
+following the call to <code>browser</code>.
+</p>
+<p>
+Typing <code>n</code> causes the step-through-debugger, to start and it is
+possible to step through the remainder of the function one line at a
+time.  In this mode <code>c</code> will continue to the end of the current
+context (to the next loop iteration if within a loop).
+</p>
+<p>
+Typing <code>Q</code> quits the current execution and returns you to the
+top-level prompt.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+<p>
+Chambers, J. M. (1998)
+<EM>Programming with Data. A Guide to the S Language</EM>.
+Springer.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="debug.html">debug</a></code>, and
+<code><a href="traceback.html">traceback</a></code> for the stack on error.
+</p>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

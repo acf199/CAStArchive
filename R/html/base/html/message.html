@@ -1,0 +1,82 @@
+<html><head><title>R: Diagnostic Messages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for message {base}"><tr><td>message {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Diagnostic Messages</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Generate a diagnostic message from its arguments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+message(..., domain = NULL)
+suppressMessages(expr)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+character vectors (which are pasted together with no
+separator), a condition object, or <code>NULL</code>.</td></tr>
+<tr valign="top"><td><code>domain</code></td>
+<td>
+see <code><a href="gettext.html">gettext</a></code>.
+If <code>NA</code>, messages will not be translated.</td></tr>
+<tr valign="top"><td><code>expr</code></td>
+<td>
+expression to evaluate.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>message</code> is used for generating &ldquo;simple&rdquo; diagnostic
+messages which are neither warnings nor errors, but nevertheless
+represented as conditions.
+</p>
+<p>
+While the message is being processed, a <code>muffleMessage</code> restart
+is available.
+</p>
+<p>
+<code>suppressMessages</code> evaluates its expression in a context that
+ignores all &ldquo;simple&rdquo; diagnostic messages.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="warning.html">warning</a></code> and <code><a href="stop.html">stop</a></code> for generating warnings
+and errors; <code><a href="conditions.html">conditions</a></code> for condition handling and
+recovery.
+</p>
+<p>
+<code><a href="gettext.html">gettext</a></code> for the mechanisms for the automated translation
+of text.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+message("ABC", "DEF")
+suppressMessages(message("ABC"))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

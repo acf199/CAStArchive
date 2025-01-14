@@ -1,0 +1,84 @@
+<html><head><title>R: Clustering Tree of a Hierarchical Clustering</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for pltree.twins {cluster}"><tr><td>pltree.twins {cluster}</td><td align="right">R Documentation</td></tr></table>
+<h2>Clustering Tree of a Hierarchical Clustering</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Draws a clustering tree (dendrogramm) of a <code>twins</code> object, i.e.,
+hierarchical clustering, typically resulting from <code>agnes</code> or
+<code>diana</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'twins':
+pltree(x, main = paste("Dendrogram of ", deparse(x$call)),
+             labels = NULL, ylab = "Height", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+an object of class <code>"twins"</code>, typically created by either
+<code><a href="agnes.html">agnes</a>()</code> or <code><a href="diana.html">diana</a>()</code>.</td></tr>
+<tr valign="top"><td><code>main</code></td>
+<td>
+main title with a sensible default.</td></tr>
+<tr valign="top"><td><code>labels</code></td>
+<td>
+labels to use; the default is constructed from <code>x</code>.</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+label for y-axis.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Graphical parameters (see <code><a href="../../graphics/html/par.html">par</a></code>) may also
+be supplied as arguments to this function.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Creates a plot of a clustering tree given a <code>twins</code> object.  The
+leaves of the tree are the original observations.  In case of an
+agglomerative clustering, two branches come together at the distance
+between the two clusters being merged.  For a divisive clustering, a
+branch splits up at the diameter of the cluster being splitted.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+a NULL value is returned.</p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="agnes.html">agnes</a></code>, <code><a href="agnes.object.html">agnes.object</a></code>, <code><a href="diana.html">diana</a></code>,
+<code><a href="diana.object.html">diana.object</a></code>, <code><a href="../../stats/html/hclust.html">hclust</a></code>, <code><a href="../../graphics/html/par.html">par</a></code>,
+<code><a href="plot.agnes.html">plot.agnes</a></code>, <code><a href="plot.diana.html">plot.diana</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+</pre>
+
+
+
+<hr><div align="center">[Package <em>cluster</em> version 1.9.8 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,65 @@
+<html><head><title>R: Select Package Repositories</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for setRepositories {utils}"><tr><td>setRepositories {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Select Package Repositories</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Interact with the user to choose the package repositories to be used.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+setRepositories(graphics = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>graphics</code></td>
+<td>
+Logical.
+If true use a listbox,
+otherwise use a text list in the console.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The default list of known repositories is stored in the file
+&lsquo;<TT>R_HOME/etc/repositories</TT>&rsquo;.
+That file can be edited for a site, or a user can have a personal copy
+in &lsquo;<TT>HOME/.R/repositories</TT>&rsquo; which will take precedence.
+</p>
+<p>
+The items that are preselected are those that are currently in
+<code>options("repos")</code> plus those marked as default in the
+list of known repositories.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+None.  This function is invoked for its side effect of updating
+<code>options("repos")</code></p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="chooseCRANmirror.html">chooseCRANmirror</a></code>, <code><a href="update.packages.html">install.packages</a></code>.
+</p>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

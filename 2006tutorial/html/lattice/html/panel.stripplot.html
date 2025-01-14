@@ -1,0 +1,83 @@
+<html><head><title>R: Default Panel Function for stripplot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for panel.stripplot {lattice}"><tr><td>panel.stripplot {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Default Panel Function for stripplot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This is the default panel function for <code>stripplot</code>. Also see
+<code>panel.superpose</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+panel.stripplot(x, y, jitter.data = FALSE, factor = 0.5,
+                horizontal = TRUE, groups = NULL,
+                ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,y</code></td>
+<td>
+coordinates of points to be plotted</td></tr>
+<tr valign="top"><td><code>jitter.data</code></td>
+<td>
+whether points should be jittered to avoid
+overplotting.</td></tr>
+<tr valign="top"><td><code>factor</code></td>
+<td>
+factor by which to jitter</td></tr>
+<tr valign="top"><td><code>horizontal</code></td>
+<td>
+logical. If FALSE, the plot is `transposed' in the
+sense that the behaviours of x and y are switched. x is now
+the `factor'.  Interpretation of other arguments change
+accordingly. See documentation of <code>bwplot</code> for a fuller
+explanation.
+</td></tr>
+<tr valign="top"><td><code>groups</code></td>
+<td>
+optional grouping variable </td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+graphical parameters etc can be supplied, passed to
+<code>panel.xyplot</code> or <code>panel.superpose</code>, depending on whether
+<code>groups</code> is present</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Creates stripplot (one dimensional scatterplot) of <code>x</code>
+for each level of <code>y</code>
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="xyplot.html">stripplot</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

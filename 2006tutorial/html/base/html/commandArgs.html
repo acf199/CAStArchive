@@ -1,0 +1,61 @@
+<html><head><title>R: Extract Command Line Arguments</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for commandArgs {base}"><tr><td>commandArgs {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Extract Command Line Arguments</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Provides access to a copy of the command line arguments supplied when
+this <font face="Courier New,Courier" color="#666666"><b>R</b></font> session was invoked.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+commandArgs()
+</pre>
+
+
+<h3>Details</h3>
+
+<p>
+These arguments are captured before the standard <font face="Courier New,Courier" color="#666666"><b>R</b></font> command line
+processing takes place.  This means that they are the unmodified
+values.  If it were useful, we could provide support an argument which
+indicated whether we want the unprocessed or processed values.
+</p>
+<p>
+This is especially useful with the <code>--args</code> command-line flag to
+<font face="Courier New,Courier" color="#666666"><b>R</b></font>, as all of the command line after than flag is skipped.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A character vector containing the name of the executable and the
+user-supplied command line arguments.  The first element is the name
+of the executable by which <font face="Courier New,Courier" color="#666666"><b>R</b></font> was invoked.  As far as I am aware, the
+exact form of this element is platform dependent.  It may be the fully
+qualified name, or simply the last component (or basename) of the
+application.</p>
+
+<h3>Examples</h3>
+
+<pre>
+commandArgs()
+## Spawn a copy of this application as it was invoked.
+## system(paste(commandArgs(), collapse=" "))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

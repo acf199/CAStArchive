@@ -1,0 +1,88 @@
+<html><head><title>R: Search Paths for Packages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for libPaths {base}"><tr><td>libPaths {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Search Paths for Packages</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>.libPaths</code> gets/sets the library trees within which packages are
+looked for.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+.libPaths(new)
+
+.Library
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>new</code></td>
+<td>
+a character vector with the locations of <font face="Courier New,Courier" color="#666666"><b>R</b></font> library trees.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>.Library</code> is a character string giving the location of the
+default library, the &lsquo;<TT>library</TT>&rsquo; subdirectory of <CODE>R_HOME</CODE>.
+</p>
+<p>
+<code>.libPaths</code> is used for getting or setting the library trees that
+<font face="Courier New,Courier" color="#666666"><b>R</b></font> knows about (and hence uses when looking for packages).  If called
+with argument <code>new</code>, the library search path is set to
+the existing files in <code>unique(new, .Library)</code> and this is
+returned.  If given no argument, a character vector with the currently
+known library trees is returned.
+</p>
+<p>
+The library search path is initialized at startup from the environment
+variable <CODE>R_LIBS</CODE> (which should be a semicolon-separated list of
+directories at which <font face="Courier New,Courier" color="#666666"><b>R</b></font> library trees are rooted) by calling
+<code>.libPaths</code> with the directories specified in <CODE>R_LIBS</CODE>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A character vector of file paths.</p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="library.html">library</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+.libPaths()                 # all library trees R knows about
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,78 @@
+<html><head><title>R: Product of Vector Elements</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for prod {base}"><tr><td>prod {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Product of Vector Elements</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>prod</code> returns the product of all the values
+present in its arguments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+prod(..., na.rm = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+numeric vectors.</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+logical. Should missing values be removed?</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If <code>na.rm</code> is <code>FALSE</code> an <code>NA</code>
+value in any of the arguments will cause
+a value of <code>NA</code> to be returned, otherwise
+<code>NA</code> values are ignored.
+</p>
+<p>
+This is a generic function: methods can be defined for it
+directly or via the <code><a href="groupGeneric.html">Summary</a></code> group generic.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="sum.html">sum</a></code>,
+<code><a href="cumsum.html">cumprod</a></code>,
+<code><a href="cumsum.html">cumsum</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+print(prod(1:7)) == print(gamma(8))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

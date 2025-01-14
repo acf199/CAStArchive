@@ -1,0 +1,121 @@
+<html><head><title>R: Default Panel Function for xyplot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for panel.xyplot {lattice}"><tr><td>panel.xyplot {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Default Panel Function for xyplot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This is the default panel function for <code>xyplot</code>. Also see
+<code>panel.superpose</code>. The default panel functions for
+<code>splom</code> and <code>qqmath</code> are essentially the same function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+panel.xyplot(x, y, type="p",
+             pch = plot.symbol$pch,
+             col,
+             col.line = plot.line$col,
+             col.symbol = plot.symbol$col,
+             font = plot.symbol$font,
+             fontfamily = plot.symbol$fontfamily,
+             fontface = plot.symbol$fontface,
+             lty = plot.line$lty,
+             cex = plot.symbol$cex,
+             lwd = plot.line$lwd,
+             horizontal = FALSE, ...)
+panel.splom(...)
+panel.qqmath(...)
+panel.qq(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,y</code></td>
+<td>
+variables to be plotted in the scatterplot</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+character vector consisting of one or more of the
+following: <code>"p", "l", "h", "b", "o", "s", "S", "r", "g",
+      "smooth"</code>. If type has more than one element, an attempt is made
+to combine the effect of each of the components.
+<br>
+The behaviour if any of the first six are included in <code>type</code> is
+similar to the effect of <code>type</code> in <code><a href="../../graphics/html/plot.html">plot</a></code> (type 'b'
+is actually the same as 'o').  <code>"r"</code> adds a regression line
+(same as <code><a href="panel.functions.html">panel.lmline</a></code>, except for default graphical
+parameters), and <code>"smooth"</code> adds a lowess fit (same as
+<code><a href="panel.functions.html">panel.loess</a></code>). <code>"g"</code> adds a reference grid using
+<code><a href="panel.functions.html">panel.grid</a></code> in the background.
+<br>
+See <code>example(xyplot)</code> and <code>demo(lattice)</code> for examples.
+</td></tr>
+<tr valign="top"><td><code>col, col.line, col.symbol</code></td>
+<td>
+default colours are obtained from <code>plot.symbol</code> and
+<code>plot.line</code> using <code><a href="trellis.par.get.html">trellis.par.get</a></code>.
+</td></tr>
+<tr valign="top"><td><code>font, fontface, fontfamily</code></td>
+<td>
+font used when <code>pch</code> is a character
+</td></tr>
+<tr valign="top"><td><code>pch, lty, cex, lwd</code></td>
+<td>
+other graphical parameters.
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+extra arguments, if any, for <code>panel.xyplot</code>. In
+most cases <code>panel.xyplot</code> ignores these. For types "r" and
+"smooth", these are passed on to <code>panel.lmline</code> and
+<code>panel.loess</code> respectively.
+</td></tr>
+<tr valign="top"><td><code>horizontal</code></td>
+<td>
+logical. Controls orientation when <code>type</code> is
+one of <code>"h"</code>, <code>"s"</code> or <code>"S"</code></td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Creates scatterplot of <code>x</code> and <code>y</code>, with various
+modifications possible via the type argument. <code>panel.qq</code> draws a
+45 degree line before calling <code>panel.xyplot</code>.
+</p>
+<p>
+Note that most of the arguments controlling the display can be
+supplied directly to the high-level <code>xyplot</code> call.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="panel.superpose.html">panel.superpose</a></code>,
+<code><a href="xyplot.html">xyplot</a></code>,
+<code><a href="splom.html">splom</a></code>,<code><a href="qqmath.html">qqmath</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

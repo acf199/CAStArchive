@@ -1,0 +1,126 @@
+<html><head><title>R: Smoothing Kernel Objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for kernel {stats}"><tr><td>kernel {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Smoothing Kernel Objects</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The <code>"tskernel"</code> class is designed to represent discrete
+symmetric normalized smoothing kernels.  These kernels can be used to
+smooth vectors, matrices, or time series objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+kernel(coef, m, r, name)
+
+df.kernel(k)
+bandwidth.kernel(k)
+is.tskernel(k)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>coef</code></td>
+<td>
+the upper half of the smoothing kernel coefficients
+(inclusive of coefficient zero) <EM>or</EM> the name of a kernel
+(currently <code>"daniell"</code>, <code>"dirichlet"</code>, <code>"fejer"</code> or
+<code>"modified.daniell"</code>.</td></tr>
+<tr valign="top"><td><code>m</code></td>
+<td>
+the kernel dimension. The number of kernel coefficients is
+<code>2*m+1</code>.</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+the name of the kernel.</td></tr>
+<tr valign="top"><td><code>r</code></td>
+<td>
+the kernel order for a Fejer kernel.</td></tr>
+<tr valign="top"><td><code>k</code></td>
+<td>
+a <code>"tskernel"</code> object.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>kernel</code> is used to construct a general kernel or named specific
+kernels.  The modified Daniell kernel halves the end coefficients (as
+used by S-PLUS). 
+</p>
+<p>
+<code>df.kernel</code> returns the &ldquo;equivalent degrees of freedom&rdquo; of
+a smoothing kernel as defined in Brockwell and Davies (1991), page
+362, and <code>bandwidth.kernel</code> returns the equivalent bandwidth as
+defined in Bloomfield (1991), p. 201, with a continuity correction.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>kernel</code> returns a list with class <code>"tskernel"</code>, and
+components the coefficients <code>coef</code> and the kernel dimension
+<code>m</code>.  An additional attribute is <code>"name"</code>.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+A. Trapletti; modifications by B.D. Ripley
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Bloomfield, P. (1976) <EM>Fourier Analysis of Time Series: An
+Introduction.</EM> Wiley.
+</p>
+<p>
+Brockwell, P.J. and Davis, R.A. (1991) <EM>Time Series: Theory and
+Methods.</EM> Second edition. Springer, pp. 350&ndash;365.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="kernapply.html">kernapply</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Demonstrate a simple trading strategy for the 
+ # financial time series German stock index DAX.
+x &lt;- EuStockMarkets[,1] 
+k1 &lt;- kernel("daniell", 50)  # a long moving average
+k2 &lt;- kernel("daniell", 10)  # and a short one
+plot(k1) 
+plot(k2)
+x1 &lt;- kernapply(x, k1)
+x2 &lt;- kernapply(x, k2)
+plot(x)
+lines(x1, col = "red")    # go long if the short crosses the long upwards
+lines(x2, col = "green")  # and go short otherwise
+
+# Reproduce example 10.4.3 from Brockwell and Davies (1991)
+spectrum(sunspot.year, kernel=kernel("daniell", c(11,7,3)), log="no")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

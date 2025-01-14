@@ -1,0 +1,98 @@
+<html><head><title>R: Tk widgets</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for TkWidgets {tcltk}"><tr><td>TkWidgets {tcltk}</td><td align="right">R Documentation</td></tr></table>
+<h2>Tk widgets</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Create Tk widgets and associated <font face="Courier New,Courier" color="#666666"><b>R</b></font> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tkwidget(parent, type, ...)
+tkbutton(parent, ...)
+tkcanvas(parent, ...)
+tkcheckbutton(parent, ...)
+tkentry(parent, ...)
+tkframe(parent, ...)
+tklabel(parent, ...)
+tklistbox(parent, ...)
+tkmenu(parent, ...)
+tkmenubutton(parent, ...)
+tkmessage(parent, ...)
+tkradiobutton(parent, ...)
+tkscale(parent, ...)
+tkscrollbar(parent, ...)
+tktext(parent, ...)
+tktoplevel(parent=.TkRoot, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>parent</code></td>
+<td>
+Parent of widget window </td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+string describing the type of widget desired</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+handled via <code>.Tcl.args</code></td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+These functions create Tk widgets.  <code>tkwidget</code> creates a widget of
+a given type, the others simply call <code>tkwidget</code> with the
+respective <code>type</code> argument.
+</p>
+<p>
+It is not possible to describe the widgets and their arguments in
+full.  Please refer to the Tcl/Tk documentation.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="TclInterface.html">TclInterface</a></code>, <code><a href="TkCommands.html">TkCommands</a></code>,
+<code><a href="TkWidgetcmds.html">TkWidgetcmds</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+## These cannot be run by examples() but should be OK when pasted
+## into an interactive R session with the tcltk package loaded
+
+tt &lt;- tktoplevel()
+label.widget &lt;- tklabel(tt, text="Hello, World!")
+button.widget &lt;- tkbutton(tt, text="Push",
+                          command=function()cat("OW!\n"))
+tkpack(label.widget, button.widget) # geometry manager
+                                    # see Tk-commands
+
+## Push the button and then...
+
+tkdestroy(tt)
+## End(Not run)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>tcltk</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

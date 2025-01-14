@@ -1,0 +1,104 @@
+<html><head><title>R: Read Text Lines from a Connection</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for readLines {base}"><tr><td>readLines {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Read Text Lines from a Connection</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Read text lines from a connection.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+readLines(con = stdin(), n = -1, ok = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>con</code></td>
+<td>
+A connection object or a character string.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+integer.  The (maximal) number of lines to
+read. Negative values indicate that one should read up to the end of
+the connection.</td></tr>
+<tr valign="top"><td><code>ok</code></td>
+<td>
+logical. Is it OK to reach the end of the connection before
+<code>n &gt; 0</code> lines are read? If not, an error will be generated.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If the <code>con</code> is a character string, the functions call
+<code><a href="connections.html">file</a></code> to obtain an file connection which is opened for
+the duration of the function call.
+</p>
+<p>
+If the connection is open it is read from its current position.
+If it is not open, it is opened for the duration of the call and then
+closed again.
+</p>
+<p>
+If the final line is incomplete (no final EOL marker) the behaviour
+depends on whether the connection is blocking or not. For a blocking
+text-mode connection (or a non-text-mode connection) the line
+will be accepted, with a warning.  For a non-blocking text-mode
+connection the incomplete line is pushed back, silently.
+</p>
+<p>
+Whatever mode the connection is opened in, any of LF, CRLF or CR will
+be accepted as the EOL marker for a line.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A character vector of length the number of lines read.</p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="connections.html">connections</a></code>, <code><a href="writeLines.html">writeLines</a></code>, <code><a href="readBin.html">readBin</a></code>,
+<code><a href="scan.html">scan</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file="ex.data",
+    sep="\n")
+readLines("ex.data", n=-1)
+unlink("ex.data") # tidy up
+
+## difference in blocking
+cat("123\nabc", file = "test1")
+readLines("test1") # line with a warning
+
+con &lt;- file("test1", "r", blocking = FALSE)
+readLines(con) # empty
+cat(" def\n", file = "test1", append = TRUE)
+readLines(con) # gets both
+close(con)
+
+unlink("test1") # tidy up
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

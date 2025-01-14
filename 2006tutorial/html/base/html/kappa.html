@@ -1,0 +1,113 @@
+<html><head><title>R: Estimate the Condition Number</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for kappa {base}"><tr><td>kappa {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Estimate the Condition Number</h2>
+
+
+<h3>Description</h3>
+
+<p>
+An estimate of the condition number of a matrix or of the <i>R</i> matrix of a
+<i>QR</i> decomposition, perhaps of a linear fit.  The condition number is
+defined as the ratio of the largest to the smallest <EM>non-zero</EM>
+singular value of the matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+kappa(z, ...)
+## S3 method for class 'lm':
+kappa(z, ...)
+## Default S3 method:
+kappa(z, exact = FALSE, ...)
+## S3 method for class 'qr':
+kappa(z, ...) 
+
+kappa.tri(z, exact = FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>z</code></td>
+<td>
+A matrix or a the result of <code><a href="qr.html">qr</a></code> or a fit from a class
+inheriting from <code>"lm"</code>.</td></tr>
+<tr valign="top"><td><code>exact</code></td>
+<td>
+logical. Should the result be exact?</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments passed to or from other methods.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If <code>exact = FALSE</code> (the default) the condition number is estimated
+by a cheap approximation. Following S, this uses the LINPACK routine
+&lsquo;<TT>dtrco.f</TT>&rsquo;.  However, in <font face="Courier New,Courier" color="#666666"><b>R</b></font> (or S) the exact calculation is also
+likely to be quick enough.
+</p>
+<p>
+<code>kappa.tri</code> is an internal function called by <code>kappa.qr</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+The condition number, <i>kappa</i>, or an approximation if
+<code>exact = FALSE</code>.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+The design was inspired by (but differs considerably from)
+the S function of the same name described in Chambers (1992).
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Chambers, J. M. (1992)
+<EM>Linear models.</EM>
+Chapter 4 of <EM>Statistical Models in S</EM>
+eds J. M. Chambers and T. J. Hastie, Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="svd.html">svd</a></code> for the singular value decomposition and
+<code><a href="qr.html">qr</a></code> for the <i>QR</i> one.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+kappa(x1 &lt;- cbind(1,1:10))# 15.71
+kappa(x1, exact = TRUE)        # 13.68
+kappa(x2 &lt;- cbind(x1,2:11))# high! [x2 is singular!]
+
+hilbert &lt;- function(n) { i &lt;- 1:n; 1 / outer(i - 1, i, "+") }
+sv9 &lt;- svd(h9 &lt;- hilbert(9))$ d
+kappa(h9)# pretty high!
+kappa(h9, exact = TRUE) == max(sv9) / min(sv9)
+kappa(h9, exact = TRUE) / kappa(h9) # .677 (i.e., rel.error = 32%)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,166 @@
+<html><head><title>R: Add an Axis to a Plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for axis {graphics}"><tr><td>axis {graphics}</td><td align="right">R Documentation</td></tr></table>
+<h2>Add an Axis to a Plot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Adds an axis to the current plot, allowing the
+specification of the side, position, labels, and other options.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+axis(side, at = NULL, labels = TRUE, tick = TRUE, line = NA,
+     pos = NA, outer = FALSE, font = NA, vfont = NULL,
+     lty = "solid", lwd = 1, col = NULL, padj = NA, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>side</code></td>
+<td>
+an integer specifying which side of the plot the axis is
+to be drawn on.  The axis is placed as follows: 1=below,
+2=left, 3=above and 4=right.</td></tr>
+<tr valign="top"><td><code>at</code></td>
+<td>
+the points at which tick-marks are to be drawn.  Non-finite
+(infinite, <code>NaN</code> or <code>NA</code>) values are omitted.  By default,
+when <code>NULL</code>, tickmark locations are computed, see Details below.</td></tr>
+<tr valign="top"><td><code>labels</code></td>
+<td>
+this can either be a logical value specifying whether
+(numerical) annotations are to be made at the tickmarks, or a vector
+of character strings to be placed at the tickpoints.</td></tr>
+<tr valign="top"><td><code>tick</code></td>
+<td>
+a logical value specifying whether tickmarks should be
+drawn</td></tr>
+<tr valign="top"><td><code>line</code></td>
+<td>
+the number of lines into the margin which the axis will
+be drawn.  This overrides the value of the graphical parameter
+<code>mgp[3]</code>.  The relative placing of tickmarks and tick labels
+is unchanged.</td></tr>
+<tr valign="top"><td><code>pos</code></td>
+<td>
+the coordinate at which the axis line is to be drawn:
+this overrides the values of both <code>line</code> and <code>mgp[3]</code>.</td></tr>
+<tr valign="top"><td><code>outer</code></td>
+<td>
+a logical value indicating whether the axis should be
+drawn in the outer plot margin, rather than the standard plot
+margin.</td></tr>
+<tr valign="top"><td><code>font</code></td>
+<td>
+font for text.</td></tr>
+<tr valign="top"><td><code>vfont</code></td>
+<td>
+vector font for text.</td></tr>
+<tr valign="top"><td><code>lty, lwd</code></td>
+<td>
+line type, width for the axis line and the tick marks.</td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+color for the axis line and the tick marks.  The default
+<code>NULL</code> means to use <code>par("fg")</code>.</td></tr>
+<tr valign="top"><td><code>padj</code></td>
+<td>
+adjustment for each string perpendicular to the reading direction.
+For strings parallel to the axes, <code>padj=0</code> means right or top alignment, 
+and <code>padj=1</code> means left or bottom alignment.
+If <code>padj</code> is not a finite value (the default), the value of
+<code>par("las")</code> determines the adjustment.  For strings plotted
+perpendicular to the axis the default is to centre the string.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+other graphical parameters may also be passed as arguments to
+this function, particularly, <code>cex.axis</code>, <code>col.axis</code> and
+<code>font.axis</code> for axis annotation, <code>las</code> for
+vertical/horizontal label orientation, or <code>fg</code> instead of
+<code>col</code>, see <code><a href="par.html">par</a></code> on these.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The axis line is drawn from the lowest to the highest value of
+<code>at</code>, but will be clipped at the plot region. Only ticks which
+are drawn from points within the plot region (up to a tolerance for
+rounding error) are plotted, but the ticks and their labels may well
+extend outside the plot region.
+</p>
+<p>
+When <code>at = NULL</code>, pretty tick mark locations are computed internally
+(the same way <code><a href="axTicks.html">axTicks</a>(side)</code> would) from
+<code><a href="par.html">par</a>("usr", "lab")</code> and <code><a href="par.html">par</a>("xlog")</code> (or
+<code>"ylog"</code>).
+</p>
+<p>
+Several of the graphics parameters affect the way axes are drawn. The
+vertical (for sides 1 and 3) positions of the axis and the tick labels
+are controlled by <code>mgp</code>, the size of the ticks is controlled by
+<code>tck</code> and <code>tcl</code> and the appearance of the tick labels by
+<code>cex.axis</code>, <code>col.axis</code> and <code>font.axis</code> with
+orientation controlled by <code>las</code> (but not <code>srt</code>, unlike S
+which uses <code>srt</code> if <code>at</code> is supplied and <code>las</code> if it is
+not).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+This function is invoked for its side effect, which is to add an axis
+to an already existing plot.</p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="axTicks.html">axTicks</a></code> returns the axis tick locations
+corresponding to <code>at=NULL</code>; <code><a href="../../base/html/pretty.html">pretty</a></code> is more flexible
+for computing pretty tick coordinates and does <EM>not</EM> depend on
+(nor adapt to) the coordinate system in use.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+plot(1:4, rnorm(4), axes=FALSE)
+axis(1, 1:4, LETTERS[1:4])
+axis(2)
+box() #- to make it look "as usual"
+
+plot(1:7, rnorm(7), main = "axis() examples",
+     type = "s", xaxt = "n", frame = FALSE, col = "red")
+axis(1, 1:7, LETTERS[1:7], col.axis = "blue")
+# unusual options:
+axis(4, col = "violet", col.axis="dark violet", lwd = 2)
+axis(3, col = "gold", lty = 2, lwd = 0.5)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>graphics</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

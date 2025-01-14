@@ -1,0 +1,126 @@
+<html><head><title>R: Finite, Infinite and NaN Numbers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for is.finite {base}"><tr><td>is.finite {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Finite, Infinite and NaN Numbers</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>is.finite</code> and <code>is.infinite</code> return a vector of the same
+length as <code>x</code>, indicating which elements are finite (not infinite
+and not missing).
+</p>
+<p>
+<code>Inf</code> and <code>-Inf</code> are positive and negative &ldquo;infinity&rdquo;
+whereas <code>NaN</code> means &ldquo;Not a Number&rdquo;.  (These apply to numeric
+values and real and imaginary parts of complex values but not to
+values of integer vectors.)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+is.finite(x)
+is.infinite(x)
+Inf
+NaN
+is.nan(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+(numerical) object to be tested.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>is.finite</code> returns a vector of the same length as <code>x</code>
+the jth element of which is <code>TRUE</code> if <code>x[j]</code> is
+finite (i.e., it is not one of the values <code>NA</code>, <code>NaN</code>,
+<code>Inf</code> or <code>-Inf</code>).  All elements of character and
+generic (list) vectors are false, so <code>is.finite</code> is only useful for
+logical, integer, numeric and complex vectors.  Complex numbers are
+finite if both the real and imaginary parts are.
+</p>
+<p>
+<code>is.infinite</code> returns a vector of the same length as <code>x</code>
+the jth element of which is <code>TRUE</code> if <code>x[j]</code> is
+infinite (i.e., equal to one of <code>Inf</code> or <code>-Inf</code>).
+</p>
+<p>
+<code>is.nan</code> tests if a numeric value is <code>NaN</code>.  Do not test
+equality to <code>NaN</code>, or even use <code><a href="identical.html">identical</a></code>,
+since systems typically have many different NaN values.
+In most ports of <font face="Courier New,Courier" color="#666666"><b>R</b></font> one of these is used for the numeric missing
+value <code>NA</code>.  It is generic: you can write methods to handle
+specific classes of objects, see <a href="zMethods.html">InternalMethods</a>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>
+In <font face="Courier New,Courier" color="#666666"><b>R</b></font>, basically all mathematical functions (including basic
+<code><a href="Arithmetic.html">Arithmetic</a></code>), are supposed to work properly with
+<code>+/- Inf</code> and <code>NaN</code> as input or output.
+</p>
+<p>
+The basic rule should be that calls and relations with <code>Inf</code>s
+really are statements with a proper mathematical <EM>limit</EM>.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+ANSI/IEEE 754 Floating-Point Standard.
+</p>
+<p>
+This link does not work any more (2003/12)
+Currently (6/2002), Bill Metzenthen's <a href="mailto:billm@suburbia.net">billm@suburbia.net</a> tutorial
+and examples at <br> <a href="http://www.suburbia.net/~billm/">http://www.suburbia.net/~billm/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="NA.html">NA</a></code>, &lsquo;<EM>Not Available</EM>&rsquo; which is not a number
+as well, however usually used for missing values and applies to many
+modes, not just numeric.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+pi / 0 ## = Inf a non-zero number divided by zero creates infinity
+0 / 0  ## =  NaN
+
+1/0 + 1/0# Inf
+1/0 - 1/0# NaN
+
+stopifnot(
+    1/0 == Inf,
+    1/Inf == 0
+)
+sin(Inf)
+cos(Inf)
+tan(Inf)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

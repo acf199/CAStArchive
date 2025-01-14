@@ -1,0 +1,128 @@
+<html><head><title>R: Mauchley's test of sphericity</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for mauchley.test {stats}"><tr><td>mauchley.test {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Mauchley's test of sphericity</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Tests whether a Wishart-distributed covariance matrix (or
+transformation thereof) is
+proportional to a given matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 methods for class 'SSD' or 'mlm' 
+mauchley.test(object, Sigma = diag(nrow = p),
+   T = Thin.row(proj(M) - proj(X)), M = diag(nrow = p), X = ~0,
+   idata = data.frame(index = seq(length = p)), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+object of class <code>SSD</code> or <code>mlm</code></td></tr>
+<tr valign="top"><td><code>Sigma</code></td>
+<td>
+Matrix to be proportional to</td></tr>
+<tr valign="top"><td><code>T</code></td>
+<td>
+Transformation matrix. By default computed from <code>M</code> and
+<code>X</code></td></tr>
+<tr valign="top"><td><code>M</code></td>
+<td>
+Formula or matrix describing the outer projection (see below)</td></tr>
+<tr valign="top"><td><code>X</code></td>
+<td>
+Formula or matrix describing the inner projection (see below)</td></tr>
+<tr valign="top"><td><code>idata</code></td>
+<td>
+Data frame describing intra-block design</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+For consistency with generic</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Mauchley's test test for whether a covariance matrix can be assumed to
+be proportional to a given matrix. 
+</p>
+<p>
+It is common to transform the observations prior to testing. This
+typically involves 
+transformation to intra-block differences, but more complicated
+within-block designs can be encountered,
+making more elaborate transformations necessary. A
+transformation matrix <code>T</code> can be given directly or specified as
+the difference between two projections onto the spaces spanned by
+<code>M</code> and <code>X</code>, which in turn can be given as matrices or as
+model formulas with respect to <code>idata</code> (the tests will be
+invariant to parametrization of the quotient space <code>M/X</code>).
+</p>
+<p>
+The common use of this test is in repeated measurements designs, with
+<code>X=~1</code>. This is almost, but not quite the same as testing for
+compund symmetry in the untransformed covariance matrix.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+An object of class <code>"htest"</code></p>
+
+<h3>Note</h3>
+
+<p>
+The p-value differs slightly from that of SAS because a second order term
+is included in the asymptotic approximation.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+TW Anderson (1958). An Introduction to Multivariate
+Statistical Analysis. Wiley
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="SSD.html">SSD</a></code>, <code><a href="anova.mlm.html">anova.mlm</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+example(SSD) # Brings in the mlmfit and reacttime objects
+
+### traditional test of intrasubj. contrasts
+mauchley.test(mlmfit, X=~1) 
+
+### tests using intra-subject 3x2 design
+idata &lt;- data.frame(deg=gl(3,1,6, labels=c(0,4,8)),
+                    noise=gl(2,3,6, labels=c("A","P")))
+mauchley.test(mlmfit, X = ~ deg + noise, idata = idata)
+mauchley.test(mlmfit, M = ~ deg + noise, X = ~ noise, idata=idata)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

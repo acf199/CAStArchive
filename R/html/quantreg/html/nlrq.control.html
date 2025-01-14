@@ -1,0 +1,57 @@
+<html><head><title>R: Set control parameters for nlrq</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for nlrq.control {quantreg}"><tr><td>nlrq.control {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Set control parameters for nlrq</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Set algorithmic parameters for nlrq (nonlinear quantile regression function)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+nlrq.control(maxiter=100, k=2, big=1e+20, eps=1e-07, beta=0.97)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>maxiter</code></td>
+<td>
+maximum number of allowed iterations</td></tr>
+<tr valign="top"><td><code>k</code></td>
+<td>
+the number of iterations of the Meketon algorithm to be calculated 
+in each step, usually 2 is reasonable, occasionally it may be helpful 
+to set k=1 </td></tr>
+<tr valign="top"><td><code>big</code></td>
+<td>
+a large scalar</td></tr>
+<tr valign="top"><td><code>eps</code></td>
+<td>
+tolerance for convergence of the algorithm </td></tr>
+<tr valign="top"><td><code>beta</code></td>
+<td>
+a shrinkage parameter which controls the recentering process 
+in the interior point algorithm. </td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="nlrq.html">nlrq</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

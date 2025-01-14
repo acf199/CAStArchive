@@ -1,0 +1,211 @@
+<html><head><title>R: GAMs with GCV smoothness estimation and GAMMs by REML/PQL</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../cast.css">
+</head><body>
+<h1>GAMs with GCV smoothness estimation and GAMMs by REML/PQL <img class="toplogo" src="../../logosm.jpg" alt="[R logo]"></h1>
+
+<hr>
+
+
+<h2>Documentation for package `mgcv' version 1.2-3</h2>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td width="25%"><a href="anova.gam.html">anova.gam</a></td>
+<td>Hypothesis tests related to  GAM fits</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">coef.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdTens.html">coef.pdTens</a></td>
+<td>Functions implementing a pdMat class for tensor product smooths</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">corMatrix.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">Dim.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="exclude.too.far.html">exclude.too.far</a></td>
+<td>Exclude prediction grid points too far from data</td></tr>
+<tr><td width="25%"><a href="extract.lme.cov.html">extract.lme.cov</a></td>
+<td>Extract the data covariance matrix from an lme object</td></tr>
+<tr><td width="25%"><a href="extract.lme.cov.html">extract.lme.cov2</a></td>
+<td>Extract the data covariance matrix from an lme object</td></tr>
+<tr><td width="25%"><a href="fix.family.link.html">fix.family.link</a></td>
+<td>Modify families for use in GAM fitting</td></tr>
+<tr><td width="25%"><a href="fix.family.link.html">fix.family.var</a></td>
+<td>Modify families for use in GAM fitting</td></tr>
+<tr><td width="25%"><a href="fixDependence.html">fixDependence</a></td>
+<td>Detect linear dependencies of one matrix on another</td></tr>
+<tr><td width="25%"><a href="formula.gam.html">formula.gam</a></td>
+<td>Extract the formula from a gam object.</td></tr>
+<tr><td width="25%"><a href="formXtViX.html">formXtViX</a></td>
+<td>Form component of GAMM covariance matrix</td></tr>
+<tr><td width="25%"><a href="full.score.html">full.score</a></td>
+<td>GCV/UBRE score for use within nlm</td></tr>
+<tr><td width="25%"><a href="gam.html">gam</a></td>
+<td>Generalized additive models with integrated smoothness estimation</td></tr>
+<tr><td width="25%"><a href="gam.check.html">gam.check</a></td>
+<td>Some diagnostics for a fitted gam model.</td></tr>
+<tr><td width="25%"><a href="gam.control.html">gam.control</a></td>
+<td>Setting GAM fitting defaults</td></tr>
+<tr><td width="25%"><a href="gam.convergence.html">gam.convergence</a></td>
+<td>GAM convergence and performance issues.</td></tr>
+<tr><td width="25%"><a href="gam.fit.html">gam.fit</a></td>
+<td>GAM P-IRLS estimation with GCV/UBRE smoothness estimation.</td></tr>
+<tr><td width="25%"><a href="gam.fit2.html">gam.fit2</a></td>
+<td>P-IRLS GAM estimation with GCV & UBRE derivative calculation</td></tr>
+<tr><td width="25%"><a href="gam.method.html">gam.method</a></td>
+<td>Setting GAM fitting method</td></tr>
+<tr><td width="25%"><a href="gam.models.html">gam.models</a></td>
+<td>Specifying Generalized Additive Models.</td></tr>
+<tr><td width="25%"><a href="gam.neg.bin.html">gam.neg.bin</a></td>
+<td>GAMs with the negative binomial distribution</td></tr>
+<tr><td width="25%"><a href="gam.outer.html">gam.outer</a></td>
+<td>Minimize GCV or UBRE score of a GAM using `outer' iteration</td></tr>
+<tr><td width="25%"><a href="gam.convergence.html">gam.performance</a></td>
+<td>GAM convergence and performance issues.</td></tr>
+<tr><td width="25%"><a href="gam.selection.html">gam.selection</a></td>
+<td>Generalized Additive Model Selection</td></tr>
+<tr><td width="25%"><a href="gam.setup.html">gam.setup</a></td>
+<td>Generalized Additive Model set up.</td></tr>
+<tr><td width="25%"><a href="gam.side.html">gam.side</a></td>
+<td>Identifiability side conditions for a GAM.</td></tr>
+<tr><td width="25%"><a href="gam2objective.html">gam2derivative</a></td>
+<td>Objective functions for GAM smoothing parameter estimation. </td></tr>
+<tr><td width="25%"><a href="gam2objective.html">gam2objective</a></td>
+<td>Objective functions for GAM smoothing parameter estimation. </td></tr>
+<tr><td width="25%"><a href="gam2objective.html">gam3objective</a></td>
+<td>Objective functions for GAM smoothing parameter estimation. </td></tr>
+<tr><td width="25%"><a href="gamm.html">gamm</a></td>
+<td>Generalized Additive Mixed Models</td></tr>
+<tr><td width="25%"><a href="gamm.setup.html">gamm.setup</a></td>
+<td>Generalized Additive Mixed Model set up.</td></tr>
+<tr><td width="25%"><a href="gamObject.html">gamObject</a></td>
+<td>Fitted gam object</td></tr>
+<tr><td width="25%"><a href="get.var.html">get.var</a></td>
+<td>Get named variable or evaluate expression from list or data.frame</td></tr>
+<tr><td width="25%"><a href="influence.gam.html">influence.gam</a></td>
+<td>Extract the diagonal of the Influence/Hat matrix for a GAM. </td></tr>
+<tr><td width="25%"><a href="initial.sp.html">initial.sp</a></td>
+<td>Starting values for multiple smoothing parameter estimation.</td></tr>
+<tr><td width="25%"><a href="interpret.gam.html">interpret.gam</a></td>
+<td>Interpret a GAM formula</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">logDet.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="logLik.gam.html">logLik.gam</a></td>
+<td>Extract the log likelihood for a fitted GAM</td></tr>
+<tr><td width="25%"><a href="magic.html">magic</a></td>
+<td>Stable Multiple Smoothing Parameter Estimation by GCV or UBRE,  with optional fixed penalty</td></tr>
+<tr><td width="25%"><a href="magic.post.proc.html">magic.post.proc</a></td>
+<td>Auxilliary information from magic fit</td></tr>
+<tr><td width="25%"><a href="mgcv.html">mgcv</a></td>
+<td>Multiple Smoothing Parameter Estimation by GCV or UBRE</td></tr>
+<tr><td width="25%"><a href="mgcv.control.html">mgcv.control</a></td>
+<td>Setting mgcv defaults</td></tr>
+<tr><td width="25%"><a href="gam.neg.bin.html">mgcv.find.theta</a></td>
+<td>GAMs with the negative binomial distribution</td></tr>
+<tr><td width="25%"><a href="gam.neg.bin.html">mgcv.get.scale</a></td>
+<td>GAMs with the negative binomial distribution</td></tr>
+<tr><td width="25%"><a href="mono.con.html">mono.con</a></td>
+<td>Monotonicity constraints for a cubic regression spline.</td></tr>
+<tr><td width="25%"><a href="mroot.html">mroot</a></td>
+<td>Smallest square root of matrix</td></tr>
+<tr><td width="25%"><a href="new.name.html">new.name</a></td>
+<td>Obtain a name for a new variable that is not already in use</td></tr>
+<tr><td width="25%"><a href="notExp.html">notExp</a></td>
+<td>Functions for better-than-log positive parameterization</td></tr>
+<tr><td width="25%"><a href="notExp.html">notLog</a></td>
+<td>Functions for better-than-log positive parameterization</td></tr>
+<tr><td width="25%"><a href="null.space.dimension.html">null.space.dimension</a></td>
+<td>The basis of the space of un-penalized functions for a t.p.r.s.</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">p.spline</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="pcls.html">pcls</a></td>
+<td>Penalized Constrained Least Squares Fitting</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">pdConstruct.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdTens.html">pdConstruct.pdTens</a></td>
+<td>Functions implementing a pdMat class for tensor product smooths</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">pdFactor.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdTens.html">pdFactor.pdTens</a></td>
+<td>Functions implementing a pdMat class for tensor product smooths</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">pdMatrix.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdTens.html">pdMatrix.pdTens</a></td>
+<td>Functions implementing a pdMat class for tensor product smooths</td></tr>
+<tr><td width="25%"><a href="pdTens.html">pdTens</a></td>
+<td>Functions implementing a pdMat class for tensor product smooths</td></tr>
+<tr><td width="25%"><a href="vis.gam.html">persp.gam</a></td>
+<td>Visualization of GAM objects</td></tr>
+<tr><td width="25%"><a href="place.knots.html">place.knots</a></td>
+<td>Automatically place a set of knots evenly through covariate values</td></tr>
+<tr><td width="25%"><a href="plot.gam.html">plot.gam</a></td>
+<td>Default GAM plotting</td></tr>
+<tr><td width="25%"><a href="predict.gam.html">predict.gam</a></td>
+<td>Prediction from fitted GAM model</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix.cr.smooth</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix.cs.smooth</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix.cyclic.smooth</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix.tensor.smooth</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix.tprs.smooth</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="Predict.matrix.html">Predict.matrix.ts.smooth</a></td>
+<td>Prediction methods for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smoothCon.html">PredictMat</a></td>
+<td>Prediction/Construction wrapper functions for GAM smooth terms</td></tr>
+<tr><td width="25%"><a href="anova.gam.html">print.anova.gam</a></td>
+<td>Hypothesis tests related to  GAM fits</td></tr>
+<tr><td width="25%"><a href="print.gam.html">print.gam</a></td>
+<td>Generalized Additive Model default print statement</td></tr>
+<tr><td width="25%"><a href="summary.gam.html">print.summary.gam</a></td>
+<td>Summary for a GAM fit</td></tr>
+<tr><td width="25%"><a href="residuals.gam.html">residuals.gam</a></td>
+<td>Generalized Additive Model residuals</td></tr>
+<tr><td width="25%"><a href="s.html">s</a></td>
+<td>Defining smooths in GAM formulae</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct.cc.smooth.spec</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct.cr.smooth.spec</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct.cs.smooth.spec</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct.tensor.smooth.spec</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct.tp.smooth.spec</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smooth.construct.html">smooth.construct.ts.smooth.spec</a></td>
+<td>Constructor functions for smooth terms in a GAM</td></tr>
+<tr><td width="25%"><a href="smoothCon.html">smoothCon</a></td>
+<td>Prediction/Construction wrapper functions for GAM smooth terms</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">solve.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="step.gam.html">step.gam</a></td>
+<td>Alternatives to step.gam</td></tr>
+<tr><td width="25%"><a href="summary.gam.html">summary.gam</a></td>
+<td>Summary for a GAM fit</td></tr>
+<tr><td width="25%"><a href="pdIdnot.html">summary.pdIdnot</a></td>
+<td>Overflow proof pdMat class for multiples of the identity matrix</td></tr>
+<tr><td width="25%"><a href="pdTens.html">summary.pdTens</a></td>
+<td>Functions implementing a pdMat class for tensor product smooths</td></tr>
+<tr><td width="25%"><a href="te.html">te</a></td>
+<td>Define tensor product smooths in GAM formulae</td></tr>
+<tr><td width="25%"><a href="tensor.prod.model.matrix.html">tensor.prod.model.matrix</a></td>
+<td>Utility functions for constructing tensor product smooths</td></tr>
+<tr><td width="25%"><a href="tensor.prod.model.matrix.html">tensor.prod.penalties</a></td>
+<td>Utility functions for constructing tensor product smooths</td></tr>
+<tr><td width="25%"><a href="uniquecombs.html">uniquecombs</a></td>
+<td>find the unique rows in a matrix </td></tr>
+<tr><td width="25%"><a href="vis.gam.html">vis.gam</a></td>
+<td>Visualization of GAM objects</td></tr>
+</table>
+</body></html>

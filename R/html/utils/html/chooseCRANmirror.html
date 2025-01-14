@@ -1,0 +1,62 @@
+<html><head><title>R: Select a CRAN Mirror</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for chooseCRANmirror {utils}"><tr><td>chooseCRANmirror {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Select a CRAN Mirror</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Interact with the user to choose a CRAN mirror.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+chooseCRANmirror(graphics = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>graphics</code></td>
+<td>
+Logical.
+If true use a list box,
+otherwise use <code><a href="menu.html">menu</a></code>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The list of mirrors is stored in file &lsquo;<TT>R_HOME/doc/CRAN_mirrors.csv</TT>&rsquo;.
+</p>
+<p>
+This function was originally written to support a Windows GUI menu
+item, but is also called by <code><a href="update.packages.html">contrib.url</a></code> if it finds the
+initial dummy value of <code><a href="../../base/html/options.html">options</a>("repos")</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+None.  This function is invoked for its side effect of updating
+<code>options("repos")</code></p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="setRepositories.html">setRepositories</a></code>, <code><a href="update.packages.html">contrib.url</a></code>.
+</p>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

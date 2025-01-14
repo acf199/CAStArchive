@@ -1,0 +1,111 @@
+<html><head><title>R: Draw Function Plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for curve {graphics}"><tr><td>curve {graphics}</td><td align="right">R Documentation</td></tr></table>
+<h2>Draw Function Plots</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Draws a curve corresponding to the given function or expression (in
+<code>x</code>) over the interval <code>[from,to]</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+curve(expr, from, to, n = 101, add = FALSE, type = "l",
+      ylab = NULL, log = NULL, xlim = NULL, ...)
+
+## S3 method for class 'function':
+plot(x, from = 0, to = 1, xlim = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+an expression written as a function of <code>x</code>, or
+alternatively the name of a function which will be plotted.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+a &lsquo;vectorizing&rsquo; numeric <font face="Courier New,Courier" color="#666666"><b>R</b></font> function.</td></tr>
+<tr valign="top"><td><code>from,to</code></td>
+<td>
+the range over which the function will be plotted.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+integer; the number of x values at which to evaluate.</td></tr>
+<tr valign="top"><td><code>add</code></td>
+<td>
+logical; if <code>TRUE</code> add to already existing plot.</td></tr>
+<tr valign="top"><td><code>xlim</code></td>
+<td>
+numeric of length 2; if specified, it serves as default
+for <code>c(from, to)</code>.</td></tr>
+<tr valign="top"><td><code>type, ylab, log, ...</code></td>
+<td>
+graphical parameters can also be
+specified as arguments.
+<code>plot.function</code> passes all these to <code>curve</code>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The evaluation of <code>expr</code> is at <code>n</code> points equally spaced
+over the range <code>[from, to]</code>, possibly adapted to log scale.  The
+points determined in this way are then joined with straight lines.
+<code>x(t)</code> or <code>expr</code> (with <code>x</code> inside) must return a
+numeric of the same length as the argument <code>t</code> or <code>x</code>.
+</p>
+<p>
+If <code>add = TRUE</code>, <code>c(from,to)</code> default to <code>xlim</code> which
+defaults to the current x-limits.  Further, <code>log</code> is taken from the
+current plot when <code>add</code> is true.
+</p>
+<p>
+This used to be a quick hack which now seems to serve a useful purpose,
+but can give bad results for functions which are not smooth.
+</p>
+<p>
+For &ldquo;expensive&rdquo; <code>expr</code>essions, you should use smarter tools.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../stats/html/splinefun.html">splinefun</a></code> for spline interpolation, <code><a href="lines.html">lines</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+op &lt;- par(mfrow=c(2,2))
+curve(x^3-3*x, -2, 2)
+curve(x^2-2, add = TRUE, col = "violet")
+
+plot(cos, xlim = c(-pi,3*pi), n = 1001, col = "blue")
+
+chippy &lt;- function(x) sin(cos(x)*exp(-x/2))
+curve(chippy, -8, 7, n=2001)
+curve(chippy, -8, -5)
+
+for(ll in c("","x","y","xy"))
+   curve(log(1+x), 1,100, log=ll, sub=paste("log= '",ll,"'",sep=""))
+par(op)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>graphics</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

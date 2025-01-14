@@ -1,0 +1,159 @@
+<html><head><title>R: Sparse Constrained Regression Quantile Fitting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for rq.fit.sfnc {quantreg}"><tr><td>rq.fit.sfnc {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Sparse Constrained Regression Quantile Fitting</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Fit constrained regression quantiles using a sparse implementation of the Frisch-Newton
+Interior-point algorithm.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rq.fit.sfnc(x, y, R, r, tau = 0.5, rhs = (1-tau)*c(t(x) %*% rep(1,length(y))), 
+   nsubmax, tmpmax, nnzlmax, cachsz = 64, small = 1e-08, maxiter = 100, warn.mesg = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+structure of the design matrix X stored in csr format</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+response vector</td></tr>
+<tr valign="top"><td><code>R</code></td>
+<td>
+constraint matrix stored in csr format</td></tr>
+<tr valign="top"><td><code>r</code></td>
+<td>
+right-hand-side of the constraint</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+desired quantile</td></tr>
+<tr valign="top"><td><code>rhs</code></td>
+<td>
+the right-hand-side of the dual problem; regular users shouldn't need to specify this</td></tr>
+<tr valign="top"><td><code>nsubmax</code></td>
+<td>
+upper bound of the dimension of lindx in Cholesky factorization;computed automatically inside the routine if missing</td></tr>
+<tr valign="top"><td><code>tmpmax</code></td>
+<td>
+upper bound of the working array in Cholesky factorization;computed automatically inside the routine if missing</td></tr>
+<tr valign="top"><td><code>nnzlmax</code></td>
+<td>
+upper bound of the non-zero entries in the Cholesky factor L;computed automatically inside the routine if missing</td></tr>
+<tr valign="top"><td><code>cachsz</code></td>
+<td>
+size of the cache on the machine; default to 64</td></tr>
+<tr valign="top"><td><code>small</code></td>
+<td>
+convergence tolerance for the interior algorithm</td></tr>
+<tr valign="top"><td><code>maxiter</code></td>
+<td>
+upper limit for the number of iterations</td></tr>
+<tr valign="top"><td><code>warn.mesg</code></td>
+<td>
+flag for printing of warning message; default to TRUE</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+additional arguments</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This is a sparse implementation of the Frisch-Newton algorithm for 
+constrained quantile regression described in Koenker and Portnoy (1996). 
+The sparse matrix
+linear algebra is implemented through the functions available in the R packages
+<code>SparseM</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>coef </code></td>
+<td>
+Regression quantile coefficients</td></tr>
+<tr valign="top"><td><code>ierr </code></td>
+<td>
+Error code for the internal Fortran routine <code>srqfn</code>: 
+<dl>
+<dt>1:</dt><dd>insufficient work space in call to <code>extract</code></dd>
+<dt>3:</dt><dd>insufficient storage in iwork when calling ordmmd</dd>
+<dt>4:</dt><dd>insufficient storage in iwork when calling sfinit</dd>
+<dt>5:</dt><dd>nnzl &gt; nnzlmax when calling sfinit</dd>
+<dt>6:</dt><dd>nsub &gt; nsubmax when calling sfinit</dd>
+<dt>7:</dt><dd>insufficient work space in iwork when calling symfct</dd>
+<dt>8:</dt><dd>inconsistancy in input when calling symfct</dd>
+<dt>9:</dt><dd>tmpsiz &gt; tmpmax when calling symfct; increase tmpmax</dd>
+<dt>10:</dt><dd>nonpositive diagonal encountered when calling blkfct</dd>
+<dt>11:</dt><dd>insufficient work storage in tmpvec when calling blkfct</dd>
+<dt>12:</dt><dd>insufficient work storage in iwork when calling blkfct</dd>
+<dt>13:</dt><dd>nnzd &gt; nnzdmax in e,je when calling amub</dd>
+<dt>14:</dt><dd>nnzd &gt; nnzdmax in g,jg when calling amub</dd>
+<dt>15:</dt><dd>nnzd &gt; nnzdmax in h,jh when calling aplb</dd>
+</dl>
+</td></tr>
+<tr valign="top"><td><code>it</code></td>
+<td>
+Iteration count</td></tr>
+<tr valign="top"><td><code>time</code></td>
+<td>
+Amount of time used in the computation</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Pin Ng
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Koenker, R and Ng, P. (2002).  SparseM:  A Sparse Matrix Package for <font face="Courier New,Courier" color="#666666"><b>R</b></font>, <br>
+<a href="http://www.econ.uiuc.edu/~roger/research">http://www.econ.uiuc.edu/~roger/research</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code>rq.fit.sfn</code> for the unconstrained version,
+<code>SparseM</code> for a sparse matrix package for <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+n=200
+p=50
+X=rnorm(n*p)
+X[abs(X)&lt;2.0]=0
+X=cbind(1,matrix(X,n,p))
+y=.5*apply(X,1,sum)+rnorm(n)
+R=rbind(diag(p+1),-diag(p+1))
+r=c(rep(0,p+1),-rep(1,p+1))
+rq.o=rq.fit.sfnc(as.matrix.csr(X),y,as.matrix.csr(R),r,tmpmax=floor(1e5+exp(-12.1)*(as.matrix.csr(X)@ia[p+1]-1)^2.35))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,81 @@
+<html><head><title>R: Function to compute Khmaladze Transformation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for khmaladzize {quantreg}"><tr><td>khmaladzize {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Function to compute Khmaladze Transformation</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Function to compute the recursive least squares transformation
+of the quantile regression process for the <code><a href="khmaladze.test.html">khmaladze.test</a></code> procedure.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+khmaladzize(tau, atau, Z, nullH)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tau</code></td>
+<td>
+quantiles specified in the fitted model</td></tr>
+<tr valign="top"><td><code>atau</code></td>
+<td>
+xbar'betahat(tau) at these quantiles</td></tr>
+<tr valign="top"><td><code>Z</code></td>
+<td>
+full rq process</td></tr>
+<tr valign="top"><td><code>nullH</code></td>
+<td>
+either "location-scale" 
+or "location" null hypothesis</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Uses adaptive kernel density estimation akj() to estimate score functions.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Returns transformed Z process.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+R. Koenker
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Koenker, Roger and Zhijie Xiao (2001), "Inference on the Quantile
+Regression Process'', textit{Econometrica},  81, 1583&ndash;1612. &lt;URL:
+http://www.econ.uiuc.edu/~roger/research/inference/inference.html&gt;
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="khmaladze.test.html">khmaladze.test</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

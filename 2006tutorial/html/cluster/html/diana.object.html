@@ -1,0 +1,124 @@
+<html><head><title>R: Divisive Analysis (DIANA) Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for diana.object {cluster}"><tr><td>diana.object {cluster}</td><td align="right">R Documentation</td></tr></table>
+<h2>Divisive Analysis (DIANA) Object</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The objects of class <code>"diana"</code>
+represent a divisive hierarchical clustering of a dataset.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A legitimate <code>diana</code> object is a list with the following components:
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>order</code></td>
+<td>
+a vector giving a permutation of the original observations to allow for
+plotting, in the sense that the branches of a clustering tree will
+not cross.
+</td></tr>
+<tr valign="top"><td><code>order.lab</code></td>
+<td>
+a vector similar to <code>order</code>, but containing observation labels
+instead of observation numbers.  This component is only available if
+the original observations were labelled.
+</td></tr>
+<tr valign="top"><td><code>height</code></td>
+<td>
+a vector with the diameters of the clusters prior to splitting.
+</td></tr>
+<tr valign="top"><td><code>dc</code></td>
+<td>
+the divisive coefficient, measuring the clustering structure of the
+dataset.  For each observation i, denote by <i>d(i)</i> the diameter of the
+last cluster to which it belongs (before being split off as a single
+observation), divided by the diameter of the whole dataset.  The
+<code>dc</code> is the average of all <i>1 - d(i)</i>.  It can also be seen
+as the average width (or the percentage filled) of the banner plot.
+Because <code>dc</code> grows with the number of observations, this
+measure should not be used to compare datasets of very different
+sizes.
+</td></tr>
+<tr valign="top"><td><code>merge</code></td>
+<td>
+an (n-1) by 2 matrix, where n is the number of
+observations. Row i of <code>merge</code> describes the split at step n-i of
+the clustering. If a number <i>j</i> in row r is negative, then the single
+observation <i>|j|</i> is split off at stage n-r. If j is positive, then the
+cluster that will be splitted at stage n-j (described by row j), is
+split off at stage n-r.
+</td></tr>
+<tr valign="top"><td><code>diss</code></td>
+<td>
+an object of class <code>"dissimilarity"</code>, representing the total
+dissimilarity matrix of the dataset.
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+a matrix containing the original or standardized measurements, depending
+on the <code>stand</code> option of the function <code>agnes</code>.  If a
+dissimilarity matrix was given as input structure, then this component
+is not available.
+</td></tr>
+</table>
+
+<h3>GENERATION</h3>
+
+<p>
+This class of objects is returned from <code><a href="diana.html">diana</a></code>.
+</p>
+
+
+<h3>METHODS</h3>
+
+<p>
+The <code>"diana"</code> class has methods for the following generic functions:
+<code>print</code>, <code>summary</code>, <code>plot</code>.
+</p>
+
+
+<h3>INHERITANCE</h3>
+
+<p>
+The class <code>"diana"</code> inherits from <code>"twins"</code>.
+Therefore, the generic function <code>pltree</code> can be used on a
+<code>diana</code> object, and an <code><a href="../../stats/html/as.hclust.html">as.hclust</a></code> method is
+available.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="agnes.html">agnes</a></code>, <code><a href="diana.html">diana</a></code>, <code><a href="plot.diana.html">plot.diana</a></code>,
+<code><a href="twins.object.html">twins.object</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## really see example(diana) !   Additionally:
+data(votes.repub)
+dv0 &lt;- diana(votes.repub, stand = TRUE)
+## Cut into 2 groups:
+dv2 &lt;- cutree(as.hclust(dv0), k = 2)
+table(dv2)
+rownames(votes.repub)[dv2 == 1]
+</pre>
+
+
+
+<hr><div align="center">[Package <em>cluster</em> version 1.9.8 <a href="00Index.html">Index]</a></div>
+
+</body></html>

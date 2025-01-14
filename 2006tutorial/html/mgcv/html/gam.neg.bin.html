@@ -1,0 +1,97 @@
+<html><head><title>R: GAMs with the negative binomial distribution</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for gam.neg.bin {mgcv}"><tr><td>gam.neg.bin {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>GAMs with the negative binomial distribution</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The <code>gam</code> modelling function is designed to be able to use 
+the <code>negative.binomial</code> and <code>neg.bin</code> families from the MASS library, 
+with or without a known <i>theta</i> parameter. A value for <code>theta</code> 
+must always be passed to these families, but if <i>theta</i> is to be
+estimated then the passed value is treated as a starting value for estimation. 
+</p>
+<p>
+If the <code>scale</code> argument passed to <code>gam</code> is positive, then it is used 
+as the scale parameter <code>theta</code> is treated as a fixed known parameter and 
+any smoothing parameters are chosen by UBRE. If <code>scale</code> is not positive then
+<i>theta</i> is estimated. The method of estimation is to choose <i>theta</i> 
+so that the GCV (Pearson) estimate of the scale parameter is one (since the scale parameter 
+is one for the negative binomial). 
+</p>
+<p>
+<i>theta</i> estimation is nested within the IRLS loop used for GAM fitting. After
+each call to fit an iteratively weighted additive model to the IRLS pseudodata, the <i>theta</i>
+estimate is updated. This is done by conditioning on all components of the current GCV/Pearson 
+estimator of the scale parameter except <i>theta</i> and then searching for the 
+<i>theta</i> which equates this conditional  estimator to one. The search is 
+a simple bisection search after an initial crude line search to bracket one. The search will 
+terminate at the upper boundary of the search region is a Poisson fit would have yielded an estimated 
+scale parameter &lt;1. Search limits can be set in <code>gam.control</code>.
+</p>
+<p>
+Note that 
+<code>neg.bin</code> only allows a log link, while <code>negative.binomial</code> also allows <code>"sqrt"</code> and
+<code>"identity"</code>. In addition the <code>negative.binomial</code> family results in a more 
+informative <code>gam</code> summary.  
+</p>
+<p>
+The negative binomial families can not yet be used with `outer' estimation of
+smoothing parameters (see <code><a href="gam.method.html">gam.method</a></code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(MASS) # required for negative binomial families
+set.seed(3)
+n&lt;-400
+x0 &lt;- runif(n, 0, 1)
+x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1)
+x3 &lt;- runif(n, 0, 1)
+pi &lt;- asin(1) * 2
+f &lt;- 2 * sin(pi * x0)
+f &lt;- f + exp(2 * x1) - 3.75887
+f &lt;- f + 0.2 * x2^11 * (10 * (1 - x2))^6 + 10 * (10 * x2)^3 * (1 - x2)^10 - 1.396
+g&lt;-exp(f/5)
+# negative binomial data  
+y&lt;-rnbinom(g,size=3,mu=g)
+# unknown theta ...
+b&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),family=negative.binomial(1))
+plot(b,pages=1)
+print(b)
+b&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),family=neg.bin(1)) # unknown theta
+plot(b,pages=1)
+print(b)
+# known theta example ...
+b&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),family=negative.binomial(3),scale=1)
+plot(b,pages=1)
+print(b)
+# Now use "sqrt" link available in negative.binomial (but not neg.bin)
+set.seed(1)
+f&lt;-f-min(f);g&lt;-f^2
+y&lt;-rnbinom(g,size=3,mu=g)
+b&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),family=negative.binomial(1,link="sqrt")) 
+plot(b,pages=1)
+print(b)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

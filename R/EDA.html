@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>CASt R: Exploratory Data Analysis and Regression</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Exploratory
+ Data Analysis and Regression</span>
+ <br>
+</span></span></big></big></div> <br>   
+This module demonstrates some of the capabilities of R for exploring
+univariate properties of quantitative variables and relationships among
+two or more such variables. <br> 
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Univariate 
+ explorations</span></small></span></span></big></big><br> 
+<br>
+We begin by examining the Hipparcos dataset found at 
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.html">
+http://astrostatistics.psu.edu/datasets/HIP_star.html</a>.
+Type<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip = read.table("http://astrostatistics.psu.edu/datasets/HIP_star.dat",
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T,fill=T)</span><br>
+<br>
+Recall the variable names in this dataset using the 
+<a href="html/base/html/names.html">names</a>
+function.  By using 
+<a href="html/base/html/attach.html">attach</a>,
+we can automatically create temporary variables with these names (these variables
+are not saved as part of the R session, and they are superseded by any other R objects
+of the same names).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(hip)</span><br>
+<br>
+After using the attach command, we can obtain, say, individual 
+<a href="html/base/html/summary.html">summaries</a>
+of the variables:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(Vmag)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(B.V)</span><br>
+<br>
+We can also use 
+<a href="html/base/html/summary.html">summary</a>
+on the entire 'hip' matrix.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(hip)</span><br>
+<br>
+Next, summarize some of this information graphically using a 
+<a href="html/graphics/html/boxplot.html">box-and-whisker plot</a> 
+showing median, quartile and
+outliers for the four variables Vmag, pmRA, pmDE, and B.V (the last variable
+used to be B-V, or B minus V, but R does not allow certain characters).  These
+are the 2nd, 6th, 7th, and 9th columns of 'hip'.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(hip[,c(2,6,7,9)])</span><br>
+<br>
+Our first attempt looks bad due to different scales of
+the variables, so we construct an array of four single-variable plots:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(2,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in c(2,6,7,9)) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; boxplot(hip[,i],main=names(hip)[i])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(1,1))</span><br>
+<br>
+The 
+<a href="html/graphics/html/boxplot.html">boxplot</a>
+command does more than produce plots; it also returns output that can be
+more closely examined.  Below, we use the same command as earlier, but we produce the
+plot <i>and</i> save the output.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">b=boxplot(hip[,c(2,6,7,9)])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(b)</span><br>
+<br>
+'b' is an object called a list.  To understand its contents, read the help for
+<a href="html/graphics/html/boxplot.html">boxplot</a>.  Suppose we wish to see
+all of the outliers in the pmRA variable, which is the second of the four variables
+in the current boxplot:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">b$names[2]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">b$out[b$group==2]</span><br>
+<br>
+Next, we'll make a more elaborate boxplot.  Suppose we wish to examine the values of Vmag, with objects
+broken into categories according to the B.V variable: <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(Vmag~cut(B.V,breaks=(-1:6)/2),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; notch=T, varwidth=T, las=1, tcl=.5,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; xlab=expression("B minus V"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; ylab=expression("V magnitude"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; main="Can you find the red giants?",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; cex=1, cex.lab=1.4, cex.axis=.8, cex.main=1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">axis(2, labels=F, at=0:12, tcl=-.25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">axis(4, at=3*(0:4))</span><br>
+<br>
+The notches in the boxes, produced using "notch=T", can be used to test for differences in
+the medians (see 
+<a href="html/graphics/html/boxplot.stats.html">boxplot.stats</a>
+for details).  With "varwidth=T", the box widths are proportional to the square roots of
+the sample sizes.  The "cex" options all give scaling factors, relative to default:  
+"cex" is for plotting text and symbols, "cex.axis" is for axis annotation,
+"cex.lab" is for the x and y labels, and
+"cex.main" is for main titles.
+The two 
+<a href="html/graphics/html/axis.html">axis</a>
+commands are used to add an axis to the current plot.  The first such command
+above adds smaller tick marks at all integers, whereas the second one adds the
+axis on the right.<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Bivariate 
+ plots</span></small></span></span></big></big><br> 
+<br>
+The 
+<a href="html/graphics/html/boxplot.html">boxplot</a>
+in the plot above is telling us something about the bivariate relationship
+between the two variables.  Yet it is probably easier to grasp this relationship
+by producing a 
+<a href="html/graphics/html/plot.html">scatter plot</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V)</span><br>
+<br>
+The above plot is a bit busy because of the default plotting character,
+set let's use a different one:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V,pch=".")</span><br>
+<br>
+Let's now produce the same graph but selecting just for Hyades stars.  This open cluster
+should be concentrated both in the sky coordinates RA and DE, and also in the proper
+motion variables pm_RA and pm_DE.  We start by noticing a concentration of stars in the 
+RA distribution:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,RA,pch=".")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x1= (RA&gt;50 &amp; RA&lt;100)</span><br>
+<br>
+Next, we select in the proper motions.  (As our cuts through the data
+are parallel to the axes, this variable-by-variable classification approach
+is sometimes called Classification and Regression
+Trees or CART, a very common multivariate classification procedure.)  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(pmRA[x1],pmDE[x1],pch=20)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(pmRA[x1],pmDE[x1],pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; xlim=c(0,200),ylim=c(-200,100))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x2=(pmRA>90 & pmRA<130)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x3=(pmDE>-60 & pmDE< -10) # Space in '< -' is necessary!</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x4=x1&x2&x3</span><br>
+<br>
+After our selection,
+we replot the HR diagram of Vmag vs. B.V.  This shows the Zero Age Main Sequence, plus four
+red giants, with great precision.  Outliers in the original Hipparcos dataset have
+been effectively removed.  However, let's have a final look at the stars we have
+identified using the
+<a href="html/graphics/html/pairs.html">pairs</a>
+command to produce all bivariate plots for pairs of variables.
+We'll exclude the first and fifth columns (the HIP identifying number
+and the parallax, which is already known to lie in a narrow band).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(hip[x4,-c(1,5)],pch=20)</span><br>
+<br>
+Note that indexing a matrix or vector using negative integers has the effect of
+<i>excluding</i> the corresponding entries.<br>
+<br>
+We see that there is one outlying star in the DE variable, indicating that this
+star is not actually one of the Hyades, and one outlying star in the e_Plx variable,
+indicating that its measurements are not reliable.  We exclude both points:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x5=x4 & (DE>0) & (e_Plx<5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(hip[x5,-c(1,5)],pch=20)</span><br>
+<br>
+Note that the x5 variable, a vector of TRUE and FALSE, may be summed to reveal the
+number of TRUE's.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(x5)</span><br>
+<br>
+As a final look at these data, let's consider the original plot of Vmag versus B.V
+but make the 92 stars we just identified look bigger (pch=20 instead of 46) and 
+color them red (col=2 instead of 1):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V,pch=c(46,20)[1+x5],</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; col=1+x5)</span><br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Linear 
+least-squares regression</span></small></span></span></big></big><br> 
+<br>
+Consider the relationship between DE and pmDE among the 92 stars identified above:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(DE[x5],pmDE[x5],pch=20)</span><br>
+<br>
+If we wish to fit a linear regression (least squares) line to this plot, we may do 
+so using the 
+<a href="html/stats/html/lm.html">lm </a>
+(linear model) function.  Note the "response ~ predictor(s)" format used
+in formulas for functions like 
+<a href="html/stats/html/lm.html">lm </a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m=lm(pmDE[x5] ~ DE[x5])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m,lwd=2,col=2)</span><br>
+<br>
+The m object just created is an object of class lm.   The class of
+an object in R can help to determine how it is treated by functions such as
+<a href="html/base/html/print.html">print</a>
+and 
+<a href="html/base/html/summary.html">summary</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m # same as print(m)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(m)</span><br>
+<br>
+There is a lot of information contained in m that is not displayed by 
+<a href="html/base/html/print.html">print</a>
+or
+<a href="html/base/html/summary.html">summary</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(m)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(m$fit,m$resid)</span><br>
+<br>
+The residual plot produced above reveals no irregularities. Note that when referring
+to the items in a list by name, as in m$fit or m$resid above, it is only necessary
+to type enough of the name to uniquely identify it.<br>
+<br>
+We now look at a different dataset, the SDSS quasar dataset.  Download this dataset from
+<a href="http://www.astrostatistics.psu.edu/datasets/SDSS_quasar.html">
+http://www.astrostatistics.psu.edu/datasets/SDSS_quasar.html</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">quas=read.table(
+"http://astrostatistics.psu.edu/datasets/SDSS_quasar.dat",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dim(quas)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(quas)</span><br>
+ <br>
+We won't need all of these columns.  Let's keep only a subset.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">quas=quas[,c("z","r_mag","i_mag",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; "sig_i","Radio","X.ray","M_i")]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(quas)</span><br>
+<br>
+Creating all bivariate plots using
+<a href="html/graphics/html/pairs.html" >pairs</a>
+would take a bit of time with this size dataset; let's 
+do some exploration using a subset of 2000 rows, which we may
+obtain using the
+<a href="html/base/html/sample.html">sample</a>
+function:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">s=sample(nrow(quas),2000)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(quas[s,-c(1,2)],pch=20)</span><br>
+<br>
+There appear to be some strange outliers in columns like Radio and X.ray.  It seems
+that values of 0, -1, and -9 are intended to signify missing data.
+Let's remove all 0's and -1's and -9's
+by changing them to NA, then use
+<a href="html/base/html/attach.html">attach</a>
+to create new temporary variables with the same names as the columns and redo
+the bivariate scatterplots.  Remember,
+any R objects with the same names as one of the columns will override these 
+temporary variables.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">quas[quas==0 | quas==-1 | quas==-9]=NA</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(quas)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(quas[s,],pch=20)</span><br>
+<br>
+Several of these plots look interesting.  Let's take a look at the
+relationship between z and M_i (using all 46420 points):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(z,M_i,pch=".")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(lm(M_i~z),col=2)</span><br>
+<br>
+Clearly a straight line does not describe this relationship well.  How about
+a quadratic relationship?  <i>Note:  fitting a quadratic curve to data is still
+linear regression</i>.  This is because we are modelling the response (M_i) using a <i>linear</i>
+combination of two variables (z and z<sup>2</sup>).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">z2=z^2</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2=lm(M_i~z+z2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=seq(min(z),max(z),len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y=predict(m2,data.frame(z=x,z2=x^2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(x,y,lwd=2,col=3)</span><br>
+<br>
+Note that we used the 
+<a href="html/base/html/seq.html">seq</a>
+function to create a sequence of x-axis (predictor) values to plot.
+We also used the 
+<a href="html/stats/html/predict">predict</a>
+function to obtain the y-axis values predicted by model m2 for the
+point in the sequence x.
+Finally, we used the 
+<a href="html/graphics/html/lines.html">lines</a>
+function to add line segments to the current plot (in order, in 
+connect-the-dots fashion).  <br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Other types of 
+ regression</span></small></span></span></big></big><br> 
+<br>
+Let's try a non-linear fit, given by 
+<a href="html/stats/html/loess.html">loess</a> or
+<a href="html/stats/html/lowess.html">lowess</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m3=lowess(z,M_i)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(m3,col=4,lwd=2)</span><br>
+<br>
+Let's consider another bivariate relationship:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(X.ray,i_mag,pch=46)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(lm(i_mag~X.ray),col=2)</span><br>
+<br>
+It is possible to apply weighted least squares.  For instance, if the variances
+of the response variables are known, a typical weight is the reciprocal of variance.
+in this example, the difference is not large:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m4=lm(i_mag~X.ray,weights=1/sig_i^2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m4,col=3)</span><br>
+<br>
+We can also try resistant regression, using the
+<a href="html/MASS/html/lqs.html">lqs</a> 
+function in the MASS package.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(MASS)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m5=lqs(i_mag~X.ray)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m5,col=4)</span><br>
+<br>
+Finally, let's use least absolute deviation regression.  To do this, we'll
+use a function called 
+<a href="html/quantreg/html/rq.html">rq</a>
+(regression quantiles) 
+in the "quantreg" package.  This package is 
+not part of the standard distribution of R, so we'll need to download it.
+In order to do this, we must tell R where to store the installed library
+using the
+<a href="html/utils/html/update.packages.html">install.packages</a>
+function.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">install.packages("quantreg",lib="v:/",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; CRAN="http://lib.stat.cmu.edu/R/CRAN")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(quantreg, lib.loc="v:/")</span><br>
+<br>
+Assuming the quantreg package is loaded, we may now compare the least-squares fit (red)
+with the least absolute deviations fit (green).  In this example, the two
+fits are nearly identical:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m6=lm(i_mag~X.ray)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m7=rq(i_mag~X.ray)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(m7)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(X.ray,i_mag,pch=46)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m6,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(m7,col=3)</span><br>
+<br>
+
+
+
+</body>
+</html>

@@ -1,0 +1,120 @@
+<html><head><title>R: File Utilities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for fileutils {tools}"><tr><td>fileutils {tools}</td><td align="right">R Documentation</td></tr></table>
+<h2>File Utilities</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Utilities for testing and listing files, and manipulating file paths.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+file_path_as_absolute(x)
+file_path_sans_ext(x)
+file_test(op, x, y)
+list_files_with_exts(dir, exts, all.files = FALSE, full.names = TRUE)
+list_files_with_type(dir, type, all.files = FALSE, full.names = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,y</code></td>
+<td>
+character vectors giving file paths.</td></tr>
+<tr valign="top"><td><code>op</code></td>
+<td>
+a character string specifying the test to be performed.
+Unary tests (only <code>x</code> is used) are <code>"-f"</code> (existence and
+not being a directory) and <code>"-d"</code> (existence and directory);
+binary tests are <code>"-nt"</code> (newer than, using the modification
+dates) and <code>"-ot"</code>.</td></tr>
+<tr valign="top"><td><code>dir</code></td>
+<td>
+a character string with the path name to a directory.</td></tr>
+<tr valign="top"><td><code>exts</code></td>
+<td>
+a character vector of possible file extensions.</td></tr>
+<tr valign="top"><td><code>all.files</code></td>
+<td>
+a logical.  If <code>FALSE</code> (default), only visible
+files are considered; if <code>TRUE</code>, all files are used.</td></tr>
+<tr valign="top"><td><code>full.names</code></td>
+<td>
+a logical indicating whether the full paths of the
+files found are returned (default), or just the file names.</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+a character string giving the &ldquo;type&rdquo; of the files
+to be listed, as characterized by their extensions.  Currently,
+possible values are <code>"code"</code> (R code), <code>"data"</code> (data
+sets), <code>"demo"</code> (demos), <code>"docs"</code> (R documentation), and
+<code>"vignette"</code> (vignettes).</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>file_path_as_absolute</code> turns a possibly relative file path
+absolute, performing tilde expansion if necessary.  Currently, only a
+single existing path can be given.
+</p>
+<p>
+<code>file_path_sans_ext</code> returns the file paths without extensions.
+(Only purely alphanumeric extensions are recognized.)
+</p>
+<p>
+<code>file_test</code> performs shell-style file tests.  Note that
+<code><a href="../../base/html/files.html">file.exists</a></code> only tests for existence (<code>test -e</code> on
+some systems) but not for not being a directory.
+</p>
+<p>
+<code>list_files_with_exts</code> returns the paths or names of the files in
+directory <code>dir</code> with extension matching one of the elements of
+<code>exts</code>.  Note that by default, full paths are returned, and that
+only visible files are used.
+</p>
+<p>
+<code>list_files_with_type</code> returns the paths of the files in <code>dir</code>
+of the given &ldquo;type&rdquo;, as determined by the extensions recognized
+by <font face="Courier New,Courier" color="#666666"><b>R</b></font>.  When listing R code and documentation files, files in
+OS-specific subdirectories are included if present.  Note that by
+default, full paths are returned, and that only visible files are
+used.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../base/html/file.path.html">file.path</a></code>,
+<code><a href="../../base/html/file.info.html">file.info</a></code>,
+<code><a href="../../base/html/list.files.html">list.files</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+dir &lt;- file.path(R.home(), "library", "stats")
+file_test("-d", dir)
+file_test("-nt", file.path(dir, "R"), file.path(dir, "demo"))
+list_files_with_exts(file.path(dir, "demo"), "R")
+list_files_with_type(file.path(dir, "demo"), "demo") # the same
+file_path_sans_ext(list.files(file.path(R.home(), "modules")))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>tools</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

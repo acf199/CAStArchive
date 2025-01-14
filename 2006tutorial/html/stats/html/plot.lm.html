@@ -1,0 +1,168 @@
+<html><head><title>R: Plot Diagnostics for an lm Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for plot.lm {stats}"><tr><td>plot.lm {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Plot Diagnostics for an lm Object</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Four plots (selectable by <code>which</code>) are currently provided: a plot
+of residuals against fitted values, a Scale-Location plot of
+<i>sqrt{| residuals |}</i> against fitted values, a Normal Q-Q plot,
+and a plot of Cook's distances versus row labels.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'lm':
+plot(x, which = 1:4,
+     caption = c("Residuals vs Fitted", "Normal Q-Q plot",
+                 "Scale-Location plot", "Cook's distance plot"),
+     panel = points,
+     sub.caption = deparse(x$call), main = "",
+     ask = prod(par("mfcol")) &lt; length(which) &amp;&amp; dev.interactive(),
+     ...,
+     id.n = 3, labels.id = names(residuals(x)), cex.id = 0.75)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<code>lm</code> object, typically result of <code><a href="lm.html">lm</a></code> or
+<code><a href="glm.html">glm</a></code>.</td></tr>
+<tr valign="top"><td><code>which</code></td>
+<td>
+If a subset of the plots is required, specify a subset of
+the numbers <code>1:4</code>.</td></tr>
+<tr valign="top"><td><code>caption</code></td>
+<td>
+Captions to appear above the plots</td></tr>
+<tr valign="top"><td><code>panel</code></td>
+<td>
+Panel function.  A useful alternative to
+<code><a href="../../graphics/html/points.html">points</a></code> is <code><a href="../../graphics/html/panel.smooth.html">panel.smooth</a></code>.</td></tr>
+<tr valign="top"><td><code>sub.caption</code></td>
+<td>
+common title&mdash;above figures if there are multiple;
+used as <code>sub</code> (s.<code><a href="../../graphics/html/title.html">title</a></code>) otherwise.</td></tr>
+<tr valign="top"><td><code>main</code></td>
+<td>
+title to each plot&mdash;in addition to the above
+<code>caption</code>.</td></tr>
+<tr valign="top"><td><code>ask</code></td>
+<td>
+logical; if <code>TRUE</code>, the user is <EM>ask</EM>ed before
+each plot, see <code><a href="../../graphics/html/par.html">par</a>(ask=.)</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+other parameters to be passed through to plotting
+functions.</td></tr>
+<tr valign="top"><td><code>id.n</code></td>
+<td>
+number of points to be labelled in each plot, starting
+with the most extreme.</td></tr>
+<tr valign="top"><td><code>labels.id</code></td>
+<td>
+vector of labels, from which the labels for extreme
+points will be chosen.  <code>NULL</code> uses observation numbers.</td></tr>
+<tr valign="top"><td><code>cex.id</code></td>
+<td>
+magnification of point labels.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>sub.caption</code>&mdash;by default the function call&mdash;is shown as
+a subtitle (under the x-axis title) on each plot when plots are on
+separate pages, or as a subtitle in the outer margin (if any) when
+there are multiple plots per page.
+</p>
+<p>
+The &ldquo;Scale-Location&rdquo; plot, also called &ldquo;Spread-Location&rdquo; or
+&ldquo;S-L&rdquo; plot, takes the square root of the absolute residuals in
+order to diminish skewness (<i>sqrt{| E |}</i> is much less skewed
+than <i>| E |</i> for Gaussian zero-mean <i>E</i>).
+</p>
+<p>
+This &lsquo;S-L&rsquo; and the Q-Q plot use <EM>standardized</EM> residuals
+which have identical variance (under the hypothesis).  They are given
+as <i>R[i] / (s*sqrt(1 - h.ii))</i>
+where <i>h.ii</i> are the diagonal entries of the hat matrix,
+<code><a href="lm.influence.html">influence</a>()</code><code>$hat</code>, see also <code><a href="influence.measures.html">hat</a></code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+John Maindonald and Martin Maechler.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Belsley, D. A., Kuh, E. and Welsch, R. E. (1980)
+<EM>Regression Diagnostics.</EM>  New York: Wiley.
+</p>
+<p>
+Cook, R. D. and Weisberg, S. (1982)
+<EM>Residuals and Influence in Regression.</EM>
+London: Chapman and Hall.
+</p>
+<p>
+Hinkley, D. V. (1975) On power transformations to
+symmetry. <EM>Biometrika</EM> <B>62</B>, 101&ndash;111.
+</p>
+<p>
+McCullagh, P. and Nelder, J. A. (1989)
+<EM>Generalized Linear Models.</EM>
+London: Chapman and Hall.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="termplot.html">termplot</a></code>, <code><a href="lm.influence.html">lm.influence</a></code>,
+<code><a href="influence.measures.html">cooks.distance</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Analysis of the life-cycle savings data
+## given in Belsley, Kuh and Welsch.
+plot(lm.SR &lt;- lm(sr ~ pop15 + pop75 + dpi + ddpi, data = LifeCycleSavings))
+
+## 4 plots on 1 page; allow room for printing model formula in outer margin:
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0))
+plot(lm.SR)
+plot(lm.SR, id.n = NULL)               # no id's
+plot(lm.SR, id.n = 5, labels.id = NULL)# 5 id numbers
+
+## Fit a smooth curve, where applicable:
+plot(lm.SR, panel = panel.smooth)
+## Gives a smoother curve
+plot(lm.SR, panel = function(x,y) panel.smooth(x, y, span = 1))
+
+par(mfrow=c(2,1))# same oma as above
+plot(lm.SR, which = 1:2, sub.caption = "Saving Rates, n=50, p=5")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

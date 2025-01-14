@@ -1,0 +1,172 @@
+<html><head><title>R: Specifying Generalized Additive Models.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for gam.models {mgcv}"><tr><td>gam.models {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Specifying Generalized Additive Models.</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This page is intended to provide some more information on
+how to specify GAMs. Assume that in general we are interested in
+modelling some response variable <i>y</i> with an exponential
+family distribution (e.g. Normal, Poisson, binomial, etc.) using predictor variables
+<i>x1,x2,...</i>, and let <i>m=E(y)</i>. A typical GAM might be:
+</p><p align="center"><i>g(m)=b0 + b1x1 + b2x2 + f1(x3) +
+f2(x4,x5) </i></p><p>
+where <i>g</i> is a smooth monotonic `link' function, and <i>f1</i>
+and <i>f2</i> are smooth functions. The key idea here is that the
+dependence of the response on the predictors can be represented as a
+parametric sub-model plus the sum of some smooth fucntions of one or
+more of the predictor variables. Thus the model is quite flexible
+relative to strictly parametric linear or generalized linear models,
+but still has much more structure than the completely general model
+that says that the response is just some smooth function of all the
+covariates.
+</p>
+<p>
+Note one important point. In order for the model to be identifiable
+the smooth functions have to be constrained to have zero mean (usually
+taken over the set of covariate values). Such constraints are always
+applied by <code>gam</code>.
+</p>
+<p>
+Specification of the distribution and link function is done using the <code><a href="../../stats/html/family.html">family</a></code>
+argument to <code><a href="gam.html">gam</a></code> and works in the same way as for
+<code><a href="../../stats/html/glm.html">glm</a></code>. This page hence assumes the default identity link
+normal error family, since the generalizations are easy.
+</p>
+<p>
+Starting with the model given above then, the <code>gam</code> formula would
+be <br>
+<code>y~x1+x2+s(x3)+s(x4,x5)</code>. <br>
+This would use the default basis for the smooths (a thin plate
+regression spline basis for each), with automatic selection of the
+effective degrees of freedom for both smooths. The dimension of the
+smoothing basis is given a default value as well (the dimension of the
+basis sets an upper limit on the maximum possible degrees of
+freedom for the basis - the limit is typically one less than basis
+dimension). Full details of how to control smooths are given in
+<code><a href="s.html">s</a></code> and <code><a href="te.html">te</a></code>. For the moment suppose that we would like to change
+the basis of the first smooth to a cubic regression spline basis with
+a dimension of 20, while fixing the second term at 25 degrees of
+freedom. The appropriate formula would be:<br>
+<code>y~x1+x2+s(x3,bs="cr",k=20)+s(x4,x5,k=26,fx=T)</code>.
+</p>
+<p>
+Now consider some more unusual models. Consider a model in which
+<i>y</i> is a smooth function of <i>x</i> except at a point
+<i>x*</i> where the function jumps discontinuously. This model can
+be written as:
+</p><p align="center"><i>E(y) = b0 + b1
+h(x*,x) + f1(x)</i></p><p>
+where <i>h</i> is a step function jumping from 0 to 1 at
+<i>x*</i>. The way to fit this model is to create a variable
+<code>h</code> which is zero for all <code>x</code> less than <i>x*</i> and
+one otherwise. Then the model formula is:<br>
+<code>y~h+s(x)</code>. <br>
+</p>
+<p>
+Another situation that occurs quite often is the one in which we
+would like to find out if the model:
+</p><p align="center"><i>E(y)=f(x,z)</i></p><p>
+is really necessary or whether:
+</p><p align="center"><i>E(y)=f1(x)+f2(z)</i></p><p>
+wouldn't do just as well. One way to do this is to look at the results
+of fitting:<br>
+<code>y~s(x)+s(z)+s(x,z)</code>.<br>
+<code>gam</code> automatically generates side conditions to make this model
+identifiable. You can also estimate `overlapping' models like:<br>
+<code>y~s(x,z)+s(z,v)</code>.
+</p>
+<p>
+Sometimes models of the form:
+</p><p align="center"><i>E(y)=b0+f(x)z</i></p><p>
+need to be estimated (where <i>f</i> is a smooth function, as usual.)
+The appropriate formula is:<br>
+<code>y~z+s(x,by=z)</code><br>
+- the <code>by</code> argument ensures that the smooth function gets multiplied by
+covariate <code>z</code>, but GAM smooths are centred (average value zero),
+so the <code>z+</code> term is needed as well (<i>f</i> is being
+represented by a constant plus a centred smooth). If we'd wanted:
+</p><p align="center"><i>E(y)=f(x)z</i></p><p>
+then the appropriate formula would be:<br>
+<code>y~z+s(x,by=z)-1</code>.<br>
+</p>
+<p>
+The <code>by</code> mechanism also allows models to be estimated in which
+the form of a smooth depends on the level of a factor, but to do this
+the user must generate the dummy variables for each level of the
+factor. Suppose for example that <code>fac</code> is a factor with 3 levels
+<code>1</code>, <code>2</code>, <code>3</code>,
+and at each level of this factor ther response depends smoothly on a
+variable <code>x</code> in a manner that is level dependent. Three dummy
+variables <code>fac.1</code>, <code>fac.2</code>, <code>fac.3</code>, can be generated for the factor   
+(e.g. <code>fac.1&lt;-as.numeric(fac==1)</code>). Then the model formula would
+be:<br>
+<code>y~fac+s(x,by=fac.1)+s(x,by=fac.2)+s(x,by=fac.3)</code>.<br>
+</p>
+<p>
+In the above examples the smooths of more than one covariate have all employed 
+single penalty thin plate regression splines. These isotropic smooths are not 
+alway appropriate: if variables are not naturally `well scaled' relative to each 
+other then it is often preferable to use tensor product smooths, with a wiggliness 
+penalty for each covariate of the term. See <code><a href="te.html">te</a></code> for examples.
+</p>
+
+
+<h3>WARNING</h3>
+
+<p>
+There are no identifiability checks made between the smooth and
+parametric parts of a gam formula, and any such lack of identifiability will
+cause problems if the underlying fitting routine is <code><a href="mgcv.html">mgcv</a></code> (not
+the default).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+set.seed(10)
+n&lt;-400
+sig2&lt;-4
+x0 &lt;- runif(n, 0, 1)
+x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1)
+pi &lt;- asin(1) * 2
+f1 &lt;- 2 * sin(pi * x2)
+f2 &lt;-  exp(2 * x2) - 3.75887
+f3 &lt;-  0.2 * x2^11 * (10 * (1 - x2))^6 + 
+       10 * (10 * x2)^3 * (1 - x2)^10 - 1.396
+e &lt;- rnorm(n, 0, sqrt(abs(sig2)))
+# A continuous `by' variable example.... 
+y &lt;- f3*x1 + e
+b&lt;-gam(y~x1-1+s(x2,by=x1))
+plot(b,pages=1)
+summary(b)
+# A dummy `by' variable example (with a spurious covariate x0)
+fac&lt;-as.factor(c(rep(1,100),rep(2,100),rep(3,200)))
+fac.1&lt;-as.numeric(fac==1);fac.2&lt;-as.numeric(fac==2);
+fac.3&lt;-as.numeric(fac==3)
+y&lt;-f1*fac.1+f2*fac.2+f3*fac.3+ e
+b&lt;-gam(y~fac+s(x2,by=fac.1)+s(x2,by=fac.2)+s(x2,by=fac.3)+s(x0))
+plot(b,pages=1)
+summary(b)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

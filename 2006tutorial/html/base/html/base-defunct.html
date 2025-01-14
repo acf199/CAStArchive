@@ -1,0 +1,218 @@
+<html><head><title>R: Defunct Functions in Base Package</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for base-defunct {base}"><tr><td>base-defunct {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Defunct Functions in Base Package</h2>
+
+
+<h3>Description</h3>
+
+<p>
+The functions or variables listed here are no longer part of <font face="Courier New,Courier" color="#666666"><b>R</b></font> as
+they are not needed (any more).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+Version()
+provide(package)
+.Provided
+category(...)
+dnchisq(.)
+pnchisq(.)
+qnchisq(.)
+rnchisq(.)
+print.anova.glm(.)
+print.anova.lm(.)
+print.tabular(.)
+print.plot(.)
+save.plot(.)
+system.test(.)
+dotplot(...)
+stripplot(...)
+getenv(...)
+read.table.url(url, method,...)
+scan.url(url, file = tempfile(), method, ...)
+source.url(url, file = tempfile(), method, ...)
+httpclient(url, port=80, error.is.fatal=TRUE, check.MIME.type=TRUE,
+           file=tempfile(), drop.ctrl.z=TRUE)
+parse.dcf(text = NULL, file = "", fields = NULL, versionfix = FALSE)
+.Alias(expr)
+reshapeWide(x, i, j, val, jnames = levels(j))
+reshapeLong(x,jvars,  ilev = row.names(x),
+            jlev = names(x)[jvars], iname = "reshape.i",
+            jname = "reshape.j", vname = "reshape.v")
+piechart(x, labels = names(x), edges = 200, radius = 0.8,
+         density = NULL, angle = 45, col = NULL, main = NULL, ...)
+print.ordered(.)
+.Dyn.libs
+.lib.loc
+machine()
+Machine()
+Platform()
+restart()
+printNoClass(x, digits = NULL, quote = TRUE, na.print = NULL,
+             print.gap = NULL, right = FALSE, ...)
+plot.mts(x, plot.type = c("multiple", "single"), panel = lines,
+         log = "", col = par("col"),  bg = NA, pch = par("pch"),
+         cex = par("cex"), lty = par("lty"), lwd = par("lwd"),
+         ann = par("ann"),  xlab = "Time", type = "l", main=NULL,
+         oma=c(6, 0, 5, 0), ...)
+print.coefmat(x, digits=max(3, getOption("digits") - 2),
+              signif.stars = getOption("show.signif.stars"),
+              dig.tst = max(1, min(5, digits - 1)),
+              cs.ind, tst.ind, zap.ind = integer(0),
+              P.values = NULL, has.Pvalue, eps.Pvalue = .Machine$double.eps,
+              na.print = "", ...)
+
+codes(x, ...)
+codes(x, ...) &lt;- value
+
+anovalist.lm(object, ..., test = NULL)
+lm.fit.null(x, y, method = "qr", tol = 1e-07, ...)
+lm.wfit.null(x, y, w, method = "qr", tol = 1e-07, ...)
+glm.fit.null(x, y, weights, start = NULL,
+             etastart = NULL, mustart = NULL, offset,
+             family = gaussian(), control = glm.control(),
+             intercept = FALSE)
+print.atomic(x, quote = TRUE, ...)
+La.eigen(x, symmetric, only.values = FALSE, method = c("dsyevr", "dsyev"))
+tetragamma(x)
+pentagamma(x)
+package.description(pkg, lib.loc = NULL, fields = NULL)
+</pre>
+
+
+<h3>Details</h3>
+
+<p>
+<code>category</code> has been an old-S function before there were factors;
+should be replaced by <code><a href="factor.html">factor</a></code> throughout!
+</p>
+<p>
+The <code>*chisq()</code> functions now take an optional non-centrality
+argument, so the <code>*nchisq()</code> functions are no longer needed.
+</p>
+<p>
+The new function <code>dev.print()</code> should now be used for saving
+plots to a file or printing them.
+</p>
+<p>
+<code>provide</code> and its object <code>.Provided</code> have been removed.
+They were never used for their intended purpose, to allow one
+package to subsume another.
+</p>
+<p>
+<code>dotplot</code> and <code>stripplot</code> have been renamed to
+<code><a href="../../graphics/html/dotchart.html">dotchart</a></code> and <code><a href="../../graphics/html/stripchart.html">stripchart</a></code>,
+respectively.
+</p>
+<p>
+<code>getenv</code> has been replaced by <code><a href="getenv.html">Sys.getenv</a></code>.
+</p>
+<p>
+<code>*.url</code> are replaced by calling <code>read.table</code>, <code>scan</code> or
+<code>source</code> on a <code><a href="connections.html">url</a></code> connection.
+</p>
+<p>
+<code>httpclient</code> was used by the deprecated <code>"socket"</code> method
+of <code><a href="../../utils/html/download.file.html">download.file</a></code>.
+</p>
+<p>
+<code>parse.dcf</code> has been replaced by <code>read.dcf</code>, which is much
+faster, but has a slightly different interface.
+</p>
+<p>
+<code>.Alias</code> provided an unreliable way to create duplicate
+references to the same object. There is no direct replacement. Where
+multiple references to a single object are required for semantic
+reasons consider using environments or external pointers. There are
+some notes on <a href="http://developer.r-project.org">http://developer.r-project.org</a>.
+</p>
+<p>
+<code>reshape*</code>, which were experimental, are replaced by
+<code><a href="../../stats/html/reshape.html">reshape</a></code>.  This has a different syntax and allows
+multiple time-varying variables.
+</p>
+<p>
+<code>piechart</code> is the old name for <code>pie</code>, but clashed with usage
+in Trellis.
+</p>
+<p>
+<code>.Dyn.libs</code> and <code>.lib.loc</code> were internal variables used for
+storing and manipulating the information about packages with dynloaded
+shared libs, and the known <font face="Courier New,Courier" color="#666666"><b>R</b></font> library trees.  These are now dynamic
+variables which one can get or set using <code><a href="library.dynam.html">.dynLibs</a></code> and
+<code><a href="libPaths.html">.libPaths</a></code>, respectively.
+</p>
+<p>
+<code>Machine()</code> and <code>Platform()</code> were functions returning the
+variables <code><a href="zMachine.html">.Machine</a></code> and <code><a href="Platform.html">.Platform</a></code>
+respectively.
+</p>
+<p>
+<code>restart()</code> should be replaced by <code>try()</code>, in preparation
+for an exception-based implementation.  If you use <code>restart()</code> in
+a way that cannot be replaced with <code>try()</code> then ask for help
+on <code>r-devel</code>.
+</p>
+<p>
+<code>printNoClass</code> was in package <STRONG>methods</STRONG> and calls directly the
+internal function <code>print.default</code>.
+</p>
+<p>
+<code>plot.mts</code> has been removed, as <code><a href="../../stats/html/plot.ts.html">plot.ts</a></code> now has the
+same functionality.
+</p>
+<p>
+<code>print.coefmat</code> was an older name for <code><a href="../../stats/html/printCoefmat.html">printCoefmat</a></code>
+with a different default for <code>na.print</code>.
+</p>
+<p>
+<code>codes</code> was almost always used inappropriately.  To get the
+internal coding of a factor, use <code>unclass</code>, <code>as.vector</code> or
+<code>as.integer</code>.  For <EM>ordered</EM> factors, <code>codes</code> was
+equivalent to these, but for <EM>unordered</EM> factors it assumed an
+an alphabetical ordering of the levels in the locale in use.
+</p>
+<p>
+<code>anovalist.lm</code> was replaced by <code><a href="../../stats/html/anova.lm.html">anova.lmlist</a></code> in
+<font face="Courier New,Courier" color="#666666"><b>R</b></font> 1.2.0.
+</p>
+<p>
+<code>lm.fit.null</code> and <code>lm.wfit.null</code> are superseded by
+<code>lm.fit</code> and <code>lm.wfit</code> which handle null models now.
+Similarly, <code>glm.fit.null</code> is superseded by <code>glm.fit</code>.
+</p>
+<p>
+<code>print.atomic</code> differed from <code>print.default</code> only in its
+argument sequence.  It is not a method for <code>print</code>.
+</p>
+<p>
+<code>La.eigen</code> has become the default for <code><a href="eigen.html">eigen</a></code>.
+</p>
+<p>
+<code>tetragamma</code> and <code>pentagamma</code> have been replaced by
+<code><a href="Special.html">psigamma</a></code>.
+</p>
+<p>
+<code>package.description</code> has been replaced by
+<code><a href="../../utils/html/packageDescription.html">packageDescription</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Defunct.html">Defunct</a></code>, <code><a href="base-deprecated.html">base-deprecated</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

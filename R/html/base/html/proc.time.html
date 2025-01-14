@@ -1,0 +1,79 @@
+<html><head><title>R: Running Time of R</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for proc.time {base}"><tr><td>proc.time {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Running Time of R</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>proc.time</code> determines how much time (in seconds) the currently
+running <font face="Courier New,Courier" color="#666666"><b>R</b></font> process already consumed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+proc.time()
+</pre>
+
+
+<h3>Value</h3>
+
+<p>
+A numeric vector of length 5, containing the user, system, and total
+elapsed times for the currently running <font face="Courier New,Courier" color="#666666"><b>R</b></font> process, and the cumulative
+sum of user and system times of any child processes spawned by it.
+<br>
+The resolution of the times will be system-specific; it is common for
+them to be recorded to of the order of 1/100 second, and elapsed
+time is rounded to the nearest 1/100.
+<br>
+It is most useful for &ldquo;timing&rdquo; the evaluation of <font face="Courier New,Courier" color="#666666"><b>R</b></font> expressions,
+which can be done conveniently with <code><a href="system.time.html">system.time</a></code>.</p>
+
+<h3>Note</h3>
+
+<p>
+CPU times will be returned as <code>NA</code> on Windows 9x/ME systems, but
+are genuine times on NT4/2000/XP systems. Times of child processes are
+not available and will always be given as <code>NA</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="system.time.html">system.time</a></code> for timing a valid <font face="Courier New,Courier" color="#666666"><b>R</b></font> expression,
+<code><a href="gc.time.html">gc.time</a></code> for how much of the time was spent in garbage
+collection.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>## Not run: 
+## a way to time an R expression: system.time is preferred
+ptm &lt;- proc.time()
+for (i in 1:50) mad(runif(500))
+proc.time() - ptm
+## End(Not run)</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

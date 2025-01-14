@@ -1,0 +1,144 @@
+<html><head><title>R: Interpolating Splines</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for splinefun {stats}"><tr><td>splinefun {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Interpolating Splines</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Perform cubic spline interpolation of given data points, returning
+either a list of points obtained by the interpolation or a function
+performing the interpolation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+splinefun(x, y = NULL, method = "fmm")
+
+spline(x, y = NULL, n = 3*length(x), method = "fmm",
+       xmin = min(x), xmax = max(x))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,y</code></td>
+<td>
+vectors giving the coordinates of the points to be
+interpolated.  Alternatively a single plotting structure can be
+specified: see <code><a href="../../graphics/html/xy.coords.html">xy.coords</a>.</code></td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+specifies the type of spline to be used.  Possible
+values are <code>"fmm"</code>, <code>"natural"</code> and <code>"periodic"</code>.</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+interpolation takes place at <code>n</code> equally spaced points
+spanning the interval [<code>xmin</code>, <code>xmax</code>].</td></tr>
+<tr valign="top"><td><code>xmin</code></td>
+<td>
+left-hand endpoint of the interpolation interval.</td></tr>
+<tr valign="top"><td><code>xmax</code></td>
+<td>
+right-hand endpoint of the interpolation interval.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The inputs can contain missing values which are deleted, so at least
+one complete <code>(x, y)</code> pair is required.
+If <code>method = "fmm"</code>, the spline used is that of Forsythe, Malcolm
+and Moler (an exact cubic is fitted through the four points at each
+end of the data, and this is used to determine the end conditions).
+Natural splines are used when <code>method = "natural"</code>, and periodic
+splines when <code>method = "periodic"</code>.
+</p>
+<p>
+These interpolation splines can also be used for extrapolation, that is
+prediction at points outside the range of <code>x</code>.  Extrapolation
+makes little sense for <code>method = "fmm"</code>; for natural splines it
+is linear using the slope of the interpolating curve at the nearest
+data point.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>spline</code> returns a list containing components <code>x</code> and
+<code>y</code> which give the ordinates where interpolation took place and
+the interpolated values.
+<br>
+<code>splinefun</code> returns a function which will perform cubic spline
+interpolation of the given data points.  This is often more useful
+than <code>spline</code>.</p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+<p>
+Forsythe, G. E., Malcolm, M. A. and Moler, C. B. (1977)
+<EM>Computer Methods for Mathematical Computations</EM>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="approxfun.html">approx</a></code> and <code><a href="approxfun.html">approxfun</a></code> for constant and
+linear interpolation.
+</p>
+<p>
+Package <STRONG>splines</STRONG>, especially <code><a href="../../splines/html/interpSpline.html">interpSpline</a></code>
+and <code><a href="../../splines/html/periodicSpline.html">periodicSpline</a></code> for interpolation splines.
+That package also generates spline bases that can be used for
+regression splines.
+</p>
+<p>
+<code><a href="smooth.spline.html">smooth.spline</a></code> for smoothing splines.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+op &lt;- par(mfrow = c(2,1), mgp = c(2,.8,0), mar = .1+c(3,3,3,1))
+n &lt;- 9
+x &lt;- 1:n
+y &lt;- rnorm(n)
+plot(x, y, main = paste("spline[fun](.) through", n, "points"))
+lines(spline(x, y))
+lines(spline(x, y, n = 201), col = 2)
+
+y &lt;- (x-6)^2
+plot(x, y, main = "spline(.) -- 3 methods")
+lines(spline(x, y, n = 201), col = 2)
+lines(spline(x, y, n = 201, method = "natural"), col = 3)
+lines(spline(x, y, n = 201, method = "periodic"), col = 4)
+legend(6,25, c("fmm","natural","periodic"), col=2:4, lty=1)
+
+f &lt;- splinefun(x, y)
+ls(envir = environment(f))
+splinecoef &lt;- eval(expression(z), envir = environment(f))
+curve(f(x), 1, 10, col = "green", lwd = 1.5)
+points(splinecoef, col = "purple", cex = 2)
+par(op)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

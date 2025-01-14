@@ -1,0 +1,91 @@
+<html><head><title>R: Default Panel Function for bwplot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for panel.bwplot {lattice}"><tr><td>panel.bwplot {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>Default Panel Function for bwplot</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This is the default panel function for <code>bwplot</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+panel.bwplot(x, y,
+             box.ratio = 1, horizontal,
+             pch, col, cex, fill = "transparent",
+             varwidth = FALSE, coef = 1.5, do.out = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+numeric vector or factor. Boxplots drawn for each unique value of
+<code>y</code> (<code>x</code>) if <code>horizontal</code> is <code>TRUE</code> (<code>FALSE</code>)</td></tr>
+<tr valign="top"><td><code>box.ratio</code></td>
+<td>
+ratio of box height to inter box space</td></tr>
+<tr valign="top"><td><code>horizontal</code></td>
+<td>
+logical. If FALSE, the plot is `transposed' in the
+sense that the behaviours of x and y are switched. x is now
+the `factor'.  Interpretation of other arguments change
+accordingly. See documentation of <code>bwplot</code> for a fuller
+explanation.
+</td></tr>
+<tr valign="top"><td><code>pch, col, cex</code></td>
+<td>
+graphical parameters controlling the dot</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+color to fill the boxplot</td></tr>
+<tr valign="top"><td><code>varwidth</code></td>
+<td>
+logical. If TRUE, widths of boxplots are proportional
+to the number of points used in creating it.</td></tr>
+<tr valign="top"><td><code>coef, do.out</code></td>
+<td>
+passed to <code>boxplot.stats</code></td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+more graphical parameters controlling the display can be supplied
+</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Creates Box and Whisker plot of <code>x</code> for every level of
+<code>y</code>. The actual boxplot statistics are calculated using
+<code>boxplot.stats</code>. Note that most arguments controlling the display
+can be supplied to the high-level <code>bwplot</code> call directly.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Deepayan Sarkar <a href="mailto:Deepayan.Sarkar@R-project.org">Deepayan.Sarkar@R-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="xyplot.html">bwplot</a></code>, <code><a href="../../graphics/html/boxplot.stats.html">boxplot.stats</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

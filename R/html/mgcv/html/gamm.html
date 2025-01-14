@@ -1,0 +1,416 @@
+<html><head><title>R: Generalized Additive Mixed Models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for gamm {mgcv}"><tr><td>gamm {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Generalized Additive Mixed Models</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Fits the specified  generalized additive mixed model (GAMM) to
+data, by a call to <code>lme</code> in the normal errors identity link case, or by 
+a call to <code>glmmPQL</code> from the <code>MASS</code> library otherwise. 
+In the latter case estimates are only approximately MLEs. The routine is typically 
+slower than <code>gam</code>, and not quite as numerically robust.
+</p>
+<p>
+Smooths are specified as in a call to <code><a href="gam.html">gam</a></code> as part of the fixed 
+effects model formula, but the wiggly components of the smooth are treated as 
+random effects. The random effects structures and correlation structures 
+availabale for <code>lme</code> are used to specify other random effects and 
+correlations. 
+</p>
+<p>
+It is assumed that the random effects and correlation structures are employed 
+primarily to model residual correlation in the data and that the prime interest
+is in inference about the terms in the fixed effects model formula including 
+the smooths. For this reason the routine calculates a posterior covariance 
+matrix for the coefficients of all the terms in the fixed effects formula, 
+including the smooths.
+</p>
+<p>
+To use this function effectively it helps to be quite familiar with the use of
+<code><a href="gam.html">gam</a></code> and <code><a href="../../nlme/html/lme.html">lme</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+gamm(formula,random=NULL,correlation=NULL,family=gaussian(),
+data=list(),weights=NULL,subset=NULL,na.action,knots=NULL,
+control=lmeControl(niterEM=3),niterPQL=20,verbosePQL=TRUE,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+A GAM formula (see also <code><a href="gam.models.html">gam.models</a></code>). 
+This is exactly like the formula for a
+glm except that smooth terms can be added to the right hand side of the
+formula (and a formula of the form <code>y ~ .</code> is not allowed).
+Smooth terms are specified by expressions of the form: <br>
+<code>s(var1,var2,...,k=12,fx=FALSE,bs="tp",by=a.var)</code> where <code>var1</code>,
+<code>var2</code>, etc. are the covariates which the smooth
+is a function of and <code>k</code> is the dimension of the basis used to
+represent the smooth term. If <code>k</code> is not
+specified then <code>k=10*3^(d-1)</code> is used where <code>d</code> is the number
+of covariates for this term. <code>fx</code> is used to indicate whether or
+not this term has a fixed muber of degrees of freedom (<code>fx=FALSE</code>
+to select d.f. by GCV/UBRE). <code>bs</code> indicates the basis to use: see
+<code><a href="s.html">s</a></code> for full details, but note that the default <code>"tp"</code> can
+be slow with large data sets. Tensor product smooths are specified using <code><a href="te.html">te</a></code> terms.
+</td></tr>
+<tr valign="top"><td><code>random</code></td>
+<td>
+The (optional) random effects structure as specified in a call to 
+<code><a href="../../nlme/html/lme.html">lme</a></code>: only the <code>list</code> form is allowed, to facilitate 
+manipulation of the random effects structure within <code>gamm</code> in order to deal
+with smooth terms. See example below.</td></tr>
+<tr valign="top"><td><code>correlation</code></td>
+<td>
+An optional <code>corStruct</code> object (see <code><a href="../../nlme/html/corClasses.html">corClasses</a></code>) as used to define correlation 
+structures in <code><a href="../../nlme/html/lme.html">lme</a></code>. Any grouping factors in the formula for
+this object are assumed to be nested within any random effect grouping
+factors, without the need to make this explicit in the formula (this is 
+slightly different to the behaviour of <code>lme</code>). See examples below.</td></tr>
+<tr valign="top"><td><code>family</code></td>
+<td>
+A <code>family</code> as used in a call to <code><a href="../../stats/html/glm.html">glm</a></code> or <code><a href="gam.html">gam</a></code>.
+The default <code>gaussian</code> with identity link causes <code>gamm</code> to fit by a direct call to
+<code><a href="../../nlme/html/lme.html">lme</a></code> procided there is no offset term, otherwise <code>glmmPQL</code> from the <code>MASS</code> library is used.</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+A data frame containing the model response variable and 
+covariates required by the formula.  By default the variables are taken 
+from <code>environment(formula)</code>, typically the environment from 
+which <code>gamm</code> is called.</td></tr>
+<tr valign="top"><td><code>weights</code></td>
+<td>
+prior weights on the data. See documentation for <code>lme</code>
+for details of how to use this argument.</td></tr>
+<tr valign="top"><td><code>subset</code></td>
+<td>
+an optional vector specifying a subset of observations to be
+used in the fitting process.</td></tr>
+<tr valign="top"><td><code>na.action</code></td>
+<td>
+a function which indicates what should happen when the data
+contain `NA's.  The default is set by the `na.action' setting
+of `options', and is `na.fail' if that is unset.  The
+``factory-fresh'' default is `na.omit'.</td></tr>
+<tr valign="top"><td><code>knots</code></td>
+<td>
+this is an optional list containing user specified knot values to be used for basis construction. 
+For the <code>cr</code> basis the user simply supplies the knots to be used, and there must be the same number as the basis
+dimension, <code>k</code>, for the smooth concerned. For the <code>tp</code> basis <code>knots</code> has two uses. 
+Firstly, for large datasets 
+the calculation of the <code>tp</code> basis can be time-consuming. The user can retain most of the advantages of the t.p.r.s. 
+approach by supplying  a reduced set of covariate values from which to obtain the basis - 
+typically the number of covariate values used will be substantially 
+smaller than the number of data, and substantially larger than the basis dimension, <code>k</code>. The second possibility 
+is to avoid the eigen-decomposition used to find the t.p.r.s. basis altogether and simply use 
+the basis implied by the chosen knots: this will happen if the number of knots supplied matches the 
+basis dimension, <code>k</code>. For a given basis dimension the second option is 
+faster, but gives poorer results (and the user must be quite careful in choosing knot locations). 
+Different terms can use different 
+numbers of knots, unless they share a covariate.
+</td></tr>
+<tr valign="top"><td><code>control</code></td>
+<td>
+A list of fit control parameters for <code><a href="../../nlme/html/lme.html">lme</a></code> returned by 
+<code><a href="../../nlme/html/lmeControl.html">lmeControl</a></code>. Note the default setting for the number of EM iterations 
+used by <code>lme</code>: high settings tend to lead to numerical problems because variance components
+for smooth terms can legitimately be non-finite.</td></tr>
+<tr valign="top"><td><code>niterPQL</code></td>
+<td>
+Maximum number of PQL iterations (if any).</td></tr>
+<tr valign="top"><td><code>verbosePQL</code></td>
+<td>
+Should PQL report its progress as it goes along?</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments for passing on e.g. to <code>lme</code></td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The Bayesian model of spline smoothing introduced by Wahba (1983) and Silverman (1985) opens 
+up the possibility of estimating the degree of smoothness of terms in a generalized additive model
+as variances of the wiggly components of the smooth terms treated as random effects. Several authors 
+have recognised this (see Wang 1998; Ruppert, Wand and Carroll, 2003) and in the normal errors, identity link case estimation can 
+be performed using general linear mixed effects modelling software such as <code>lme</code>. In the generalized case only 
+approximate inference is so far available, for example using the Penalized Quasi-Likelihood approach of Breslow 
+and Clayton (1993) as implemented in <code>glmmPQL</code> by Venables and Ripley (2002). 
+One advantage of this approach is that it allows correlated errors to be dealt with via random effects 
+or the correlation structures available in the <code>nlme</code> library. 
+</p>
+<p>
+Some brief details of how GAMs are represented as mixed models and estimated using <code>lme</code> or <code>glmmPQL</code> in <code>gamm</code> can be found in Wood (2004a,b). In addition <code>gamm</code> obtains a posterior covariance matrix for the parameters of all the fixed effects and the smooth terms. The approach is similar to that described in (Lin &amp; Zhang, 1999) - the covariance matrix of the data (or pseudodata in the generalized case) implied by the weights, correlation and random effects structure is obtained, based on the estimates of the parameters of these terms and this is used to obtain the posterior covariance matrix of the fixed and smooth effects. 
+</p>
+<p>
+The bases used to represent smooth terms are the same as those used in <code><a href="gam.html">gam</a></code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Returns a list with two items:
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>gam</code></td>
+<td>
+an object of class <code>gam</code>, less information relating to
+GCV/UBRE model selection. At present this contains enough information to use
+<code>predict</code>, <code>summary</code> and <code>print</code> methods and <code>vis.gam</code>,
+but not to use e.g. the <code>anova</code> method function to comapre models.</td></tr>
+<tr valign="top"><td><code>lme</code></td>
+<td>
+the fitted model object returned by <code>lme</code> or <code>glmmPQL</code>. Note that the model formulae and grouping 
+structures may appear to be rather bizarre, because of the manner in which the GAMM is split up and the calls to 
+<code>lme</code> and <code>glmmPQL</code> are constructed.</td></tr>
+</table>
+
+<h3>WARNINGS</h3>
+
+<p>
+The routine will be very slow and memory intensive if correlation structures
+are used for the very large groups of data. e.g. attempting to run the
+spatial example in the examples section with many 1000's of data is definitely not 
+recommended: often the correlations should only apply within clusters that can
+be defined by a grouping factor, and provided these clusters do not get too huge
+then fitting is usually possible.
+</p>
+<p>
+Models must contain at least one random effect: either a smooth with non-zero
+smoothing parameter, or a random effect specified in argument <code>random</code>.
+</p>
+<p>
+Models like <code>s(z)+s(x)+s(x,z)</code> are not currently supported.
+</p>
+<p>
+<code>gamm</code> is not as numerically stable as <code>gam</code>: an <code>lme</code> call will occasionally fail. Experimenting with 
+<code>niterEM</code> in the <code>control</code> argument can sometimes help.
+</p>
+<p>
+<code>gamm</code> is usually much slower than <code>gam</code>, and on some platforms you may need to
+increase the memory available to R in order to use it with large data sets
+(see <code><a href="../../base/html/Memory.html">mem.limits</a></code>).
+</p>
+<p>
+Note that the weights returned in the fitted GAM object are dummy, and not
+those used by the PQL iteration: this makes partial residual plots look odd.
+</p>
+<p>
+Note that the <code>gam</code> object part of the returned object is not complete in
+the sense of having all the elements defined in <code><a href="gamObject.html">gamObject</a></code> and
+does not inherit from <code>glm</code>: hence e.g. multi-model <code>anova</code> calls will not work.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Breslow, N. E. and Clayton, D. G. (1993) Approximate inference in generalized linear 
+mixed models. Journal of the American Statistical Association 88, 9-25.
+</p>
+<p>
+Lin, X and Zhang, D. (1999) Inference in generalized additive mixed models by using smoothing 
+splines. JRSSB. 55(2):381-400
+</p>
+<p>
+Pinheiro J.C. and Bates, D.M. (2000) Mixed effects Models in S and S-PLUS. Springer
+</p>
+<p>
+Ruppert, D., Wand, M.P. and Carroll, R.J. (2003) Semiparametric Regression. 
+Cambridge
+</p>
+<p>
+Silverman, B.W. (1985) Some aspects of the spline smoothing approach to nonparametric regression.
+JRSSB 47:1-52 
+</p>
+<p>
+Venables, W. N. and Ripley, B. D. (2002) Modern Applied Statistics
+with S. Fourth edition.  Springer.
+</p>
+<p>
+Wahba, G. (1983) Bayesian confidence intervals for the cross validated smoothing spline. 
+JRSSB 45:133-150
+</p>
+<p>
+Wood, S.N. (2004a) Stable and efficient multiple smoothing parameter estimation for
+generalized additive models. Journal of the American Statistical Association. 99:637-686
+</p>
+<p>
+Wood, S.N. (2003) Thin plate regression splines. J.R.Statist.Soc.B 65(1):95-114
+</p>
+<p>
+Wood, S.N. (2004b) Low rank scale invariant tensor product smooths for
+Generalized Additive Mixed Models. Technical Report of the Department of
+Statistics, University of Glasgow, UK.
+</p>
+<p>
+Wang, Y. (1998) Mixed effects smoothing spline analysis of variance. J.R. Statist. Soc. B 60, 159-174
+</p>
+<p>
+<a href="http://www.stats.gla.ac.uk/~simon/">http://www.stats.gla.ac.uk/~simon/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="te.html">te</a></code>, <code><a href="s.html">s</a></code>, <code><a href="predict.gam.html">predict.gam</a></code>,
+<code><a href="plot.gam.html">plot.gam</a></code>, <code><a href="summary.gam.html">summary.gam</a></code>, <code><a href="gam.neg.bin.html">gam.neg.bin</a></code>, 
+<code><a href="vis.gam.html">vis.gam</a></code>,<code><a href="pdTens.html">pdTens</a></code>,<code><a href="gamm.setup.html">gamm.setup</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(mgcv)
+## simple examples using gamm as alternative to gam
+set.seed(0) 
+n &lt;- 400
+sig &lt;- 2
+x0 &lt;- runif(n, 0, 1)
+x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1)
+x3 &lt;- runif(n, 0, 1)
+f &lt;- 2 * sin(pi * x0)
+f &lt;- f + exp(2 * x1) - 3.75887
+f &lt;- f+0.2*x2^11*(10*(1-x2))^6+10*(10*x2)^3*(1-x2)^10-1.396
+e &lt;- rnorm(n, 0, sig)
+y &lt;- f + e
+b &lt;- gamm(y~s(x0)+s(x1)+s(x2)+s(x3))
+plot(b$gam,pages=1)
+summary(b$lme) # details of underlying lme fit
+summary(b$gam) # gam style summary of fitted model
+anova(b$gam) 
+
+b &lt;- gamm(y~te(x0,x1)+s(x2)+s(x3)) 
+op &lt;- par(mfrow=c(2,2))
+plot(b$gam)
+par(op)
+
+## Add a factor to the linear predictor, to be modelled as random
+fac &lt;- rep(1:4,n/4)
+f &lt;- f + fac*3
+fac&lt;-as.factor(fac)
+
+g&lt;-exp(f/5)
+y&lt;-rpois(rep(1,n),g)
+b2&lt;-gamm(y~s(x0)+s(x1)+s(x2)+s(x3),family=poisson,random=list(fac=~1))
+plot(b2$gam,pages=1)
+
+## now an example with autocorrelated errors....
+x &lt;- 0:(n-1)/(n-1)
+f &lt;- 0.2*x^11*(10*(1-x))^6+10*(10*x)^3*(1-x)^10-1.396
+e &lt;- rnorm(n,0,sig)
+for (i in 2:n) e[i] &lt;- 0.6*e[i-1] + e[i]
+y &lt;- f + e
+op &lt;- par(mfrow=c(2,2))
+b &lt;- gamm(y~s(x,k=20),correlation=corAR1())
+plot(b$gam);lines(x,f-mean(f),col=2)
+b &lt;- gamm(y~s(x,k=20))
+plot(b$gam);lines(x,f-mean(f),col=2)
+b &lt;- gam(y~s(x,k=20))
+plot(b);lines(x,f-mean(f),col=2)
+
+## more complicated autocorrelation example - AR errors
+## only within groups defined by `fac'
+e &lt;- rnorm(n,0,sig)
+for (i in 2:n) e[i] &lt;- 0.6*e[i-1]*(fac[i-1]==fac[i]) + e[i]
+y &lt;- f + e
+b &lt;- gamm(y~s(x,k=20),correlation=corAR1(form=~1|fac))
+plot(b$gam);lines(x,f-mean(f),col=2)
+par(op) 
+
+## more complex situation with nested random effects and within
+## group correlation 
+
+set.seed(0)
+n.g &lt;- 10
+n&lt;-n.g*10*4
+sig &lt;- 2
+## simulate smooth part
+x0 &lt;- runif(n, 0, 1)
+x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1)
+x3 &lt;- runif(n, 0, 1)
+f &lt;- 2 * sin(pi * x0)
+f &lt;- f + exp(2 * x1) - 3.75887
+f &lt;- f+0.2*x2^11*(10*(1-x2))^6+10*(10*x2)^3*(1-x2)^10-1.396
+## simulate nested random effects....
+fa &lt;- as.factor(rep(1:10,rep(4*n.g,10)))
+ra &lt;- rep(rnorm(10),rep(4*n.g,10))
+fb &lt;- as.factor(rep(rep(1:4,rep(n.g,4)),10))
+rb &lt;- rep(rnorm(4),rep(n.g,4))
+for (i in 1:9) rb &lt;- c(rb,rep(rnorm(4),rep(n.g,4)))
+## simulate auto-correlated errors within groups
+e&lt;-array(0,0)
+for (i in 1:40) {
+eg &lt;- rnorm(n.g, 0, sig)
+for (j in 2:n.g) eg[j] &lt;- eg[j-1]*0.6+ eg[j]
+e&lt;-c(e,eg)
+}
+y &lt;- f + ra + rb + e
+dat&lt;-data.frame(y=y,x0=x0,x1=x1,x2=x2,x3=x3,fa=fa,fb=fb)
+## fit model .... 
+b &lt;- gamm(y~s(x0,bs="cr")+s(x1,bs="cr")+s(x2,bs="cr")+
+  s(x3,bs="cr"),data=dat,random=list(fa=~1,fb=~1),
+  correlation=corAR1())
+plot(b$gam,pages=1)
+
+## and a "spatial" example
+library(nlme);set.seed(1)
+test1&lt;-function(x,z,sx=0.3,sz=0.4)
+{ (pi**sx*sz)*(1.2*exp(-(x-0.2)^2/sx^2-(z-0.3)^2/sz^2)+
+  0.8*exp(-(x-0.7)^2/sx^2-(z-0.8)^2/sz^2))
+}
+n&lt;-200
+old.par&lt;-par(mfrow=c(2,2))
+x&lt;-runif(n);z&lt;-runif(n);
+xs&lt;-seq(0,1,length=30);zs&lt;-seq(0,1,length=30)
+pr&lt;-data.frame(x=rep(xs,30),z=rep(zs,rep(30,30)))
+truth &lt;- matrix(test1(pr$x,pr$z),30,30)
+contour(xs,zs,truth)  # true function
+f &lt;- test1(x,z)  # true expectation of response
+## Now simulate correlated errors...
+cstr &lt;- corGaus(.1,form = ~x+z)  
+cstr &lt;- Initialize(cstr,data.frame(x=x,z=z))
+V &lt;- corMatrix(cstr) # correlation matrix for data
+Cv &lt;- chol(V)
+e &lt;- t(Cv) %*% rnorm(n)*0.05 # correlated errors
+## next add correlated simulated errors to expected values
+y &lt;- f + e ## ... to produce response
+b&lt;- gamm(y~s(x,z,k=50),correlation=corGaus(.1,form=~x+z))
+plot(b$gam) # gamm fit accounting for correlation
+# overfits when correlation ignored.....  
+b1 &lt;- gamm(y~s(x,z,k=50));plot(b1$gam) 
+b2 &lt;- gam(y~s(x,z,k=50));plot(b2)
+par(old.par)
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

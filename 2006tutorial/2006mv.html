@@ -1,0 +1,547 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Multivariate Computations in R</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Multivariate
+ Computations</span>
+ <br>
+</span></span></big></big></div> <br>   
+This tutorial deals with a few multivariate techniques including clustering
+and principal
+components.  We begin with a short introduction to generating multivariate
+normal random vectors.<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Multivariate normal distributions </span></small></span></span></big></big><br> 
+<br>
+
+We'll start off by generating some multivariate normal random vectors.  
+There are packages that do this automatically, such as the mvtnorm package
+available from CRAN, but it is easy and instructive to do from first principles.
+<br>
+Let's generate from a bivariate normal distribution in which the standard 
+deviations of the components are 2 and 3 where the correlation between
+the components is -1/2.  For simplicity, let the mean of the vectors be the
+origin.  We need to figure out what the covariance matrix looks like.<br>
+<br>
+The diagonal elements of the covariance matrix are the marginal variances, namely
+4 and 9.  The off-diagonal element is the covariance, which equals the 
+correlation times the product of the marginal standard deviations, or -3:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sigma &lt;- 
+matrix(c(4,-3,-3,9),2,2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sigma</span><br>
+<br>
+We now seek to find a matrix M such that M times its transpose equals sigma.
+There are many matrices that do this; one of them is the transpose of the
+Cholesky square root:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">M &lt;- t(chol(sigma))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">M %*% t(M)</span><br>
+<br>
+We now recall that if Z is a random vector and M is a matrix, then the
+covariance matrix of MZ equals M cov(Z) M<sup>t</sup>.  It is very easy to
+simulate normal random vectors whose covariance matrix is the identity
+matrix; this is accomplished whenever the vector components are independent
+standard normals.  Thus, we obtain a multivariate normal random vector 
+with covariance matrix sigma if we first generate a standard normal vector
+and then multiply by the matrix M above.  Let us create a dataset
+with 200 such vectors:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">Z &lt;- matrix(rnorm(400),2,200)
+ # 2 rows, 200 columns</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">X &lt;- t(M %*% Z)</span><br>
+<br>
+The transpose above is taken so that X becomes a 200 x 2 matrix, since R
+prefers to have the columns as the vector components rather than the rows.
+Let us now plot the randomly generated normals and find the sample mean
+and covariance.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(X)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">Xbar &lt;- apply(X,2,mean)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">S &lt;- cov(X)</span><br>
+<br>
+We can compare the S matrix with the sigma matrix, but it is also nice to plot
+an ellipse to see what shape these matrices correspond to.  The car package,
+which we used in the 
+<a href="2006reg.html">EDA and regression</a> tutorial, has the capability
+to plot ellipses.  You might not need to run the install.packages
+function below since this package may already have been installed
+in the previous tutorial.  However, the library function is necessary.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">install.packages("car",lib="V:/")
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(car,lib.loc="V:/")</span><br>
+<br>
+To use the ellipse function in the car package, we need the center (mean), 
+shape (covariance), and the radius.  The radius is the radius of a circle
+that represents the "ellipse" for a standard bivariate normal distribution.
+To understand how to provide a radius, it is helpful to know that if we sum
+the squares of k independent standard normal random variables, the result
+is (by definition) a chi-squared random variable on k degrees of freedom.
+Thus, for a standard bivariate normal vector, the squares of the radii should
+be determined by the quantiles of the chi-squared distribution on 2 degrees
+of freedom.  Let us then construct an ellipses with radius based on the median
+of the chi-squared distribution.  Thus, this ellipse should contain roughly
+half of the points generated.  We'll also produce a second ellipse, based
+on the true mean and covariance matrix, for purposes of comparison.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ellipse(Xbar, S, 
+sqrt(qchisq(.5,2)))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ellipse(c(0,0), sigma,
+sqrt(qchisq(.5,2)), col=3, lty=2)</span><br>
+<br>
+
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Model-based clustering </span></small></span></span></big></big><br> 
+<br>
+
+Let's apply some of the bivariate normal results of the previous section 
+to looking for clusters in an astronomical dataset.  The
+<a href="http://astrostatistics.psu.edu/datasets/COMBO17.html">
+COMBO-17</a> dataset provides brightness measurements on 3462 galaxies.  Here,
+we use a subset of this dataset to try to reproduce a figure that appears 
+on the 
+<a href="http://astrostatistics.psu.edu/datasets/COMBO17.html">
+COMBO17.html</a> web page (not completely successfully, it turns out, 
+though I'm not quite sure why).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">combo &lt;- read.csv(</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+"http://astrostatistics.psu.edu/datasets/COMBO17.csv", </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+na.strings="")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(combo)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(combo)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xy &lt;- cbind(BjMAG, S280MAG-BjMAG)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xy &lt;- xy[Mcz>.7 & 
+Mcz<.9,]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xy &lt;- na.omit(xy)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(xy[,1],xy[,2], pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;xlab=expression(M[B]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;ylab=
+expression("(280-B)"[rest]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;main="z between 0.7 and 0.9",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;cex.lab=1.5)</span><br>
+<br>
+Notice that the 
+<a href="html/graphics/html/plot.html">plot</a>
+command uses the 
+<a href="html/base/html/expression.html">expression</a>
+function.  This is one way
+to put mathematical notation to an R plot.  See the help function for
+<a href="html/grDevices/html/plotmath.html">plotmath</a>
+for details.<br>
+<br>
+In model-based clustering, the assumption is (usually) that the multivariate 
+sample is a random sample from a mixture of multivariate normal distributions.
+A <b>mixture</b> in this case is a weighted sum of different normal 
+distributions.<br>
+<br>
+Think of it like this:  Supppose there exist k multivariate normal distributions
+(subpopulations).  To
+select our sample, someone in a closed room first rolls a k-sided die (not 
+necessarily a fair die), then selects a random member of the subpopulation
+indicated by the die.  The <i>only</i> thing we get to observe is the final
+observation; we do not know which number came up on the die or any of the
+characteristics (parameters) of the normal subpopulations.  <br>
+<br>
+To take a simple example, suppose you are given a dataset consisting <i>only</i>
+of the 
+heights of a sample of individuals.  You know that there are two subpopulations,
+males and females, and that heights in each subpopulation are roughly normally
+distributed.  Is it possible, without knowing the sexes corresponding to the
+measurements you are given, to estimate the means and standard deviations
+for each sex, along with the proportion of males?  The answer is yes.<br>
+<br>
+Note here that model-based clustering using mixture models is not the same 
+thing as disciminant analysis, in which we are given not only observations but
+also their known class memberships.  The goal in discriminant analysis is to
+build a rule for classifying future observations based on a training sample, 
+whereas clustering usually has broader goals than this:  To discover the
+classes in the first place.<br>
+<br>
+There is a CRAN package that does model-based clustering assuming normal
+distributions.  It is called mclust:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">install.packages("mclust",lib="V:/")
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(mclust,lib.loc="V:/")</span><br>
+<br>
+Let's first fit a two-component normal mixture model (i.e., search for two
+multivariate normal clusters).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc2 &lt;- Mclust(xy, minG=2, maxG=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(mc2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc2$mu</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc2$sigma</span><br>
+<br>
+Let's take a look at 50% ellipses of the clustering solution to see what the
+solution "looks like".<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">r &lt;- sqrt(qchisq(.5,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:mc2$G) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+ellipse(mc2$mu[,i], mc2$sigma[,,i], r, col=1+i)</span><br>
+<br>
+Is two components the "best" solution?  There is no best answer to this question
+in general, but we can do things like consider model selection criteria
+to try to decide.  By default, the Mclust uses BIC to search for a best 
+model from 1 to 9 components:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc &lt;- Mclust(xy)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mc$G</span><br>
+<br>
+So let's see what the three-component solution looks like:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(xy[,1],xy[,2], pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;xlab=expression(M[B]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;ylab=
+expression("(280-B)"[rest]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;main="z between 0.7 and 0.9",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;cex.lab=1.5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:mc$G) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+ellipse(mc$mu[,i], mc$sigma[,,i], r, col=1+i)</span><br>
+<br>
+
+
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Principal components </span></small></span></span></big></big><br> 
+<br>
+We now look at a different dataset, the SDSS quasar dataset.  Download this dataset from
+<a href="http://www.astrostatistics.psu.edu/datasets/SDSS_quasar.html">
+http://www.astrostatistics.psu.edu/datasets/SDSS_quasar.html</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">quas=read.table(
+"http://astrostatistics.psu.edu/datasets/SDSS_quasar.dat",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dim(quas)</span><br>
+<br>
+We want to get rid of the missing values.  However, in this case missing
+values create more havoc than usual due to the fact that we will be working with
+covariance matrices.  Thus, we will eliminate all rows with missing values:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">quas[quas==0 | quas==-1 | quas==-9]=NA</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">quas &lt;- na.omit(quas)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dim(quas)</span><br>
+<br>
+This leaves us with a much smaller dataset, but for purposes of illustration it will serve
+well.  Once the principal component loadings are determined, we can then apply these loadings,
+or a simplified version thereof, 
+to the <i>whole</i> dataset.<br>
+<br>
+In principal components analysis,
+we wish to reduce the number of variables.  
+The method is to find the "best" linear combinations of
+all existing variables.  
+To understand what is "best" in this context, 
+consider the 22 quantitative measurement columns in the
+quas dataset (the first column is the SDSS designation of the object).  Each
+row may be considered to be a point in 22-dimensional Euclidean space.  Thus,
+the entire dataset consists of a cloud of 279 22-dimensional points.  The
+"best" linear combination here will be the single vector in 22-space parallel to
+which the variance of these 279 points is the greatest.  The second-best
+will be the single vector orthogonal to the first along which the variance is
+the greatest, and so on.<br>
+<br>
+We will implement principal components in R using two distinct approaches.
+One approach is to use the 
+<a href="html/stats/html/princomp.html">princomp</a>
+function.  Another is to obtain the same results from scratch using an eigenvalue
+decomposition.  
+We will use the former approach for analysis and interpretation; the latter
+approach is presented only to help you understand how the method works
+mathematically.<br>
+<br>
+
+To create a single object containing all the principal components
+information you will need, type<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pc=princomp(quas[,-1])</span><br>
+<br>
+Note that we omit the first column from the analysis since it is not a quantitative
+measurement.<br>
+<br>
+Let's see what kind of information is carried in pc.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(pc)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">?princomp</span><br>
+<br>
+Before explaining what each of these things means, let's briefly show 
+how to obtain the important bits, namely pc$sdev and pc$loadings, from scratch
+using an eigenvalue/eigenvector decomposition of the sample covariance
+matrix.  The square roots of the eigenvalues give pc$sdev and the matrix
+of normalized eigenvectors gives pc$loadings.  (Note, however, that a normalized
+eigenvector is still a normalized eigenvector if multiplied by -1; therefore,
+some of the columns of the eigenvector matrix differ from the corresponding
+columns of pc$loadings by a sign change.)<br>
+<br>
+In other words, it is possible to reconstruct all of the information in 
+pc by using<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">s=cov(quas[,-1])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">es=eigen(s)</span><br>
+<br>
+One may compare sqrt(es$val) with pc$sdev and es$vec with pc$load to verify
+that they are the same except for sign changes in some columns of pc$load.<br>
+<br>
+If one invokes the princomp command with cor=TRUE, then the
+eigen decomposition is performed on the correlation matrix, obtained via
+cor(quas[,-1]), rather than the covariance matrix.  Which method is more
+appropriate in this case?  To answer this question, let's examine
+the standard deviations of the columns of quas:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">apply(quas[,-1],2,sd)</span><br>
+<br>
+Note that the variation of the R.A and Dec. columns is far larger than that of any other 
+column.  Thus, we should not be surprised if these two columns dominate the first two principal
+components.  In fact, since these two columns together with z give position of the object, we
+might want to extract them from the principal components analysis altogether, retaining them
+unchanged in the reduced data set.  However, we could essentially put all variables on
+an equal footing in terms of variability by using the correlation rather than the covariance
+(this is equivalent to standardizing each of the variables to have standard deviation equal
+to 1 before performing the princomp analysis).  In the following development, we use essentially
+the first approach.<br>
+<br>
+The two most important pieces of information in a principal components analysis are the
+variances explained (eigenvalues) and variable loadings (eigenvectors).  The former may 
+be viewed graphically using a technique called a 
+<a href="html/stats/html/screeplot.html">screeplot</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">screeplot(pc)</span><br>
+<br>
+In the above plot, we see that the variance of the first two PCs dwarfs the others.  To
+see what this means, we must look at the loadings for these first two PCs:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">loadings(pc)</span><br>
+<br>
+This last command prints a lot of information.  Scroll up to see the loadings of components 1
+and 2, with any loadings less than 0.1 in absolute value suppressed as unimportant.  (In reality,
+the loadings for the first principal component are a vector of real numbers, scaled so that
+the sum of their squares equals 1.  Each element in the vector gives the relative weight of
+the corresponding variable.)  <br>
+<br>
+To see <i>all</i> of the loadings for the first principal component (and only those), type<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pc$load[,1]</span><br>
+<br>
+We may conclude from the output above that the first principal component consists
+essentially of nothing other than R.A (recall that the standard deviation of R.A was much larger than
+that of the other variables, so this result is really not surprising).<br>
+<br>
+It is also unsurprising to see that the second principal component consists almost entirely of the
+Declination:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pc$load[,2]</span><br>
+<br>
+These two principal components together comprise over 99.8% of the total variance 
+of these variables, which
+makes it difficult to see easily the effect of the remaining principal components.  
+As explained earlier,
+one way to deal with the problem of variables on vastly different scales is by 
+analyzing the correlation
+matrix rather than the covariance matrix.  However, in this case, the two 
+variables causing the trouble
+are easy to identify; thus, we'll proceed by performing a new principal 
+components analysis on the remaining
+columns of quas after R.A and Dec. are removed:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pc2=princomp(quas[,-(1:3)])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">screeplot(pc2)</span><br>
+<br>
+In the new screeplot, we see three or 
+four PCs with relatively large variance, one to four PCs with moderate variance, and the
+rest with relatively small variance.  Let's see what the variable loadings for these first five PCs 
+are:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">loadings(pc2)</span><br>
+<br>
+Again, it is necessary to scroll up to see the important output.<br>
+<br>
+Examining these loadings, the first PC is somewhat difficult to interpret, but the second is 
+basically an average of all the "_mag" variables.  Notably, the three variables (u_mag, g_mag, r_mag)
+always occur with roughly the same weights in the first few PCs, indicating that we may replace these
+three with a single variable equal to their mean.  The same is true of (i_mag, z_mag) and 
+(J_mag, H_mag, K_mag).  We could thus reduce these 8 variables to 3.<br>
+<br>
+Another approach is to analyze only the principal component
+scores themselves, which are contained in pc$scores.  This 279x22 matrix contains exactly the
+same information as the original dataset, but the axes have been rotated so that the first axis is
+the most important in explaining information, followed by the second, etc.  Based on our analysis,
+only 5 or 6 of these PCs should be very variable.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(pc2$scores[,1:6],pch=".")</span><br>
+<br>
+The drawback to the above plots, of course, is that many of them are difficult to interpret.<br>
+<br>
+A biplot for a principal components analysis is a way of seeing both the 
+PC scores and the factor loadings simultaneously.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">biplot(pc2, choices=1:2)</span><br>
+<br>
+In summary, principal components provides an objective way to decide, based on data alone,
+how to reduce the dimensionality of a dataset to ease interpretability.  However, 
+substantive astronomical knowledge should be at least as important as
+such considerations (e.g., if M_i is known to be important, then maybe it should be kept
+regardless of what PC analysis says).<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Clustering via agglomerative nesting (agnes)</span></small></span></span></big></big><br> 
+<br>
+We turn now to a few of the many methods of clustering.  The goal of a clustering algorithm
+is to identify structure within a multivariate cloud of points by assigning each point to one
+of a small number of groups (some clustering algorithms don't provide specific assignments
+for each point but instead tell how likely each point is to belong to each group).<br>
+<br>
+We will analyze the 
+<a href="http://www.astrostatistics.psu.edu/datasets/Shapley_galaxy.html">
+Shapley galaxy dataset</a>, which may be downloaded by typing <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">shap=read.table(</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; 
+"http://www.astrostatistics.psu.edu/datasets/Shapley_galaxy.dat",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; head=T)</span><br>
+<br>
+Let's have a look:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dim(shap)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(shap)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(shap,pch=46)</span><br>
+<br>
+It looks like we have to deal with some missing Mag observations in column 3:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">shap[shap[,3]==0,3]=NA</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(shap,pch=46)</span><br>
+<br>
+Next, let's make a rough cut using the V variable and color those points red:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(shap)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">a=V>12000 & V<16000</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(shap,pch=46,col=1+a)</span><br>
+<br>
+We'd like to search for clusters in space.  Let's plot R.A against Dec and use different
+colors for different V values:
+black, red, green, and blue for V/1000 in (12,13), (13,14), (14,15), and (15,16), respectively.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(shap[a,1:2], pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; col=V[a]%/%1000 - 12)</span><br>
+<br>
+Now we begin to apply some clustering techniques.  Most of these are contained in the
+cluster package, which must be loaded.  We will consider the technique called
+<a href="html/cluster/html/agnes.html">agnes</a> (agglomerative nesting) first.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(cluster)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">?agnes</span><br>
+<br>
+There are two options of 
+<a href="html/cluster/html/agnes.html">agnes</a> 
+that we care about:  "stand" and "method".  The first of these should be 
+set to TRUE if we want 
+<a href="html/cluster/html/agnes.html">agnes</a> 
+to standardize the variables before clustering.  Let's decide whether this makes
+sense by checking the variability of each variable (first, we'll reduce the dataset to
+just those variables and quasars we want to use for the clustering):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">shap2=shap[a,c(1,2,4)]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">apply(shap2,2,sd)</span><br>
+<br>
+We see that because of the units used, the V variable has much higher variance
+than the other two variables.  Therefore, if we were to apply
+<a href="html/cluster/html/agnes.html">agnes</a> using "stand=FALSE", we would
+essentially be clustering only on V, which would not be very interesting.
+One solution here is to convert the (R.A, Dec., V) points into (x, y, z) points
+in Euclidean space.  Another, slightly rougher, solution is simply to use "stand=TRUE",
+which is what we'll do here:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ag=agnes(shap2,stand=TRUE)</span><br>
+<br>
+Note that we have used the default value of "method", which is "average".
+Let's take a look at a dendrogram:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(ag,which=2)</span><br>
+<br>
+You can see the plotting options for an R object of class "agnes" by 
+reading the help file for
+<a href="html/cluster/html/plot.agnes.html">plot.agnes</a>.
+You can also see what information is included in the ag object by
+looking at the help file for
+<a href="html/cluster/html/agnes.object.html">agnes.object</a>.<br>
+<br>
+The dendrogram is hard to read near the leaves because there are 1629 
+observations in this dataset.  To obtain the order in which the original
+observations must be rearranged to obtain the order seen in the dendrogram, 
+look at ag$order.  Since we don't really care about retaining the original order 
+of the galaxies, let's simply reorder them as in the dendrogram:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">shap2=shap2[ag$order,]</span><br>
+<br>
+In ag$height, there are 1628 values, one for each of the merges.  (Each merge reduces
+the number of clusters by one, so in reducing from 1629 observations to 1 cluster we
+must have 1628 merges.)  We can use these values to determine where to make cuts in the
+dataset:  Whenever ag$height[i] is high enough, we should make a cut between observations
+i and i+1.<br>
+<br>
+Let's try making a cut at a height of 4:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pltree(ag)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(col=2, h=4)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">which(ag$hei>4)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(col=2, v=.5+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; which(ag$hei>4))</span><br>
+<br>
+Although the four cuts identified by the
+<a href="html/base/html/which.html">which</a>
+function result in 5 clusters, several of these clusters consist of only a few observations and 
+could perhaps be lumped together with other clusters.  On the other hand, using a height cutoff
+of 3.5 instead of 4 leads to four good-sized clusters:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">which(ag$hei>3.5)</span><br>
+<br>
+Let's produce a categorical variable for the clusters:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">agclust=cut(1:1629,lab=1:4,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; breaks=c(0,188,1278,1535,1629))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">table(agclust)</span><br>
+<br>
+Now we may use this categorical variable to add color to a pairs plot:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(shap2,pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; col=as.numeric(agclust))</span><br>
+<br>
+Note that the 
+<a href="html/base/html/factor.html">factor</a>
+agclust must be explicitly coerced to a numeric vector using
+<a href="html/base/html/as.numeric.html">as.numeric</a>.<br>
+<br>
+Above, we used the method="average" option.  Two other commonly used options
+are "single", which tends to produce stringy clusters because two clusters
+are considered as close as their closest elements; and "complete", which is the opposite
+of "single" in the sense that two clusters are considered as close as the most distant elements.<br>
+<br>
+There are many clustering/partitioning algorithms, far more than we can present here.
+One way to see the many options in R is to look at the list of functions for the
+<a href="html/cluster/html/00Index.html">cluster package</a>.  There are also a couple of 
+clustering algorithms in the standard R package, namely hierarchical clustering 
+(<a href="html/stats/html/hclust.html">hclust</a>) 
+and k-means clustering
+(<a href="html/stats/html/kmeans.html">kmeans</a>).
+<br>
+<br>
+
+
+</body>
+</html>

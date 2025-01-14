@@ -1,0 +1,110 @@
+<html><head><title>R: Maxima and Minima</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Extremes {base}"><tr><td>Extremes {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Maxima and Minima</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Returns the (parallel) maxima and minima of the input values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+max(..., na.rm=FALSE)
+min(..., na.rm=FALSE)
+
+pmax(..., na.rm=FALSE)
+pmin(..., na.rm=FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+numeric arguments.</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+a logical indicating whether missing values should be
+removed.</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+<code>max</code> and <code>min</code> return the maximum or minimum of all the
+values present in their arguments, as <code><a href="integer.html">integer</a></code> if all are
+<code>integer</code>, 
+or as <code><a href="double.html">double</a></code> otherwise.
+<br>
+The minimum and maximum of an empty set are <code>+Inf</code> and <code>-Inf</code>
+(in this order!) which ensures <EM>transitivity</EM>, e.g.,
+<code>min(x1, min(x2)) == min(x1,x2)</code>.
+In <font face="Courier New,Courier" color="#666666"><b>R</b></font> versions before 1.5, <code>min(integer(0)) == .Machine$integer.max</code>,
+and analogously for <code>max</code>, preserving argument <EM>type</EM>,
+whereas from <font face="Courier New,Courier" color="#666666"><b>R</b></font> version 1.5.0, <code>max(x) == -Inf</code> and
+<code>min(x) == +Inf</code> whenever <code>length(x) == 0</code> (after removing
+missing values if requested).
+<br>
+If <code>na.rm</code> is <code>FALSE</code> an <code>NA</code> value in any of the
+arguments will cause a value of <code>NA</code> to be returned, otherwise
+<code>NA</code> values are ignored.
+<br>
+<code>pmax</code> and <code>pmin</code> take several vectors (or matrices) as arguments and
+return a single vector giving the parallel maxima (or minima) of the
+vectors.  The first element of the result is the maximum (minimum) of
+the first elements of all the arguments, the second element of the
+result is the maximum (minimum) of the second elements of all the
+arguments and so on.  Shorter vectors are recycled if necessary.  If
+<code>na.rm</code> is <code>FALSE</code>, <code>NA</code> values in the input vectors
+will produce <code>NA</code> values in the output.  If <code>na.rm</code> is
+<code>TRUE</code>, <code>NA</code> values are ignored.
+<code><a href="attributes.html">attributes</a></code> (such as <code><a href="names.html">names</a></code> or
+<code><a href="dim.html">dim</a></code>) are transferred from the first argument (if applicable).
+<br>
+<code>max</code> and <code>min</code> are generic functions: methods can be defined
+for them individually or via the <code><a href="groupGeneric.html">Summary</a></code> group generic.</p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="range.html">range</a></code> (<EM>both</EM> min and max) and
+<code><a href="which.min.html">which.min</a></code> (<code>which.max</code>) for the <EM>arg min</EM>,
+i.e., the location where an extreme value occurs.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+require(stats)
+min(5:1,pi)
+pmin(5:1, pi)
+x &lt;- sort(rnorm(100));  cH &lt;- 1.35
+pmin(cH, quantile(x)) # no names
+pmin(quantile(x), cH) # has names
+plot(x, pmin(cH, pmax(-cH, x)), type='b', main= "Huber's function")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

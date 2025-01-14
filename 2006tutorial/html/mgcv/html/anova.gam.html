@@ -1,0 +1,132 @@
+<html><head><title>R: Hypothesis tests related to  GAM fits</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for anova.gam {mgcv}"><tr><td>anova.gam {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Hypothesis tests related to  GAM fits</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Performs hypothesis tests relating to one or more fitted
+<code>gam</code> objects. For a single fitted <code>gam</code> object, Wald tests of
+the significance of each parametric and smooth term are performed. Otherwise
+the fitted models are compared using an analysis of deviance table. The tests
+are usually approximate, unless the models are un-penalized.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+anova.gam(object, ..., dispersion = NULL, test = NULL)
+print.anova.gam(x,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object,...</code></td>
+<td>
+fitted model objects of class <code>gam</code> as produced by <code>gam()</code>.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+an <code>anova.gam</code> object produced by a single model call to <code>anova.gam()</code>.</td></tr>
+<tr valign="top"><td><code>dispersion</code></td>
+<td>
+a value for the dispersion parameter: not normally used.</td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+what sort of test to perform for a multi-model call. One of
+<code>"Chisq"</code>, <code>"F"</code> or <code>"Cp"</code>. </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If more than one fitted model is provided than <code>anova.glm</code> is
+used. If only one model is provided then the significance of each model term
+is assessed using Wald tests: see <code><a href="summary.gam.html">summary.gam</a></code> for details of the
+actual computations. In the latter case <code>print.anova.gam</code> is used as the
+printing method.
+</p>
+<p>
+P-values are usually reliable if the smoothing parameters are known, or
+the model is unpenalized. If smoothing parameters have been estimated then the
+p-values are typically somewhat too low. i.e. terms that appear `not
+significant' really are not, while terms that are significant, may in fact be
+non-significant if the p-value is close to whatever significance level you
+are choosing to operate at. This occurs because the uncertainty associated
+with the smoothing parameters is neglected in the calculations of the
+distributions under the null, which tends to lead to underdispersion in these
+distributions, and in turn to p-value estimates that are too low. (In
+simulations where the null is correct, I have seen p-values that are as low as half of what they should
+be.)
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+In the multi-model case <code>anova.gam</code> produces output identical to
+<code><a href="../../stats/html/anova.glm.html">anova.glm</a></code>, which it in fact uses.
+<br>
+In the single model case an object of class <code>anova.gam</code> is produced,
+which is in fact an object returned from <code><a href="summary.gam.html">summary.gam</a></code>.
+<br>
+<code>print.anova.gam</code> simply produces tabulated output.</p>
+
+<h3>WARNING</h3>
+
+<p>
+P-values may be under-estimates, as a result of ignoring
+smoothing parameter uncertainty.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="gam.html">gam</a></code>, <code><a href="predict.gam.html">predict.gam</a></code>,
+<code><a href="gam.check.html">gam.check</a></code>, <code><a href="summary.gam.html">summary.gam</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(mgcv)
+set.seed(0)
+n&lt;-200
+sig&lt;-2
+x0 &lt;- rep(1:4,50)
+x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1)
+x3 &lt;- runif(n, 0, 1)
+y &lt;- 2 * x0
+y &lt;- y + exp(2 * x1)
+y &lt;- y + 0.2 * x2^11 * (10 * (1 - x2))^6 + 10 * (10 * x2)^3 * (1 - x2)^10
+e &lt;- rnorm(n, 0, sig)
+y &lt;- y + e
+x0&lt;-as.factor(x0)
+b&lt;-gam(y~x0+s(x1)+s(x2)+s(x3))
+anova(b)
+b1&lt;-gam(y~x0+s(x1)+s(x2))
+anova(b,b1,test="F")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

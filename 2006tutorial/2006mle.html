@@ -1,0 +1,665 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Likelihood computations and random numbers in R</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">
+ Likelihood computations and random numbers</span>
+ <br>
+</span></span></big></big></div>
+<br> 
+
+<br>
+It is often necessary to simulate random numbers in R.  There are
+many functions available to accomplish this and related tasks 
+such as evaluating the density, distribution function, and quantile function
+of a distribution.  <br>
+<br> 
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+ Maximum likelihood estimation in a simple case
+ </span></small></span></span></big></big><br> 
+ <br> 
+
+Let's reconsider the flux measurements in the gamma ray burst dataset.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">  grb &lt;- read.table 
+("http://astrostatistics.psu.edu/datasets/GRB_afterglow.dat",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;       
+header=T, skip=1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">flux &lt;- grb[,2]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(flux)</span><br>
+<br>
+The histogram suggests that the univariate distribution has roughly
+the shape of an exponential distribution (we'll speak more about what this
+means later).  Let us replot these data in a particular (and particularly
+common) manner besides the histogram 
+that is also suggestive of an exponential distribution.<br>
+<br>
+As a first step, let us calculate something akin to the (x,y) coordinates
+of the empirical distribution function -- the function that has a jump
+of size 1/n at every one of the sorted data points.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">n &lt;- length(flux)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xx=sort(flux)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">yy=(1:n)/n</span><br>
+<br>
+We could now obtain the empirical cdf by connecting the (xx,yy) points using
+a stairstep pattern.  However, we'll look at these points slightly differently.<br>
+<br>
+The exponential distribution has a distribution function given by
+F(x) = 1-exp(-x/mu) for positive x, 
+where mu&gt;0 is a scalar parameter equal to the mean of the
+distribution.  This implies among other things that log(1-F(x)) = -x/mu is
+a linear function of x in which the slope is the negative 
+reciprocal of the mean.  Let us then look for the characteristic linear
+pattern if we plot log(1-F(x)) against x using the empirical distribution
+function for F:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(xx, log(1-yy+1/n), 
+xlab="flux", </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+ylab="log(1-F(flux))")</span><br>
+<br>
+You may recall from the <a href="2006reg.html">EDA and regression</a>
+tutorial that this plot looks like the plot of time vs. flux that
+we produced as part of a regression analysis.  This is only a coincidence;
+<i>the two plots are fundamentally different</i>.  The plot seen here is
+fundamentally a univariate plot, whereas the time vs. flux plot was a 
+bivariate plot.  We are ignoring the time variable here.<br>
+<br>
+The plot certainly looks linear, so let us proceed on the assumption that
+the flux data are a sample from an exponential distribution with unknown
+parameter mu.  <br>
+<br>
+The overriding question of this section is this:  How shall we estimate
+mu?<br>
+<br>
+As mentioned above, mu is equal to the mean of this population.  For a quick
+refresher on some probability theory, let us recall why this is so:
+The first step in going from the distribution function F(x) = 1 - exp(-x/mu)
+to the mean, or expectation, is to obtain the density function by 
+differentiating:  f(x) = exp(-x/mu)/mu.   Notice that we typically use F(x)
+to denote the distribution function and f(x) to denote the density function.
+Next, we integrate x*f(x) over the interval 0 to infinity, which gives the
+mean, mu.<br>
+<br>
+Since mu is the population mean, it is intuitively appealing to simply
+estimate mu using the sample mean.  This method, in which we match the
+population moments to the sample moments and then solve for the parameter
+estimators, is called the method of moments.  Though it is a well-known
+procedure, we focus instead on a much more widely used method (for good 
+reason) called maximum likelihood estimation.<br>
+<br>
+The first step in maximum likelihood estimation is to write down the likelihood
+function, which is nothing but the joint density of the dataset viewed as
+a function of the parameters.  Next, we typically take the log, giving what
+is commonly called the loglikelihood function.  Remember that all logs are
+natural logs unless specified otherwise.<br>
+<br>
+The loglikelihood function in this case is 
+(with apologies for the awkward notation)<br>
+&nbsp; l(mu) = -n log(mu) - x<sub>1</sub>/mu - ... - x<sub>n</sub>/mu<br>
+A bit of calculus reveals that l(mu) is therefore maximized at the sample
+mean.  Thus, the sample mean is not only the method of moments estimator
+in this case but the maximum likelihood estimate as well.<br>
+<br>
+In practice, however, it is sometimes the case that the linear-looking plot
+produced earlier is used to estimate mu.  As we remarked, the negative
+reciprocal of the slope should give mu, so there is a temptation to fit
+a straight line using, say, least-squares regression, then use the
+resulting slope to estimate mu.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean (flux) # This is the MLE</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lm(log(1-yy+1/n) ~ xx)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">1/.03025 # An alternative 
+estimator</span><br>
+<br>
+There is a possible third method that I am told is sometimes used for some 
+kinds of distributions.  We start with a histogram, which may be viewed as 
+a rough approximation of the density:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">h &lt;- hist(flux)</span><br>
+<br>
+All of the information used to produce the histogram is now stored in the 
+h object, including the midpoints of the bins and their heights on a density
+scale (i.e., a scale such that the total area of the histogram equals one).<br>
+<br>
+To see how to use this information, note that the logarithm of the density 
+function is log f(x) = -log(mu) - x/mu, which is a linear function of x.  Thus,
+plotting the logarithm of the density against x might be expected to give a line.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">counts &lt;- h$counts</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dens &lt;- h$density[counts>0]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">midpts &lt;- h$mids[counts>0]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(midpts, log(dens))</span><br>
+<br>
+When using linear regression to estimate the slope of the linear pattern just
+produced, I am told that it is standard to weight each point by the number of
+observations it represents, which is proportional to the reciprocal of the
+variance of the estimated proportion of the number of points in that bin.
+We can obtain both the weighted and unweighted versions here.  We can then 
+obtain an estimate of mu using either the intercept, which is -log(mu), or
+the slope, which is -1/mu:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m1 &lt;- lm(log(dens) ~ midpts)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m2 &lt;- lm(log(dens) ~ midpts,
+weights=counts[counts>0])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">exp(-m1$coef[1]) # This is one estimate</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">-1/m1$coef[2] # This is another</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">exp(-m2$coef[1]) # Yet another</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">-1/m2$coef[2] # And another</span><br>
+<br>
+We have thus produced no fewer than six different estimators of mu (actually seven,
+except that the MLE and the method of moments estimator are the same in this case).
+How should we choose one of them?<br>
+<br>
+There are a couple of ways to answer this question.  One is to appeal to 
+statistical theory.  The method of maximum likelihood estimation
+is backed by a vast statistical literature that shows it has certain properties
+that may be considered optimal.  The method of moments is also
+a well-established method, but arguably with less general theory behind it than
+the method of maximum likelihood.  The regression-based methods, on the
+other hand, are all essentially ad hoc.<br>
+<br>
+A second way to choose among estimators is to run a simulation study in which
+we repeatedly simulate datasets (whose parameters are then known to us) and
+test the estimators to see which seems to perform best.  In order to 
+do this, we will need to be able to generate random numbers, which is the next
+topic in this tutorial.<br>
+
+ <br> 
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+ Generating random numbers in R
+ </span></small></span></span></big></big><br> 
+ <br> 
+First, semantics:  "Random numbers" does not refer solely to uniform
+numbers between 0 and 1, though this is what "random numbers" means
+in some contexts.  We are mostly interested in generating non-uniform
+random numbers here.
+ <br>
+ R handles many common distributions easily.  To see a list, type<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">help.search("distribution",package="stats")</span><br>
+<br>
+Let's consider the well-known normal distribution as an example:  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">?Normal</span><br>
+<br>
+
+
+The four functions <a href="html/stats/html/Normal.html">'rnorm', 'dnorm', 
+'pnorm', and 'qnorm'</a> give random normals, the normal density (sometimes called the differential
+distribution function), the normal cumulative distribution function (CDF), and
+the inverse of the normal CDF (also called the quantile function), respectively.  Almost all  
+of the other distributions have similar sets of four functions.  The 'r' versions are 
+<a href="html/stats/html/Beta.html">rbeta</a>, 
+<a href="html/stats/html/Binomial.html">rbinom</a>, 
+<a href="html/stats/html/Cauchy.html">rcauchy</a>, 
+<a href="html/stats/html/Chisquare.html">rchisq</a>, 
+<a href="html/stats/html/Exponential.html">rexp</a>, 
+<a href="html/stats/html/FDist.html">rf</a>, 
+<a href="html/stats/html/GammaDist.html">rgamma</a>, 
+<a href="html/stats/html/Geometric.html">rgeom</a>, 
+<a href="html/stats/html/Hypergeometric.html">rhyper</a>, 
+<a href="html/stats/html/Logistic.html">rlogis</a>, 
+<a href="html/stats/html/Lognormal.html">rlnorm</a>, 
+<a href="html/stats/html/Multinomial.html">rmultinom</a>, 
+<a href="html/stats/html/NegBinomial.html">rnbinom</a>, 
+<a href="html/stats/html/Normal.html">rnorm</a>, 
+<a href="html/stats/html/Poisson.html">rpois</a>, 
+<a href="html/stats/html/SignRank.html">rsignrank</a>, 
+<a href="html/stats/html/TDist.html">rt</a>, 
+<a href="html/stats/html/Uniform.html">runif</a>, 
+<a href="html/stats/html/Weibull.html">rweibull</a>, and
+<a href="html/stats/html/Wilcoxon.html">rwilcox</a>
+(there is no rtukey because generally only
+<a href="html/stats/html/Tukey.html">ptukey and qtukey</a> 
+are needed).<br>
+<br>
+As an example, suppose we wish 
+to simulate a vector of 10
+independent, standard (i.e., mean 0 and standard deviation 1) normal random variables.  We use the
+<a href="html/stats/html/Normal.html">rnorm</a> function for this 
+purpose, and its defaults are mean=0 and standard deviation=1.  Thus, we may simply type <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rnorm(10)</span><br>
+<br>
+Suppose we wish to simulate a large number of normal random variables with mean 10 and
+standard deviation 3, then check a histogram against 
+two normal density functions, one based on the true parameters and one based on estimates, to 
+see how it looks.  We'll use 'col=2, lty=2, lwd=3' to make the curve based on the true parameters
+red (color=2), dashed (line type=2), and wider than normal (line width=3).  Also note that
+we are requesting 100 bins in the histogram (nclass=100) and putting it on the same vertical scale
+as the density functions (freq=FALSE).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">z=rnorm(200000, mean=10, sd=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(z,freq=FALSE,nclass=100)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=seq(min(z),max(z),len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(x,dnorm(x, mean=10, sd=3),col=2, lty=2, lwd=3) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(x,dnorm(x,mean=mean(z),sd=sqrt(var(z))))</span><br>
+<br>
+We can find out what proportion of the deviates lie outside 3 standard deviations from the true mean,
+a common cutoff used by physical scientists.  We can also see the true theoretical proportion:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(abs((z-10)/3)>3)/length(z)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">2*pnorm(-3)</span><br>
+<br>
+In the first line above, we are using 
+<a href="html/base/html/sum.html">sum</a>
+to count the number of TRUE's in the logical vector (abs((z-10)/3)>3).
+This works because logical values are coerced to 0's and 1's when necessary.
+<br>
+The function 
+<a href="html/stats/html/Normal.html">dnorm</a> 
+has a closed form:  With mean=0 and sd=1, dnorm(x) 
+equals exp(-x<sup>2</sup>/2)/sqrt(2*pi).  By contrast, 
+the CDF, given by 
+<a href="html/stats/html/Normal.html">pnorm</a>, 
+has no closed form and must be numerically approximated.  By 
+definition, pnorm(x) equals the integral of dnorm(t) as t ranges from minus infinity to x.  To find a p-value 
+(i.e., the probability of observing a statistic more extreme than the one actually observed), we use
+pnorm; to construct a confidence interval (i.e., a range of reasonable values for the true parameter), 
+we use the inverse, 
+<a href="html/stats/html/Normal.html">qnorm</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pnorm(1:3)-pnorm(-(1:3))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qnorm(c(.05,.95))</span><br>
+<br>
+The first line above summarizes the well-known 68, 95, 99.7 rule for normal distributions (these are the approximate
+proportions lying within 1, 2, and 3 standard deviations from the mean).  The second
+line gives the critical values used to construct a 90% confidence interval for a parameter when its 
+estimator is approximately normally distributed.<br>
+<br>
+Let us now briefly consider an example of a <i>discrete</i> distribution, 
+which means a distribution on a finite or countably
+infinite set (as opposed to a <i>continuous</i> distribution like the normal).
+The 
+<a href="html/stats/html/Poisson.html">Poisson</a>
+distribution, which has a single real-valued parameter lambda, puts all of
+its probability mass on the nonnegative integers.  A Poisson distribution, often used
+to model data consisting of counts, has mean
+and variance both equal to lambda.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">k=0:10</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dpois(k,lambda=2.5) # or equivalently,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">exp(-2.5)*2.5^k/factorial(k)</span><br>
+<br>
+Next, simulate some Poisson variables:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=rpois(10000,lambda=2.5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">table(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">var(x)</span><br>
+<br>
+<br>
+
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">The power-law or Pareto distribution
+ </span></small></span></span></big></big><br> 
+<br>
+A commonly used distribution in astrophysics is the power-law distribution, 
+more commonly known in the statistics literature as the
+Pareto distribution.  There are no built-in R functions for dealing with this
+distribution, but because it is an extremely simple distribution it is easy 
+to write such functions.  <br>
+<br>
+The density function for the Pareto is f(x)=ab<sup>a</sup>/x<sup>(a+1)</sup> for x>b.  
+Here, a and b are fixed positive parameters, where 
+b is the minimum possible value. 
+As an example, consider the log N = -1.5 * log S
+relationship, where S is the apparent brightness and N
+is the number of standard candles randomly located in transparent space.  Thus, a Pareto
+distribution with (a+1) = 1.5 is a reasonable, if simplistic,
+model for the brightness of observed standard
+candles in space. The b parameter merely reflects the choice of units of measurement.<br>
+<br>
+As another example, consider the Salpeter function, the simple but widely
+known expression of the initial mass function (IMF), in which the mass of
+a randomly selected newly formed star has a Pareto distribution with parameter
+a=1.35.  
+<br>
+It turns out that a Pareto random variable is simply b*exp(X), where 
+X is an 
+<a href="html/stats/html/Exponential.html">exponential</a>
+random variable with rate=a (i.e., with mean=1/a).  
+However, rather than exploiting this simple relationship,
+we wish to build functions for the Pareto distribution from
+scratch.  Our default values, which may be changed by the user, will be a=0.5 and b=1.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dpareto=function(x, a=0.5, b=1) a*b^a/x^(a+1)</span><br>
+<br>
+Next, we integrate the density function to obtain the distribution function, 
+which is
+F(x)=1-(b/x)<sup>a</sup> for x>=b (and naturally F(x)=0 for x &lt b):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ppareto=function(x, a=0.5, b=1) (x &gt b)*(1-(b/x)^a)</span><br>
+<br>
+Note that (x &gt b) in the above function
+is coerced to numeric, either 0 or 1.<br>
+<br>
+Inverting the distribution function gives the quantile function.  The following 
+simplistic function is wrong unless 0&lt;u&lt;1, so a better-designed function should do some
+error-checking.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qpareto=function(u, a=0.5, b=1) b/(1-u)^(1/a)</span><br>
+<br>
+Finally, to simulate random Pareto random variables, we use the fact that whenever the quantile function
+is applied to a uniform random variable, the result is a random variable with the desired distribution:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rpareto=function(n, a=0.5, b=1) qpareto(runif(n),a,b)</span><br>
+<br>
+Creating functions in R, as illustrated above, is a common procedure.  Note that each of the arguments of
+a function may be given a default value, which is used whenever the user calls the function without specifying
+the value of this parameter.  Also note that each of the above functions consists of only a single line; however,
+longer functions may be created by enclosing them inside curly braces { }.<br>
+<br>
+<br>
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">A few simple plots
+ </span></small></span></span></big></big><br> 
+<br>
+The commands below create plots related to the four functions just created.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(2,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=seq(1,50,len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,dpareto(x),type="l")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,ppareto(x),type="l",lty=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">u=seq(.005,.9,len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(u,qpareto(u),type="l",col=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">z=rpareto(200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dotchart(log10(z), main="200 random logged Pareto deviates",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;cex.main=.7)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(1,1))</span><br>
+<br>
+The above commands illustrate some of the many plotting capabilities of R.  
+The <a href="html/graphics/html/par.html">par</a>
+function sets many graphical
+parameters, for instance, 'mfrow=c(2,2)', which divides the plotting window into a matrix
+of plots, set here to two rows and two columns.  In the 
+<a href="html/graphics/html/plot.html">plot</a>
+commands, 'type' is set here to
+"l" for a line plot; other common options are "p" for points (the default), 
+"b" for connected dots, and "n" for nothing (to create
+axes only). Other options used: 
+'lty' sets the line type (1=solid, 2=dashed, etc.), 'col' sets color (1=black, 2=red,
+3=green, etc.), 'main' puts a string into the plot title, and 'cex.main' sets the text magnification. <br>
+Type 
+'<a href="html/graphics/html/par.html">? par</a>'
+to see a list of the many plotting parameters and options.  <br>
+<br>
+
+<br>
+<br>
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+A simulation study 
+ </span></small></span></span></big></big><br> 
+<br>
+
+Let us posit that the random variable X has a Pareto distribution with parameters
+a=1.35 and b=1.  We will simulate multiple datasets with this property and 
+then apply several different estimation methods to each.  To simplify matters,
+we will assume that the value of b is known, so that the goal is estimation 
+of a.<br>
+<br>
+To evaluate the
+estimators, we will look at their mean squared error (MSE), which is just
+what it sounds like:  The average of the squared distances from the estimates
+to the true parameter value of a=1.35. <br>
+<br>
+To illustrate the estimators we'll evaluate, let's start by simulating a 
+single dataset of size 100:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">d=rpareto(100, a=1.35)</span><br>
+<br>
+Here are the estimators we'll consider:
+<ol>
+  <li>The <b>maximum likelihood</b> estimator.  Since the density with b=1 is 
+  given by f(x) = a/x^(a+1), the loglikelihood function is <br>
+  l(a) = n log(a) - (a+1)(log x<sub>1</sub> + log x<sub>2</sub> + ... + log x<sub>n</sub>).<br>
+  The maximizer may be found using calculus to equal n/(log x<sub>1</sub> + ... + log x<sub>n</sub>).
+  For our dataset, this may be found as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">1/mean(log(d))</span><br>
+<br>
+  We used the sum of logarithms above where we could have used
+  the equivalent mathematical expression given by the log of the product.  
+  Sometimes the former method gives more numerically stable answers for
+  very large samples, though in this case "100/log(prod(d))" gives exactly
+  the same answer.<br>
+<br>  
+<li>The <b>method of moments</b> estimator.  By integrating, we find that 
+  the mean of the Pareto distribution with b=1 is equal to a/(a-1).  (This
+  fact requires that a be greater than 1.)  Setting a/(a-1) equal to the sample
+  mean and solving for a gives 1/(1-1/samplemean) as the estimator.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">1/(1-1/mean(d))</span><br>
+<br>
+<li>What we'll call the <b>EDF (empirical distribution function) estimator</b>.  
+Since 
+log(1-F(x)) equals -a log(x) when b=1, by plotting the sorted values of log(d)
+against log(n/n), log((n-1)/n), ..., log(1/n), we should observe roughly a
+straight line.  We may then use least-squares regression to find the slope
+of the line, which is our estimate of -a:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lsd &lt;- log(sort(d))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lseq &lt;- log((100:1)/100)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(lsd, lseq)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmp=lm(lseq ~ lsd)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(tmp,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">-tmp$coef[2]</span><br>
+<br>
+<li>What we'll call the <b>unweighted histogram estimator</b>.  Since log f(x) equals
+log(a) - (a+1) log(x) when b=1, if we plot the values of log(d) against
+histogram-based estimates of the log-density function, we should observe
+roughly a straight line with slope -(a+1) and intercept log(a).  Let's use
+only the slope, since that is the feature that is most
+often the focus of a plot that is supposed to illustrate a power-law 
+relationship.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hd &lt;- hist(d,nclass=20,plot=F)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">counts &lt;- hd$counts</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ldens &lt;- log(hd$density[counts>0])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lmidpts &lt;- log(hd$mids[counts>0])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(lmidpts, ldens)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmp=lm(ldens~lmidpts)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(tmp,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">-1-as.numeric(tmp$coef[2])</span><br>
+<br>
+<li>What we'll call the <b>weighted histogram estimator</b>.  Exactly the
+same as the unweighted histogram estimator, but we'll estimate the slope using 
+weighted least squares instead of ordinary least squares.  The weights should
+be proportional to the bin counts.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(lmidpts, ldens)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmp=lm(ldens~lmidpts, 
+weights=counts[counts>0])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(tmp,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">-1-as.numeric(tmp$coef[2])</span><br>
+<br>
+</ol>
+Now let's write a single function that will take a vector of data as its
+argument, then return all five of these estimators.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">five &lt;- function(d) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;lsd &lt;- log(sort(d))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;n &lt;- length(d)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;lseq &lt;- log((n:1)/n)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;m1=lm(lseq ~ lsd)$coef</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;hd &lt;- hist(d,nclass=n/5,plot=F)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;counts &lt;- hd$counts</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;ldens &lt;- log(hd$density[counts>0])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;lmidpts &lt;- log(hd$mids[counts>0])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;m2 &lt;- lm(ldens~lmidpts)$coef</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;m3 &lt;- lm(ldens~lmidpts,
+weights=counts[counts>0])$coef</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;out &lt;- c(max.lik=1/mean(log(d)), 
+meth.mom=1/(1-1/mean(d)),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+EDF=-as.numeric(m1[2]), unwt.hist=-1-as.numeric(m2[2]),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+wt.hist=-1-as.numeric(m3[2]))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;return(out)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+The very last line of the function, "out", is the value that will be returned.
+(We could also have written "return(out)".)
+Let's test this function on our dataset:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">five(d)</span><br>
+<br>
+There is no good way to compare these estimators based on a single 
+sample like this.  We now need to simulate multiple samples.  Let's begin by
+taking n=100.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">n.100 &lt;- NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:250) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+dd &lt;- rpareto(100, a=1.35)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+n.100 &lt;- rbind(n.100, five(dd))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Now we can get estimates of the biases of the estimators
+(their expectations minus
+the true parameter) and their variances.  Note that we'll use the
+biased formula for the variance (i.e., the one that uses n instead of n-1
+in the denominator) for a technical reason explained below.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">bias.100 &lt;- apply(n.100,2,mean) 
+- 1.35</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">var.100 &lt;- apply(n.100,2,var)
+*(249/250)</span><br>
+<br>
+It is a mathematical identity that the mean squared error (MSE) equals the
+square of the bias plus the variance, as we may check numerically for (say)
+the first column of n.100.  However, the identity only works if we use
+the biased formula for the variance, which is why we used the multiplier
+(249/250) above.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean((n.100[,1]-1.35)^2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">bias.100[1]^2 + var.100[1]</span><br>
+<br>
+Thus, we can construct the MSEs and view the results as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mse.100 &lt;- bias.100^2 + var.100</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rbind(bias.100, var.100, mse.100)</span><br>
+<br>
+Finally, let's repeat the whole experiment using samples of size 200.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">n.200 &lt;- NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:250) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+dd &lt;- rpareto(200, a=1.35)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;
+n.200 &lt;- rbind(n.200, five(dd))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">bias.200 &lt;- apply(n.200,2,mean) 
+- 1.35</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">var.200 &lt;- apply(n.200,2,var)
+*(249/250)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mse.200 &lt;- bias.200^2 + var.200</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rbind(bias.200, var.200, mse.200)</span><br>
+<br>
+
+<br>
+<br>
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+EM algorithms
+ </span></small></span></span></big></big><br> 
+<br>
+
+The class of algorithms called EM algorithms is enormously important
+in statistics.  There are many, many different specific algorithms that
+can be called EM algorithms, but they have this in common:  They seek to
+iteratively maximize a likelihood function in a situation in which 
+the data may be thought of as incompletely observed.<br>
+<br>
+The name "EM algorithm" has its genesis in a seminal 1977 paper by Dempster,
+Laird, and Rubin in 
+the Journal of the Royal Statistical Society, Series B.  Many distinct algorithms
+published prior to 1977 were examples of EM, including the Lucy-Richardson
+algorithm for image deconvolution that is apparently quite well known 
+in astronomy.  The major contribution of Dempster et al was to unify these
+algorithms and prove certain facts about them.  Interesting historical note:
+They even "proved" an untrue fact that was refuted six years (!) later (even
+thirty years ago, publications in statistics churned through the pipeline
+at a snail's pace).<br>
+<br>
+We'll derive a simple EM algorithm on a toy example:  We'll pretend that some
+of the gamma ray burst flux measurements were right-censored, as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cflux &lt;- flux</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cflux[flux>=60] &lt;- 60</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">n &lt;- length(cflux)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">yy=(1:n)/n</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(sort(cflux),log(1-yy+1/n))</span><br>
+<br>
+The situation may be viewed like this:  The complete dataset is a set
+of n observations from an exponential distribution with unknown mean mu, say,
+X<sub>1</sub>, ..., X<sub>n</sub>.  What we observe, however, is 
+Z<sub>1</sub>, ..., Z<sub>n</sub>, where Z<sub>i</sub>
+is defined as min(X<sub>i</sub>, 60).  
+The loglikelihood for the observed data is as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">m &lt;- sum(flux>=60)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">s &lt;- sum(cflux)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">loglik &lt;- function(mu)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;-(n-m)*log(mu)-s/mu</span><br>
+<br>
+As it turns out, this loglikelihood function can be maximized explicitly:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mle &lt;- s/(n-m)</span><br>
+<br>
+However, we will construct an EM algorithm anyway for two reasons:  First, 
+it is instructive to see how the EM operates.  Second, not all censoring
+problems admit a closed-form solution like this one does!<br>
+<br>
+We start by writing down the complete-data loglikelihood for the sample.
+This is straightforward because the complete data are simply a random sample
+from an exponential distribution with mean mu.  Next, we pick a starting
+value of mu, say mu<sub>0</sub>.  Then comes the tricky part:  We take the conditional
+expectation of the complete data loglikelihood, conditional on the observed
+data and assuming that mu<sub>0</sub> is the correct parameter.  (This will have to
+happen on the chalkboard!)  The result is a function of <b>both</b> mu and mu<sub>0</sub>,
+and construction of this function is called the E (expectation) step.
+Next, we maximize this function over mu.  The result of the maximization 
+becomes our next iterate, mu<sub>1</sub>, and the process repeats.<br>
+<br>
+Let's start with mu<sub>0</sub>=20.  Carrying out the calculations described above yields
+the following iterative scheme:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mu &lt;- 20</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">loglik(mu)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mu &lt;- s/n + m*mu/n; loglik(mu)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mu &lt;- s/n + m*mu/n; loglik(mu)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;"># repeat the last line a few times</span><br>
+<br>
+Notice that the value of the (observed data) loglikelihood increases at each iteration.
+This is the fundamental property of any EM algorithm!  In fact, it is very 
+helpful when debugging computer code, since there must be a bug somewhere 
+whenever the loglikelihood is ever observed to decrease.
+Notice also that the value of mu has converged to the true maximum likelihood
+estimator after a few iterations.
+
+
+
+
+
+
+ 
+</body>
+</html>

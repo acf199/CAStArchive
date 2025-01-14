@@ -1,0 +1,113 @@
+<html><head><title>R: Generating a PACKAGES file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for write_PACKAGES {tools}"><tr><td>write_PACKAGES {tools}</td><td align="right">R Documentation</td></tr></table>
+<h2>Generating a PACKAGES file</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Generating a &lsquo;<TT>PACKAGES</TT>&rsquo; file for a repository of source or
+Windows binary packages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+write_PACKAGES(dir, fields,
+               type = c("source", "mac.binary", "win.binary"),
+               verbose = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dir</code></td>
+<td>
+Character vector describing the location of the repository 
+(directory including source or binary packages) to generate
+the &lsquo;<TT>PACKAGES</TT>&rsquo; file from and write it to.
+</td></tr>
+<tr valign="top"><td><code>fields</code></td>
+<td>
+Optional, the fields to be used in the &lsquo;<TT>PACKAGES</TT>&rsquo; file.
+The default are those needed by <code><a href="../../utils/html/update.packages.html">available.packages</a></code>:
+&ldquo;Package&rdquo;, &ldquo;Bundle&rdquo;, &ldquo;Priority&rdquo;,
+&ldquo;Version&rdquo;, &ldquo;Depends&rdquo;, &ldquo;Suggests&rdquo;,
+&ldquo;Imports&rdquo; and &ldquo;Contains&rdquo;.
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+Type of packages: currently source <code>.tar.gz</code> archives
+and Windows binary <code>.zip</code> packages are supported.  Defaults to
+<code>"win.binary"</code> on Windows and to <code>"source"</code> otherwise.
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+logical. Should packages be listed as they are processed?</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>type = "win.binary"</code> uses <code><a href="../../base/html/connections.html">unz</a></code> connections to read all
+&lsquo;<TT>DESCRIPTION</TT>&rsquo; files contained in the (zipped) binary packages for
+Windows in the given directory <code>dir</code>, and builds a
+&lsquo;<TT>PACKAGES</TT>&rsquo; file from these information.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Invisibly returns the number of packages described in the resulting
+&lsquo;<TT>PACKAGES</TT>&rsquo; file.  If 0, no packages were found and no
+&lsquo;<TT>PACKAGES</TT>&rsquo; file has been written.</p>
+
+<h3>Note</h3>
+
+<p>
+Processing <code>.tar.gz</code> archives to extract the &lsquo;<TT>DESCRIPTION</TT>&rsquo;
+files is quite slow.
+</p>
+<p>
+This function can be useful on other OSes to prepare a repository to
+be accessed by Windows machines, so <code>type = "winBinary"</code> should
+work on all OSes.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Uwe Ligges and R-core.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+See <code><a href="../../base/html/dcf.html">read.dcf</a></code> and <code><a href="../../base/html/dcf.html">write.dcf</a></code> for reading
+&lsquo;<TT>DESCRIPTION</TT>&rsquo; files and writing the &lsquo;<TT>PACKAGES</TT>&rsquo; file.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+write_PACKAGES("c:/myFolder/myRepository")  # on Windows
+write_PACKAGES("/pub/RWin/bin/windows/contrib/2.1",
+               type="win.binary")  # on Linux
+## End(Not run)</pre>
+
+
+
+<hr><div align="center">[Package <em>tools</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

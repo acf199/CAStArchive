@@ -1,0 +1,158 @@
+<html><head><title>R: R/LaTeX Driver for Sweave</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for RweaveLatex {utils}"><tr><td>RweaveLatex {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>R/LaTeX Driver for Sweave</h2>
+
+
+<h3>Description</h3>
+
+<p>
+A driver for <code><a href="Sweave.html">Sweave</a></code> that translates R code chunks in
+LaTeX files.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+RweaveLatex()
+
+RweaveLatexSetup(file, syntax, output = NULL, quiet = FALSE,
+                 debug = FALSE, echo = TRUE, eval  =  TRUE,
+                 split = FALSE, stylepath = TRUE,
+                 pdf = TRUE, eps = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+Name of Sweave source file.</td></tr>
+<tr valign="top"><td><code>syntax</code></td>
+<td>
+An object of class <code>SweaveSyntax</code>.</td></tr>
+<tr valign="top"><td><code>output</code></td>
+<td>
+Name of output file, default is to remove extension
+&lsquo;<TT>.nw</TT>&rsquo;, &lsquo;<TT>.Rnw</TT>&rsquo; or &lsquo;<TT>.Snw</TT>&rsquo; and to add extension
+&lsquo;<TT>.tex</TT>&rsquo;. Any 
+directory names in <code>file</code> are also removed such that the output
+is created in the current working directory.</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+If <code>TRUE</code> all progress messages are suppressed.</td></tr>
+<tr valign="top"><td><code>debug</code></td>
+<td>
+If <code>TRUE</code>, input and output of all code
+chunks is copied to the console.</td></tr>
+<tr valign="top"><td><code>stylepath</code></td>
+<td>
+If <code>TRUE</code>, a hard path to the file &lsquo;<TT>Sweave.sty</TT>&rsquo;
+installed with this package is set, if <code>FALSE</code>, only
+<code>\usepackage{Sweave}</code> is written. The hard path makes the
+TeX file less
+portable, but avoids the problem of installing the current
+version of &lsquo;<TT>Sweave.sty</TT>&rsquo; to some place in your TeX input path.
+The argument is ignored if a <code>\usepackage{Sweave}</code> is
+already present in the Sweave source file.
+</td></tr>
+<tr valign="top"><td><code>echo</code></td>
+<td>
+set default for option <code>echo</code>, see details below.</td></tr>
+<tr valign="top"><td><code>eval</code></td>
+<td>
+set default for option <code>eval</code>, see details below.</td></tr>
+<tr valign="top"><td><code>split</code></td>
+<td>
+set default for option <code>split</code>, see details below.</td></tr>
+<tr valign="top"><td><code>pdf</code></td>
+<td>
+set default for option <code>pdf</code>, see details below.</td></tr>
+<tr valign="top"><td><code>eps</code></td>
+<td>
+set default for option <code>eps</code>, see details below.</td></tr>
+</table>
+
+<h3>Supported Options</h3>
+
+<p>
+RweaveLatex supports the following options for code chunks (the values
+in parentheses show the default values):
+<dl>
+<dt>echo:</dt><dd>logical (<code>TRUE</code>). Include S code in the
+output file?</dd>
+<dt>eval:</dt><dd>logical (<code>TRUE</code>). If <code>FALSE</code>, the code chunk is not
+evaluated, and hence no text or graphical output produced.</dd>
+<dt>results:</dt><dd>character string (<code>verbatim</code>).
+If <code>verbatim</code>, the output of S commands is
+included in the verbatim-like Soutput environment. If
+<code>tex</code>, the output is taken to be already proper latex markup
+and included as is. If <code>hide</code> then all output is
+completely suppressed (but the code executed during the weave).</dd>
+<dt>print:</dt><dd>logical (<code>FALSE</code>)
+If <code>TRUE</code>, each expression in the
+code chunk is wrapped into a <code>print()</code> statement before evaluation,
+such that the values of all expressions become visible.</dd>
+<dt>term:</dt><dd>logical (<code>TRUE</code>). If <code>TRUE</code>, visibility of values
+emulates an interactive R session: values of assignments are not
+printed, values of single objects are printed. If <code>FALSE</code>,
+output comes only from explicit <code><a href="../../base/html/print.html">print</a></code> or
+<code><a href="../../base/html/cat.html">cat</a></code> statements.</dd>
+<dt>split:</dt><dd>logical (<code>FALSE</code>). If <code>TRUE</code>, text output is
+written to separate files 
+for each code chunk.</dd>
+<dt>strip.white:</dt><dd>character string (<code>false</code>). If <code>true</code>, blank
+lines at the beginning and end of output are removed. If
+<code>all</code>, then all blank lines are removed from the output.</dd>
+<dt>prefix:</dt><dd>logical (<code>TRUE</code>). If <code>TRUE</code> generated filenames of
+figures and output have a common prefix.</dd>
+<dt>prefix.string:</dt><dd>a character string, default is the name of the
+&lsquo;<TT>.Snw</TT>&rsquo; source file.</dd>
+<dt>include:</dt><dd>logical (<code>TRUE</code>), indicating whether input
+statements for text output and includegraphics statements
+for figures should be auto-generated. Use <code>include = FALSE</code> if
+the output should appear in a different place than the code chunk
+(by placing the input line manually).</dd>
+<dt>fig:</dt><dd>logical (<code>FALSE</code>), indicating whether the code
+chunk produces 
+graphical output. Note that only one figure per code chunk can be
+processed this way.</dd>
+<dt>eps:</dt><dd>logical (<code>TRUE</code>), indicating whether EPS figures shall be
+generated. Ignored if <code>fig = FALSE</code>.</dd> 
+<dt>pdf:</dt><dd>logical (<code>TRUE</code>), indicating whether PDF figures shall be
+generated. Ignored if <code>fig = FALSE</code>.</dd>
+<dt>width:</dt><dd>numeric (6), width of figures in inch.</dd>
+<dt>height:</dt><dd>numeric (6), height of figures in inch.</dd>
+</dl>
+
+<h3>Author(s)</h3>
+
+<p>
+Friedrich Leisch
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Friedrich Leisch: Sweave User Manual, 2002<br>
+<a href="http://www.ci.tuwien.ac.at/~leisch/Sweave">http://www.ci.tuwien.ac.at/~leisch/Sweave</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Sweave.html">Sweave</a></code>, <code><a href="Rtangle.html">Rtangle</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

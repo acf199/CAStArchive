@@ -1,0 +1,103 @@
+<html><head><title>R: View or List Vignettes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for vignette {utils}"><tr><td>vignette {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>View or List Vignettes</h2>
+
+
+<h3>Description</h3>
+
+<p>
+View a specified vignette, or list the available ones.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+vignette(topic, package = NULL, lib.loc = NULL)
+
+## S3 method for class 'vignette':
+print(x, ...)
+## S3 method for class 'vignette':
+edit(name, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>topic</code></td>
+<td>
+a character string giving the (base) name of the vignette
+to view. If omitted, all available vignettes are listed.</td></tr>
+<tr valign="top"><td><code>package</code></td>
+<td>
+a character vector with the names of packages to
+search through, or <code>NULL</code> in which case <EM>all</EM> available
+packages in the library trees specified by <code>lib.loc</code> are
+searched.</td></tr>
+<tr valign="top"><td><code>lib.loc</code></td>
+<td>
+a character vector of directory names of <font face="Courier New,Courier" color="#666666"><b>R</b></font> libraries,
+or <code>NULL</code>.  The default value of <code>NULL</code> corresponds to all
+libraries currently known.</td></tr>
+<tr valign="top"><td><code>x, name</code></td>
+<td>
+Object of class <code>vignette</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Ignored by the <code>print</code> method, passed on to
+<code><a href="file.edit.html">file.edit</a></code> by the <code>edit</code> method.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Function <code>vignette</code> returns an object of the same class, the
+print method opens a viewer for it.
+Currently, only PDF versions of vignettes can be viewed.
+If several vignettes have PDF versions with base name identical to
+<code>topic</code>, the first one found is used. The <code>edit</code> method
+extracts the R code from the vignette to a temporary file and opens
+the file in an editor.
+</p>
+<p>
+If no topics are given, the available vignettes are listed.  The
+corresponding information is returned in an object of class
+<code>"packageIQR"</code>.  The structure of this class is experimental.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## List vignettes in all attached packages
+vignette()
+
+## Not run: 
+## Open the grid intro vignette
+vignette("grid")
+
+## The same
+v1 &lt;- vignette("grid")
+print(v1)
+
+## Now let us have a closer look at the code
+edit(v1)
+
+## A package can have more than one vignette (package grid has several):
+vignette(package="grid")
+vignette("rotated")
+## The same, but without searching for it:
+vignette("rotated", package="grid")
+## End(Not run)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

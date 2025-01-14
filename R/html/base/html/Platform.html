@@ -1,0 +1,94 @@
+<html><head><title>R: Platform Specific Variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for .Platform {base}"><tr><td>.Platform {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Platform Specific Variables</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>.Platform</code> is a list with some details of the platform under
+which <font face="Courier New,Courier" color="#666666"><b>R</b></font> was built.  This provides means to write OS portable <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+.Platform
+</pre>
+
+
+<h3>Value</h3>
+
+<p>
+A list with at least the following components:
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>OS.type</code></td>
+<td>
+character, giving the <B>O</B>perating <B>S</B>ystem
+(family) of the computer.  One of <code>"unix"</code> or <code>"windows"</code>.
+</td></tr>
+<tr valign="top"><td><code>file.sep</code></td>
+<td>
+character, giving the <B>file</B> <B>sep</B>arator,
+used on your platform, e.g., <code>"/"</code> on Unix alikes.
+</td></tr>
+<tr valign="top"><td><code>dynlib.ext</code></td>
+<td>
+character, giving the file name <B>ext</B>ension of
+<B>dyn</B>amically loadable <B>lib</B>raries, e.g., <code>".dll"</code> on
+Windows.
+</td></tr>
+<tr valign="top"><td><code>GUI</code></td>
+<td>
+character, giving the type of GUI in use, or
+<code>"unknown"</code> if no GUI can be assumed.
+</td></tr>
+<tr valign="top"><td><code>endian</code></td>
+<td>
+character, <code>"big"</code> or <code>"little"</code>, giving the
+endianness of the processor in use.
+</td></tr>
+<tr valign="top"><td><code>pkgType</code></td>
+<td>
+character, the preferred setting for <code><a href="options.html">options</a>("pkgType")</code>.
+Values <code>"source"</code>, <code>"mac.binary"</code> and <code>"win.binary"</code>
+are currently in use.
+</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Version.html">R.version</a></code> and <code><a href="Sys.info.html">Sys.info</a></code> give more details
+about the OS.  In particular, <code>R.version$platform</code> is the
+canonical name of the platform under which <font face="Courier New,Courier" color="#666666"><b>R</b></font> was compiled.
+</p>
+<p>
+<code><a href="zMachine.html">.Machine</a></code> for details of the arithmetic used, and
+<code><a href="system.html">system</a></code> for invoking platform-specific system commands.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Note: this can be done in a system-independent way by file.info()$isdir
+if(.Platform$OS.type == "unix") {
+   system.test &lt;- function(...) { system(paste("test", ...)) == 0 }
+   dir.exists &lt;- function(dir) sapply(dir, function(d)system.test("-d", d))
+   dir.exists(c(R.home(), "/tmp", "~", "/NO"))# &gt; T T T F
+}
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

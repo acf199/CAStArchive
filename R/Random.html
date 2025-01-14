@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>CASt R: Random numbers</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Random 
+ numbers in R</span>
+ <br>
+</span></span></big></big></div>
+<br> 
+It is often necessary to simulate random numbers in R.  There are
+many functions available to accomplish this and related tasks 
+such as evaluating the density, distribution function, and quantile function
+of a distribution.  <br>
+<br> 
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Distributions
+ intrinsic to R</span></small></span></span></big></big><br> 
+ <br> 
+R handles many common distributions easily.  To see a list, type<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">help.search("distribution",package="stats")</span><br>
+<br>
+Let's consider the well-known normal distribution as an example:  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">?Normal</span><br>
+<br>
+
+
+The four functions <a href="html/stats/html/Normal.html">'rnorm', 'dnorm', 
+'pnorm', and 'qnorm'</a> give random normals, the normal density (sometimes called the differential
+distribution function), the normal cumulative distribution function (CDF), and
+the inverse of the normal CDF (also called the quantile function), respectively.  Almost all  
+of the other distributions have similar sets of four functions.  The 'r' versions are 
+<a href="html/stats/html/Beta.html">rbeta</a>, 
+<a href="html/stats/html/Binomial.html">rbinom</a>, 
+<a href="html/stats/html/Cauchy.html">rcauchy</a>, 
+<a href="html/stats/html/Chisquare.html">rchisq</a>, 
+<a href="html/stats/html/Exponential.html">rexp</a>, 
+<a href="html/stats/html/FDist.html">rf</a>, 
+<a href="html/stats/html/GammaDist.html">rgamma</a>, 
+<a href="html/stats/html/Geometric.html">rgeom</a>, 
+<a href="html/stats/html/Hypergeometric.html">rhyper</a>, 
+<a href="html/stats/html/Logistic.html">rlogis</a>, 
+<a href="html/stats/html/Lognormal.html">rlnorm</a>, 
+<a href="html/stats/html/Multinomial.html">rmultinom</a>, 
+<a href="html/stats/html/NegBinomial.html">rnbinom</a>, 
+<a href="html/stats/html/Normal.html">rnorm</a>, 
+<a href="html/stats/html/Poisson.html">rpois</a>, 
+<a href="html/stats/html/SignRank.html">rsignrank</a>, 
+<a href="html/stats/html/TDist.html">rt</a>, 
+<a href="html/stats/html/Uniform.html">runif</a>, 
+<a href="html/stats/html/Weibull.html">rweibull</a>, and
+<a href="html/stats/html/Wilcoxon.html">rwilcox</a>
+(there is no rtukey because generally only
+<a href="html/stats/html/Tukey.html">ptukey and qtukey</a> 
+are needed).<br>
+<br>
+As an example, suppose we wish 
+to simulate a vector of 10
+independent, standard (i.e., mean 0 and standard deviation 1) normal random variables.  We use the
+<a href="html/stats/html/Normal.html">rnorm</a> function for this 
+purpose, and its defaults are mean=0 and standard deviation=1.  Thus, we may simply type <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rnorm(10)</span><br>
+<br>
+Suppose we wish to simulate a large number of normal random variables with mean 10 and
+standard deviation 3, then check a histogram against 
+two normal density functions, one based on the true parameters and one based on estimates, to 
+see how it looks.  We'll use 'col=2, lty=2, lwd=3' to make the curve based on the true parameters
+red (color=2), dashed (line type=2), and wider than normal (line width=3).  Also note that
+we are requesting 100 bins in the histogram (nclass=100) and putting it on the same vertical scale
+as the density functions (freq=FALSE).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">z=rnorm(200000, mean=10, sd=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(z,freq=FALSE,nclass=100)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=seq(min(z),max(z),len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(x,dnorm(x, mean=10, sd=3),col=2, lty=2, lwd=3) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(x,dnorm(x,mean=mean(z),sd=sqrt(var(z))))</span><br>
+<br>
+We can find out what proportion of the deviates lie outside 3 standard deviations from the true mean,
+a common cutoff used by physical scientists.  We can also see the true theoretical proportion:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(abs((z-10)/3)>3)/length(z)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">2*pnorm(-3)</span><br>
+<br>
+In the first line above, we are using 
+<a href="html/base/html/sum.html">sum</a>
+to count the number of TRUE's in the logical vector (abs((z-10)/3)>3).
+This works because logical values are coerced to 0's and 1's when necessary.
+<br>
+The function 
+<a href="html/stats/html/Normal.html">dnorm</a> 
+has a closed form:  With mean=0 and sd=1, dnorm(x) 
+equals exp(-x<sup>2</sup>/2)/sqrt(2*pi).  By contrast, 
+the CDF, given by 
+<a href="html/stats/html/Normal.html">pnorm</a>, 
+has no closed form and must be numerically approximated.  By 
+definition, pnorm(x) equals the integral of dnorm(t) as t ranges from minus infinity to x.  To find a p-value 
+(i.e., the probability of observing a statistic more extreme than the one actually observed), we use
+pnorm; to construct a confidence interval (i.e., a range of reasonable values for the true parameter), 
+we use the inverse, 
+<a href="html/stats/html/Normal.html">qnorm</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pnorm(1:3)-pnorm(-(1:3))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qnorm(c(.05,.95))</span><br>
+<br>
+The first line above summarizes the well-known 68, 95, 99.7 rule for normal distributions (these are the approximate
+proportions lying within 1, 2, and 3 standard deviations from the mean).  The second
+line gives the critical values used to construct a 90% confidence interval for a parameter when its 
+estimator is approximately normally distributed.<br>
+<br>
+Let us now briefly consider an example of a <i>discrete</i> distribution, 
+which means a distribution on a finite or countably
+infinite set (as opposed to a <i>continuous</i> distribution like the normal).
+The 
+<a href="html/stats/html/Poisson.html">Poisson</a>
+distribution, which has a single real-valued parameter lambda, puts all of
+its probability mass on the nonnegative integers.  A Poisson distribution, often used
+to model data consisting of counts, has mean
+and variance both equal to lambda.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">k=0:10</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dpois(k,lambda=2.5) # or equivalently,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">exp(-2.5)*2.5^k/factorial(k)</span><br>
+<br>
+Next, simulate some Poisson variables:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=rpois(10000,lambda=2.5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">table(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">var(x)</span><br>
+<br>
+<br>
+
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">The power-law or Pareto distribution
+ </span></small></span></span></big></big><br> 
+<br>
+A commonly used distribution in astrophysics is the power-law distribution, 
+more commonly known in the statistics literature as the
+Pareto distribution.  There are no built-in R functions for dealing with this
+distribution, but because it is an extremely simple distribution it is easy 
+to write such functions.  <br>
+<br>
+The density function for the Pareto is f(x)=ab<sup>a</sup>/x<sup>(a+1)</sup> for x>b.  
+Here, a and b are fixed positive parameters, where 
+b is the minimum possible value. 
+As an example, consider the log N = -1.5 * log S
+relationship, where S is the apparent brightness and N
+is the number of standard candles randomly located in transparent space.  Thus, a Pareto
+distribution with (a+1) = 1.5 is a reasonable, if simplistic,
+model for the brightness of observed standard
+candles in space. The b parameter merely reflects the choice of units of measurement.<br>
+<br>
+It turns out that a Pareto random variable is simply b*exp(X), where 
+X is an 
+<a href="html/stats/html/Exponential.html">exponential</a>
+random variable with rate=a (i.e., with mean=1/a).  
+However, rather than exploiting this simple relationship,
+we wish to build functions for the Pareto distribution from
+scratch.  Our default values, which may be changed by the user, will be a=0.5 and b=1.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dpareto=function(x, a=0.5, b=1) a*b^a/x^(a+1)</span><br>
+<br>
+Next, we integrate the density function to obtain the distribution function, 
+which is
+F(x)=1-(b/x)<sup>a</sup> for x>=b (and naturally F(x)=0 for x &lt b):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ppareto=function(x, a=0.5, b=1) (x &gt b)*(1-(b/x)^a)</span><br>
+<br>
+Note that (x &gt b) in the above function
+is coerced to numeric, either 0 or 1.<br>
+<br>
+Inverting the distribution function gives the quantile function.  The following 
+simplistic function is wrong unless 0&lt;u&lt;1, so a better-designed function should do some
+error-checking.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qpareto=function(u, a=0.5, b=1) b/(1-u)^(1/a)</span><br>
+<br>
+Finally, to simulate random Pareto random variables, we use the fact that whenever the quantile function
+is applied to a uniform random variable, the result is a random variable with the desired distribution:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rpareto=function(n, a=0.5, b=1) qpareto(runif(n),a,b)</span><br>
+<br>
+Creating functions in R, as illustrated above, is a common procedure.  Note that each of the arguments of
+a function may be given a default value, which is used whenever the user calls the function without specifying
+the value of this parameter.  Also note that each of the above functions consists of only a single line; however,
+longer functions may be created by enclosing them inside curly braces { }.<br>
+<br>
+<br>
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">A few simple plots
+ </span></small></span></span></big></big><br> 
+<br>
+The commands below create plots related to the four functions just created.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(2,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=seq(1,50,len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,dpareto(x),type="l")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,ppareto(x),type="l",lty=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">u=seq(.005,.9,len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(u,qpareto(u),type="l",col=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">z=rpareto(200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dotchart(log10(z), main="200 random logged Pareto deviates",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;cex.main=.7)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(1,1))</span><br>
+<br>
+The above commands illustrate some of the many plotting capabilities of R.  
+The <a href="html/graphics/html/par.html">par</a>
+function sets many graphical
+parameters, for instance, 'mfrow=c(2,2)', which divides the plotting window into a matrix
+of plots, set here to two rows and two columns.  In the 
+<a href="html/graphics/html/plot.html">plot</a>
+commands, 'type' is set here to
+"l" for a line plot; other common options are "p" for points (the default), 
+"b" for connected dots, and "n" for nothing (to create
+axes only). Other options used: 
+'lty' sets the line type (1=solid, 2=dashed, etc.), 'col' sets color (1=black, 2=red,
+3=green, etc.), 'main' puts a string into the plot title, and 'cex.main' sets the text magnification. <br>
+Type 
+'<a href="html/graphics/html/par.html">? par</a>'
+to see a list of the many plotting parameters and options.  <br>
+<br>
+
+
+ 
+</body>
+</html>

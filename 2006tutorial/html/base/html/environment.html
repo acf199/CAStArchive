@@ -1,0 +1,165 @@
+<html><head><title>R: Environment Access</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for environment {base}"><tr><td>environment {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Environment Access</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Get, set, test for and create environments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+environment(fun = NULL)
+environment(fun) &lt;- value
+
+is.environment(obj)
+
+.GlobalEnv
+globalenv()
+.BaseNamespaceEnv
+
+new.env(hash = FALSE, parent = parent.frame())
+
+parent.env(env)
+parent.env(env) &lt;- value
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fun</code></td>
+<td>
+a <code><a href="function.html">function</a></code>, a <code><a href="../../stats/html/formula.html">formula</a></code>, or
+<code>NULL</code>, which is the default.</td></tr>
+<tr valign="top"><td><code>value</code></td>
+<td>
+an environment to associate with the function</td></tr>
+<tr valign="top"><td><code>obj</code></td>
+<td>
+an arbitrary <font face="Courier New,Courier" color="#666666"><b>R</b></font> object.</td></tr>
+<tr valign="top"><td><code>hash</code></td>
+<td>
+a logical, if <code>TRUE</code> the environment will be hashed</td></tr>
+<tr valign="top"><td><code>parent</code></td>
+<td>
+an environment to be used as the enclosure of the
+environment created.</td></tr>
+<tr valign="top"><td><code>env</code></td>
+<td>
+an environment</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Environments consist of a <EM>frame</EM>, or collection of named
+objects, and a pointer to an <EM>enclosing environment</EM>.  The most
+common example is the frame of variables local to a function call;
+its enclosure is the environment where the function was
+defined.  The enclosing environment is distinguished from the
+<EM>parent frame</EM>:  the latter (returned by
+<code><a href="sys.parent.html">parent.frame</a></code>) refers to the environment of the caller
+of a function.
+</p>
+<p>
+When <code><a href="get.html">get</a></code> or <code><a href="exists.html">exists</a></code> search an environment
+with the default <code>inherits = TRUE</code>, they look for the variable
+in the frame, then in the enclosing frame, and so on.
+</p>
+<p>
+The global environment <code>.GlobalEnv</code>, more often known as the
+user's workspace, is the first item on the search path.  It can also
+be accessed by <code>globalenv()</code>.  On the search path, each item's
+enclosure is the next item.
+</p>
+<p>
+The object <code>.BaseNamespaceEnv</code> is the namespace environment for
+the base package.  The environment of the base package itself is
+represented by <code>NULL</code>, the ultimate enclosure of any environment:
+If one follows the <code>parent.env()</code> chain of enclosures back far
+enough from any environment, eventually one reaches <code>NULL</code>.
+This means that arithmetic operators and the base package functions
+will be always be found by <code><a href="eval.html">eval</a>()</code> or <code><a href="get.html">get</a>(...,
+  inherits = TRUE)</code>.
+</p>
+<p>
+The replacement function <code>parent.env&lt;-</code> is extremely dangerous as
+it can be used to destructively change environments in ways that
+violate assumptions made by the internal C code.  It may be removed
+in the near future.
+</p>
+<p>
+<code>is.environment</code> is generic: you can write methods to handle
+specific classes of objects, see <a href="zMethods.html">InternalMethods</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+If <code>fun</code> is a function or a formula then <code>environment(fun)</code>
+returns the environment associated with that function or formula.
+If <code>fun</code> is <code>NULL</code> then the current evaluation environment is
+returned.
+<br>
+The assignment form sets the environment of the function or formula
+<code>fun</code> to the <code>value</code> given.
+<br>
+<code>is.environment(obj)</code> returns <code>TRUE</code> iff <code>obj</code> is an
+<code>environment</code>.
+<br>
+<code>new.env</code> returns a new (empty) environment enclosed in the
+parent's environment, by default.
+<br>
+<code>parent.env</code> returns the parent environment of its argument.
+<br>
+<code>parent.env&lt;-</code> sets the enclosing environment of its first
+argument.</p>
+
+<h3>See Also</h3>
+
+<p>
+The <code>envir</code> argument of <code><a href="eval.html">eval</a></code>, <code><a href="get.html">get</a></code>,
+and <code><a href="exists.html">exists</a></code>.
+</p>
+<p>
+<code><a href="ls.html">ls</a></code> may be used to view the objects in an environment.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+##-- all three give the same:
+environment()
+environment(environment)
+.GlobalEnv
+
+ls(envir=environment(approxfun(1:2,1:2, method="const")))
+
+is.environment(.GlobalEnv) # TRUE
+
+e1 &lt;- new.env(parent = NULL)  # this one has enclosure package:base.
+e2 &lt;- new.env(parent = e1)
+assign("a", 3, env=e1)
+ls(e1)
+ls(e2)
+exists("a", env=e2)     # this succeeds by inheritance     
+exists("a", env=e2, inherits = FALSE)
+exists("+", env=e2)     # this succeeds by inheritance
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

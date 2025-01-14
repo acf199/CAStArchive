@@ -1,0 +1,62 @@
+<html><head><title>R: Modify families for use in GAM fitting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for fix.family.link {mgcv}"><tr><td>fix.family.link {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Modify families for use in GAM fitting</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Generalized Additive Model fitting by `outer' iteration,
+requires extra derivatives of the variance and link functions to be 
+added to family objects. The functions add what is needed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fix.family.link(fam)
+fix.family.var(fam)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fam</code></td>
+<td>
+A <code>family</code>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Outer iteration GAM estimation requires derivatives of the GCV/UBRE
+score, which are obtained by differentiating the P-IRLS GAM fitting iteration
+w.r.t. the model smoothing parameters. The expressions for the derivatives
+require the second derivative of the link w.r.t. the mean, and the first
+derivative of the variance function w.r.t. the mean. These functions add
+functions evaluating these quantities to a family.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A family object with extra component functions <code>dvar</code> and <code>d2link</code>.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

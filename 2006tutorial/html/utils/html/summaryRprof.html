@@ -1,0 +1,96 @@
+<html><head><title>R: Summarise Output of R Profiler</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for summaryRprof {utils}"><tr><td>summaryRprof {utils}</td><td align="right">R Documentation</td></tr></table>
+<h2>Summarise Output of R Profiler</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Summarise the output of the <code><a href="Rprof.html">Rprof</a></code> function to show the
+amount of time used by different <font face="Courier New,Courier" color="#666666"><b>R</b></font> functions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+summaryRprof(filename = "Rprof.out", chunksize = 5000)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>filename</code></td>
+<td>
+Name of a file produced by <code>Rprof()</code></td></tr>
+<tr valign="top"><td><code>chunksize</code></td>
+<td>
+Number of lines to read at a time</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This function is an alternative to <code>R CMD Rprof</code>. It provides the
+convenience of an all-<font face="Courier New,Courier" color="#666666"><b>R</b></font> implementation but will be slower for large
+files.
+</p>
+<p>
+As the profiling output file could be larger than available memory, it
+is read in blocks of <code>chunksize</code> lines. Increasing <code>chunksize</code>
+will make the function run faster if sufficient memory is available.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A list with components
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>by.self</code></td>
+<td>
+Timings sorted by &lsquo;self&rsquo; time</td></tr>
+<tr valign="top"><td><code>by.total</code></td>
+<td>
+Timings sorted by &lsquo;total&rsquo; time</td></tr>
+<tr valign="top"><td><code>sampling.time</code></td>
+<td>
+Total length of profiling run</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+The chapter on &ldquo;Tidying and profiling R code&rdquo; in
+&ldquo;Writing <font face="Courier New,Courier" color="#666666"><b>R</b></font> Extensions&rdquo; (see the &lsquo;<TT>doc/manual</TT>&rsquo; subdirectory
+of the <font face="Courier New,Courier" color="#666666"><b>R</b></font> source tree).
+</p>
+<p>
+<code><a href="Rprof.html">Rprof</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+## Rprof() is not available on all platforms
+Rprof(tmp &lt;- tempfile())
+example(glm)
+Rprof()
+summaryRprof(tmp)
+unlink(tmp)
+## End(Not run)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>utils</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

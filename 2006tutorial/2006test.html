@@ -1,0 +1,592 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Hypothesis testing and bootstrapping in R</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Hypothesis
+ testing and bootstrapping</span>
+ <br>
+</span></span></big></big></div> <br>   
+This tutorial demonstrates some of the many statistical tests that
+R can perform.  It is impossible to give an exhaustive list of
+such testing functionality, but we hope not only to provide several
+examples but also to elucidate some of the logic of statistical hypothesis
+tests with these examples.<br> 
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">T
+ tests</span></small></span></span></big></big><br> 
+<br>
+
+In the 
+<a href="2006reg.html">exploratory data analysis and regression</a>
+tutorial, we used exploratory techniques to identify 92 stars from the
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.html">Hipparcos</a>
+data set that are associated with the Hyades.  We did this based on the values
+of right ascension, declination, principal motion of right ascension,
+and principal motion of declination.  We then excluded one additional
+star with a large error of parallax measurement:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip = read.table("http://astrostatistics.psu.edu/datasets/HIP_star.dat",
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T,fill=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter1= (RA>50 & RA<100 & 
+DE>0 & DE<25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter2=(pmRA>90 & pmRA<130 & 
+pmDE>-60 & pmDE< -10) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter = filter1 & filter2 
+& (e_Plx<5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(filter)</span><br>
+<br>
+In this section of the tutorial, we will compare these Hyades stars with the remaining stars in 
+the Hipparcos dataset on the basis of the color (B minus V) variable.
+That is, we are comparing the groups in the boxplot below:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">color=B.V</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(color~filter,notch=T)</span><br>
+<br>
+For ease of notation, we define vectors H and nH (for
+"Hyades" and "not Hyades") that 
+contain the data values for the two groups.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">H=color[filter]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">nH=color[!filter & !is.na(color)]</span><br>
+<br>
+In the definition of nH above, we needed to exclude the NA values.<br>
+<br>
+A two-sample t-test may now be performed with a single line:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">t.test(H,nH)</span><br>
+<br>
+Because it is instructive and quite easy, we may obtain the same results 
+without resorting to the 
+<a href="html/stats/html/t.test.html">t.test</a>
+function.  First, we calculate the variances of the sample means
+for each group:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">v1=var(H)/92</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">v2=var(nH)/2586</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">c(var(H),var(nH))</span><br>
+<br>
+The t statistic is based on the standardized difference between the two
+sample means.  Because the two samples are assumed independent, the
+variance of this difference equals the sum of the individual variances
+(i.e., v1+v2).  Nearly always in a two-sample t-test, we wish to test
+the null hypothesis that the true difference in means equals zero.  Thus, 
+standardizing the difference in means involves subtracting zero and then
+dividing by the square root of the variance:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tstat=(mean(H)-mean(nH))/sqrt(v1+v2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tstat</span><br>
+<br>
+To test the null hypothesis, this t statistic is compared to a t distribution.  In a Welch
+test, we assume that the variances of the two populations are not necessarily equal, and
+the degrees of freedom of the t distribution are computed using the so-called
+Satterthwaite approximation:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">(v1 + v2)^2 / (v1^2/91 + v2^2/2585)</span><br>
+<br>
+The two-sided p-value may now be determined by using the 
+cumulative distribution function of the t distribution,
+which is given by the
+<a href="html/stats/html/TDist.html">pt</a> function.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">2*pt(tstat,97.534)</span><br>
+<br>
+Incidentally, one of the assumptions of the t-test, namely that each of the
+two underlying populations is normally distributed, is almost certainly not true
+in this example.  However, because of the central limit
+theorem, the t-test is robust against violations of this assumption; even if the 
+populations are not roughly normally distributed, the sample means are. <br>
+<br>
+In this particular example, the Welch test is probably not necessary, since
+the sample variances are so close that an assumption of equal variances is warranted.
+Thus, we might conduct a slightly more restrictive t-test that assumes equal population
+variances.  Without going into the details here,
+we merely present the R output:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">t.test(H,nH,var.equal=T)</span><br>
+<br>
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Permutation tests </span></small></span></span></big></big><br> 
+<br>
+
+Let's look at another example in which a t-test might be warranted.  
+The <a href="http://astrostatistics.psu.edu/datasets/glob_clus.html">globular
+cluster luminosity dataset</a> gives measurements for two different 
+galaxies, Milky Way galaxy (MWG) and Andromeda galaxy (M31).  The t-test
+gives us a very simplistic way of comparing these galaxies, namely, by
+the mean luminosity of their globular clusters.  Because the apparent magnitudes
+for M31 are offset by the distance modulus of 24.44, the t-test should compare 
+the difference in sample means with 24.44 instead of the usual zero:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">gc = read.csv 
+("http://astrostatistics.psu.edu/datasets/glob_clus.csv")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">t.test(lum~gal, data=gc, mu=24.44)</span><br>
+<br>
+As before, the t-statistic here (1.6254) is accompanied by a p-value (0.1074).
+This p-value may be interpreted as follows:  IF the two samples really are representive
+samples from populations whose means differ by 24.44, THEN the probability of
+obtaining a t-statistic at least as far from zero as 1.6254 would be 
+roughly 0.1074.  Since most people don't consider 0.1074 to be a very small 
+probability, the conclusion here is that there is not strong statistical
+evidence of a difference in true means other than 24.44.<br>
+<br>
+The p-value of 0.1074 is an approximation
+calculated under certain distributional assumptions
+on the populations.  An alternative method for calculating a p-value corresponding
+to the t-statistic of 1.6254 is called a permutation test.  Conceptually, the
+permutation test follows directly from the definition (given in the preceding
+paragraph) of a p-value.  Let us assume that the luminosities
+for the MWG globular clusters are distributed exactly like the luminosities
+for the M31 globular clusters, except that the latter are all shifted down by
+24.44.  Under this assumption (called the <i>null hypothesis</i>), we may add 24.44 to
+each of the M31 luminosities and then the combined samples are equivalent to one
+large sample from the common distribution.  In other words, if the null hypothesis
+is true and we randomly
+permute the labels (81 instances of MWG and 360 of M31), then the original sample
+is no different than the permuted sample.  <br>
+<br>
+By definition, then, the p-value should be equal to the proportion of all 
+possible t-statistics resulting from label permutations that are at least
+as extreme as the observed t-statistic (1.6254).  Since there are far too
+many such permuations (roughly 10<sup>90</sup>) 
+for us to make this exact calculation, we will have to settle
+for a random sample of permutations:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tlist=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lum=gc[,"lum"]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">gal=gc[,"gal"]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lum[gal=="M31"]=lum[gal=="M31"]-24.44</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:5000) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; s=sample(441,81) 
+# choose a sample</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; newtstat = 
+t.test(lum[s], lum[-s])$stat</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; tlist=c(tlist, newtstat)
+# add t-stat to list</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Note:  The above code is <i>not</i> built for speed!<br>
+<br>
+By definition, the p-value is the probability of obtaining a test statistic more extreme than the
+observed test statistic under the null hypothesis.  Let's take a look at the null distribution of
+the t statistic we just calculated, along with the observed value:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(tlist)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(v=c(-1,1)*1.6254,lty=2,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(abs(tlist)>=1.6254)/5000</span><br>
+<br>
+This p-value is quite close to the 0.1074 obtained earlier.
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Empirical distribution
+ functions</span></small></span></span></big></big><br> 
+<br>
+Suppose we are curious about whether a given sample comes from a particular
+distribution.  For instance, how normal is the random sample 'tlist' of t statistics
+obtained under the null hypothesis in the previous example?  How normal (say) are the
+colors of 'H' and 'nH'?   <br>
+<br>
+A simple yet very powerful graphical device is called a Q-Q plot, in which some quantiles
+of the sample are plotted against the same quantiles of whatever distribution we have in mind.
+If a roughly straight line results, this suggests that the fit is good.  Roughly, a pth quantile of
+a distribution is a value such that a proportion p of the distribution lies below that value.<br>
+<br>
+A Q-Q plot for normality is so common that there is a separate function, 
+<a href="html/stats/html/qqnorm.html">qqnorm</a>, that implements it.   (Normality
+is vital in statistics not merely because many common populations 
+are normally distributed -- 
+which is actually not true in astronomy -- but because the central limit 
+theorem guarantees the 
+approximate normality of sample means.) <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(2,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qqnorm(tlist,main="Null luminosity
+t statistics")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(0,1,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qqnorm(H,main="Hyades")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">qqnorm(nH,main="non-Hyades")</span><br>
+<br>
+Not surprisingly, the tlist variable appears extremely nearly normally distributed (more precisely,
+it is nearly <i>standard</i> normal, as evidenced by the proximity of the Q-Q plot to the line
+x=y, shown in red).  As for H and nH, the distribution of B minus V exhibits moderate non-normality in each
+case.  <br>
+<br>
+In the bottom right corner of the plotting window, let's reconstruct the Q-Q plot from scratch for
+tlist.  This is instructive because the same technique may be applied to any comparison distribution,
+not just normal.  If we consider the 5000 entries of tlist in increasing order, let's call the ith
+value the ((2i-1)/10000)th quantile for all i from 1 to 5000.  We merely graph this point against the
+corresponding quantile of standard normal:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(qnorm((2*(1:5000)-1)/10000),sort(tlist))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(1,1)) # reset plotting window</span><br>
+<br>
+Related to the Q-Q plot is a distribution function called the <i>empirical 
+(cumulative) distribution function</i>, or
+EDF. (In fact, the EDF is almost the same as a Q-Q plot against a uniform distribution.)
+The EDF is, by definition, the cumulative distribution function for the
+discrete distribution represented by the sample itself -- that is, the distribution that puts mass
+1/n on each of the n sample points.  We may graph the EDF using the 
+<a href="html/stats/html/ecdf.html">ecdf</a>
+function:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(ecdf(tlist))</span><br>
+<br>
+While it is generally very difficult to interpret the EDF directly, it is possible
+to compare an EDF to a theoretical cumulative distribution function or two another EDF.
+Among the statistical tests that implement such a comparison is the Kolmogorov-Smirnov
+test, which is implemented by the R function
+<a href="html/stats/html/ks.test.html">ks.test</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(tlist,"pnorm")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(H,nH)</span><br>
+<br>
+Whereas the first result above gives a surprisingly small p-value,
+the second result is not surprising; we already saw that H and nH have 
+statistically significantly different means.  However, if we center each, we obtain<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(H-mean(H),nH-mean(nH))</span><br>
+<br>
+In other words, the Kolmogorov-Smirnov test finds no statistically significant evidence that
+the distribution of B.V for the Hyades stars is anything other than a shifted version of
+the distribution of B.V for the other stars.  We can perform the same test for
+the luminosities of globular clusters from both the Milky Way and Andromeda:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lum.mwg=gc[gal=="MWG","lum"]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lum.m31=gc[gal=="M31","lum"]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(lum.mwg,
+lum.m31-24.44)</span><br>
+<br>
+The above test does give a statistically significant difference.  The
+K-S test tests whether the M31 dataset, shifted by 24.44,
+comes from the same distribution as the MWG
+dataset.  The t-test, on the other hand, only tests whether these
+distributions have the same mean.
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Chi-squared
+ tests for categorical data </span></small></span></span></big></big><br> 
+<br>
+We begin with a plot very similar to one seen in the
+<a href="EDA.html">exploratory data analysis and regression</a>
+tutorial:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">bvcat=cut(color, breaks=c(-Inf,.5,.75,1,Inf))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(Vmag~bvcat, varwidth=T,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; ylim=c(max(Vmag),min(Vmag)), </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; xlab=expression("B minus V"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; ylab=expression("V magnitude"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; cex.lab=1.4, cex.axis=.8)</span><br>
+<br>
+The cut values for bvcat are based roughly on the quartiles of the B minus V variable.  
+We have created, albeit artificially, a second categorical 
+variable ("filter", the Hyades indicator, is the first).  Here is
+a summary of the dataset based only on these two variables:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">table(bvcat,filter)</span><br>
+<br>
+Note that the Vmag variable is irrelevant in the table above.  <br>
+<br>
+To perform a chi-squared test of the null hypothesis that the true population 
+proportions falling in the four categories are the same for both the Hyades and 
+non-Hyades stars, use the 
+<a href="html/stats/html/chisq.test.html">chisq.test</a>
+function:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">chisq.test(bvcat,filter)</span><br>
+<br>
+Since we already know these two groups differ with respect to the B.V variable,
+the result of this test is not too surprising.  But it does give a qualitatively different
+way to compare these two distributions than simply comparing their means.<br>
+<br>
+The p-value produced above is based on the fact that the chi-squared statistic is
+approximately distributed like a true chi-squared distribution (on 3 degrees of freedom,
+in this case) if the null hypothesis is true.  However, it is possible to obtain 
+exact p-values, if one wishes to calculate the chi-squared statistic for all possible
+tables of counts with the same row and column sums as the given table.  Since this is rarely
+practical computationally, the exact p-value may be approximated using a Monte Carlo method
+(just as we did earlier for the permutation test).
+Such a method is implemented in the 
+<a href="html/stats/html/chisq.test.html">chisq.test</a>
+function:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">chisq.test(bvcat,filter,sim=T,B=50000)</span><br>
+<br>
+The two different p-values we just generated a numerically similar but based 
+on entirely different mathematics.  The difference may be summed up as follows:
+The first method produces the exact value of an approximate p-value, whereas the second
+method produces an approximation to the exact p-value!<br>
+<br>
+The test above is usually called a chi-squared test of homogeneity.  If we observe
+only one sample, but we wish to test whether the categories occur in some pre-specified 
+proportions, a similar test (and the same R function) may be applied.  In this case, the test
+is usually called a chi-squared test of goodness-of-fit.
+
+<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Nonparametric bootstrapping
+of regression standard errors</span></small></span></span></big></big><br> 
+<br>
+
+Let us consider a linear model for the relationship
+between DE and pmDE among the 92 Hyades stars:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x=DE[filter]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y=pmDE[filter]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,pch=20)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model1=lm(y ~ x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1,lwd=2,col=2)</span><br>
+<br>
+The red line on the plot is the usual least-squares line, for which estimation is 
+easy and asymptotic theory gives easy-to-calculate standard errors for the 
+coefficients:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(model1)$coef</span><br>
+<br>
+However, suppose we wish to use a resistant regression method such as 
+<a href="html/MASS/html/lqs.html">lqs</a>.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(MASS)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2=lqs(y ~ x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model2,lwd=2,col=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2</span><br>
+<br>
+In this case, it is not so easy to obtain standard errors for the coefficients.
+Thus, we will turn to bootstrapping.  In a standard, or nonparametric, bootstrap,
+we repeatedly draw samples of size 92 from the empirical distribution of the data, which
+in this case consist of the (DE, pmDE) pairs.  We use 
+<a href="html/MASS/html/lqs.html">lqs</a>
+to fit a line to each sample, then compute the sample covariance of the resulting
+coefficient vectors.  The procedure works like this:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2B=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for (i in 1:200) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; s=sample(92,replace=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; model2B=rbind(model2B, 
+lqs(y[s]~x[s])$coef)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+We may now find the sample covariance matrix for model2B.  The (marginal) standard errors
+of the coefficients are obtained as the square roots of the diagonal entries of this matrix:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cov(model2B)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">se=sqrt(diag(cov(model2B)))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">se</span><br>
+<br>
+The logic of the bootstrap procedure is that we are estimating an approximation
+of the true standard errors.  The approximation involves replacing the true distribution
+of the data (unknown) with the empirical distribution of the data.  This approximation
+may be estimated with arbitrary accuracy by a Monte Carlo approach, since the empirical
+distribution of the data is known and in principle
+we may sample from it as many times as we wish.  In other words, as the bootstrap sample
+size increases, we get a better estimate of the true value of the <i>approximation</i>.
+On the other hand, the quality of this approximation depends on the original sample size (92, in 
+our example) and
+there is nothing we can do to change it.<br>
+<br>
+An alternative way to generate a bootstrap sample 
+in this example is by generating a new value of each response variable (y) by adding the predicted
+value from the original lqs model to a randomly selected residual from the original set of residuals.
+Thus, we resample not the entire bivariate structure but merely the residuals.  As an exercise, you
+might try implementing this approach in R.  Note that this approach is not a good idea if you have reason
+to believe that the distribution of residuals is not the same for all points.  For instance, if there is
+heteroscedasticity or if the residuals contain structure not explained by the model, this residual resampling
+approach is not warranted.<br>
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Using the 
+ <a href="html/boot/html/00Index.html">boot</a>
+ package in R</span></small></span></span></big></big><br> 
+<br>
+There is a 
+<a href="html/boot/html/00Index.html">boot</a>
+package in R that contains many functions relevant to bootstrapping.
+As a quick example, we will show here how to obtain the same kind of bootstrap example
+obtained above (for the lqs model of pmDE regressed on DE for the Hyades stars.)<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(boot)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mystat=function(a,b)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; lqs(a[b,2]~a[b,1])$coef</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2B.2 = boot(cbind(x,y),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; mystat, 200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(model2B.2)</span><br>
+<br>
+As explained in the help file, the
+<a href="html/boot/html/boot.html">boot</a>
+function requires as input a function that accepts as arguments the whole dataset
+and an index that references an observation from that dataset.  This is why we defined
+the mystat function above.
+To see the output that is similar to that obtained earlier for the m2B object, look in
+m2B2$t:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cov(model2B.2$t)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sqrt(diag(cov(model2B.2$t)))</span><br>
+<br>
+Compare with the output provided by 
+<a href="html/boot/html/print.boot.html">print.boot</a> and the plot produced by
+<a href="html/boot/html/plot.boot.html">plot.boot</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2B.2</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(model2B.2)</span><br>
+<br>
+Another related function, for producing bootstrap confidence intervals, is
+<a href="html/boot/html/boot.ci.html">boot.ci</a>.<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Parametric bootstrapping
+of regression standard errors</span></small></span></span></big></big><br> 
+<br>
+We now return to the regression problem studied earlier.<br>
+<br>
+Sometimes, resampling is done from a theoretical distribution rather than 
+from the original sample.  For instance, if simple linear regression is applied to the
+regression of pmDE on DE, we obtain a parametric estimate of the distribution of the residuals,
+namely, normal with mean zero and standard deviation estimated from the regression:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(model1)</span><br>
+<br>
+Remember that model1 was defined above as lm(y~x).  We observe a residual standard
+error of 4.449.  <br>
+<br>
+A parametric bootstrap scheme proceeds by simulating a new set of pmDE (or y) values using the
+model<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y = 21.9 - 3.007*x + 4.449*rnorm(92)</span><br>
+<br>
+Then, we refit a linear model using y as the new response, 
+obtaining slightly different values of the regression coefficients.  
+If this is repeated, we obtain an approximation of the joint distribution of the regression coefficients
+for this model.<br>
+<br>
+Naturally, the same approach could be tried with other regression methods such as those discussed
+in the 
+<a href="EDA.html">EDA and regression</a> tutorial,
+but careful thought should be
+given to the parametric model used to generate the new residuals.  In the normal case discussed here,
+the parametric bootstrap is simple, but it is really not necessary 
+because standard linear regression already gives a very good approximation to the joint distribution
+of the regression coefficients when errors are heteroscedastic and normal.
+One possible use of this method is in a model that assumes the absolute residuals are exponentially
+distributed, in which case least absolute deviation regression as discussed in the
+<a href="EDA.html">EDA and regression</a> tutorial can be justified.  The reader is encouraged to
+implement a parametric bootstrap using the
+<a href="html/quantreg/html/rq.html">rq</a>
+function found in the "quantreg" package.  <br>
+
+<br>
+<br>
+<big><big><span 
+style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Kolmogorov-Smirnov:  Bootstrapped p-values
+ </span></small></span></span></big></big><br> 
+<br>
+Earlier, we generated 5000 samples from the null
+distribution of the t-statistic for testing the null hypothesis that
+the distribution of MWG luminosities is the same as the distribution
+of M31 luminosities, shifted by 24.44.  Let's do a similar thing for the
+color comparison between Hyades and non-Hyades:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tlist2=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">all=c(H,nH)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:5000) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; s=sample(2586,92) # choose a sample</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; tlist2=c(tlist2, t.test(all[s],all[-s],</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp; var.eq=T)$stat) # add t-stat to list</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Let's look at two different ways of assessing whether the values in
+the tlist2 vector appear to be a random sample from a standard normal 
+distribution.  The first is graphical, and the second uses the 
+Kolmogorov-Smirnov test.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(qnorm((2*(1:5000)-1)/10000),
+sort(tlist2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(0,1,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(tlist2,"pnorm")</span><br>
+<br>
+The graphical method does not show any major deviation from standard 
+normality, but this graphical "test" is better able to detect departures
+from an overall normal shape than to detect, say, a shift of the mean away from
+zero.  The following procedures illustrate this fact:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(qnorm((2*(1:5000)-1)/10000),
+sort(tlist2)-mean(tlist2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(0,1,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(tlist2-mean(tlist2),"pnorm")</span><br>
+<br>
+The graphical plot shows no discernable difference from before, but we see a vast
+difference in the new p-value returned by the Kolmogorov-Smirnov test (!!).<br>
+<br>
+However, let us now consider the p-value returned by the last use of ks.test
+above.  It is not quite valid because the theoretical null distribution
+against which we are testing depends upon an estimate (the mean) derived from the data.  
+To get a more accurate p-value, we may use a bootstrap approach.<br>
+<br>
+First, obtain the Kolmogorov-Smirnov test statistic from the test above:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">obs.ksstat=ks.test(tlist2-mean(tlist2),
+"pnorm")$stat</span><br>
+<br>
+Now we'll generate a new bunch of these statistics under the null hypothesis
+that tlist2 really represents a random sample from <i>some</i> normal distribution
+with variance 1 and unknown mean:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">random.ksstat=NULL</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:1000) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; x=rnorm(5000)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; random.ksstat=c(random.ksstat,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; &nbsp;&nbsp; 
+ks.test(x,pnorm,mean=mean(x))$stat)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Now let's look at a histogram of the test statistics and estimate a p-value:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(random.ksstat,nclass=40)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(v=obs.ksstat,lty=2,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(random.ksstat>=obs.ksstat)</span><br>
+<br>
+Note that the approximate p-value above is smaller than the original 
+p-value reported by newkstest, 
+though it is still not small enough to provide strong evidence that the
+tlist2 sample is not normal with unit variance.<br>
+<br>
+The bootstrap procedure above relied on multiple resamples with replacement.  
+Since these
+samples were drawn from a theoretical population (in this case, a normal
+distribution with parameters that might be determined by the data), it
+is considered a <i>parametric</i> bootstrap procedure.<br>
+<br>
+In a <i>nonparametric</i> bootstrap procedure, the resamples are taken from
+the empirical distribution of the data (that is, from a distribution that
+places mass 1/n on each of the n observed values).  It is possible to
+implement a nonparametric bootstrap procedure to calculate a p-value
+for the Kolmogorov-Smirnov test here, but to do so is a bit tricky.  
+The "straightforward" method for obtaining the null distribution
+of K-S statistics would be repeated usage of the following:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">s=sample(5000,replace=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">ks.test(tlist[s],pnorm,mean=mean(tlist[s]))$stat</span><br>
+<br>
+However, this statistic has a bias that must be corrected.  To make this
+correction, it is necessary to rewrite the ks.test function itself.  There is
+no way to use the output of the ks.test function to produce the bias-corrected
+statistics.  
+<br>
+<br>
+
+
+
+</body>
+</html>

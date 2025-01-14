@@ -1,0 +1,560 @@
+<html><head><title>R: Generalized additive models with integrated smoothness estimation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for gam {mgcv}"><tr><td>gam {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Generalized additive models with integrated smoothness estimation</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Fits a generalized additive model (GAM) to
+data. The degree of smoothness of model terms is estimated as part of
+fitting; isotropic or scale invariant smooths of any number of variables are
+available as model terms; confidence/credible intervals are readily
+available for any quantity predicted using a fitted model; <code>gam</code> is
+extendable: i.e. users can add smooths. 
+</p>
+<p>
+Smooth terms are represented using penalized regression splines (or similar smoothers)
+with smoothing parameters selected by GCV/UBRE or by regression splines with
+fixed degrees of freedom (mixtures of the two are
+permitted). Multi-dimensional smooths are available using penalized thin plate
+regression splines (isotropic) or tensor product splines (when an isotropic smooth is inappropriate). 
+For more on specifying models see <code><a href="gam.models.html">gam.models</a></code>. For more on model 
+selection see <code><a href="gam.selection.html">gam.selection</a></code>. For faster fits use the <code>"cr"</code>
+bases for smooth terms, <code><a href="te.html">te</a></code> smooths for smooths of several
+variables, and performance iteration for smoothing parameter estimation (see
+<code><a href="gam.method.html">gam.method</a></code>).  For large datasets see warnings.
+</p>
+<p>
+<code>gam()</code> is not a clone of what S-PLUS provides: the major
+differences are (i) that by default estimation of the
+degree of smoothness of model terms is part of model fitting, (ii) a
+Bayesian approach to variance estimation is employed that makes for easier
+confidence interval calculation (with good coverage probabilites) and (iii) the
+facilities for incorporating smooths of more than one variable are
+different: specifically there are no <code>lo</code> smooths, but instead (a) <code>s</code>
+terms can have more than one argument, implying an isotropic smooth and (b) <code>te</code> smooths are
+provided as an effective means for modelling smooth interactions of any
+number of variables via scale invariant tensor product smooths. If you want
+a clone of what S-PLUS provides use <a href="../../gam/html/gam.html">gam</a> from package <code>gam</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+
+gam(formula,family=gaussian(),data=list(),weights=NULL,subset=NULL,
+    na.action,offset=NULL,control=gam.control(),method=gam.method(),
+    scale=0,knots=NULL,sp=NULL,min.sp=NULL,H=NULL,gamma=1,
+    fit=TRUE,G=NULL,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>formula</code></td>
+<td>
+A GAM formula (see also <code><a href="gam.models.html">gam.models</a></code>). This is exactly like the formula for a
+GLM except that smooth terms can be added to the right hand side of the
+formula (and a formula of the form <code>y ~ .</code> is not allowed).
+Smooth terms are specified by expressions of the form: <br>
+<code>s(var1,var2,...,k=12,fx=FALSE,bs="tp",by=a.var)</code> where <code>var1</code>,
+<code>var2</code>, etc. are the covariates which the smooth
+is a function of and <code>k</code> is the dimension of the basis used to
+represent the smooth term. If <code>k</code> is not
+specified then <code>k=10*3^(d-1)</code> is used where <code>d</code> is the number
+of covariates for this term. <code>fx</code> is used to indicate whether or
+not this term has a fixed number of degrees of freedom (<code>fx=FALSE</code>
+to select d.f. by GCV/UBRE). <code>bs</code> indicates the basis to use for the smooth: for a full
+list see <code><a href="s.html">s</a></code>, but note that the default <code>"tp"</code>, while
+it possesses nice optimality properties is slow and memory hungry for very
+large datasets (but see examples for how to get around this). <code>by</code> can be used to specify a variable by which
+the smooth should be multiplied. For example <code>gam(y~z+s(x,by=z))</code>
+would specify a model <i>E(y)=f(x)z</i> where
+<i>f(.)</i> is a smooth function (the formula is
+<code>y~x+s(x,by=z)</code> rather than <code>y~s(x,by=z)</code> because
+the smooths are always set up to sum to zero over the covariate
+values). The <code>by</code> option is particularly useful for models in
+which different functions of the same variable are required for
+each level of a factor and for `variable parameter models': see <code><a href="s.html">s</a></code>. 
+<br>
+An alternative for specifying smooths of more than one covariate is e.g.: <br>
+<code>te(x,z,bs=c("tp","tp"),m=c(2,3),k=c(5,10))</code> which would specify a tensor product 
+smooth of the two covariates <code>x</code> and <code>z</code> constructed from marginal t.p.r.s. bases 
+of dimension 5 and 10 with marginal penalties of order 2 and 3. Any combination of basis types is 
+possible, as is any number of covariates.
+<br>
+Formulae can involve nested or ``overlapping'' terms such as <br>
+<code>y~s(x)+s(z)+s(x,z)</code> or <code>y~s(x,z)+s(z,v)</code>: see
+<code><a href="gam.side.html">gam.side</a></code> for further details and examples. Note that 
+nesting with <code><a href="te.html">te</a></code> terms is not supported. </td></tr>
+<tr valign="top"><td><code>family</code></td>
+<td>
+This is a family object specifying the distribution and link to use in
+fitting etc. See <code><a href="../../stats/html/glm.html">glm</a></code> and <code><a href="../../stats/html/family.html">family</a></code> for more
+details. The negative binomial families provided by the MASS library 
+can be used, with or without known <i>theta</i> parameter: see
+<code><a href="gam.neg.bin.html">gam.neg.bin</a></code> for details.
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+A data frame containing the model response variable and 
+covariates required by the formula. By default the variables are taken 
+from <code>environment(formula)</code>: typically the environment from 
+which <code>gam</code> is called.</td></tr>
+<tr valign="top"><td><code>weights</code></td>
+<td>
+prior weights on the data.</td></tr>
+<tr valign="top"><td><code>subset</code></td>
+<td>
+an optional vector specifying a subset of observations to be
+used in the fitting process.</td></tr>
+<tr valign="top"><td><code>na.action</code></td>
+<td>
+a function which indicates what should happen when the data
+contain `NA's.  The default is set by the `na.action' setting
+of `options', and is `na.fail' if that is unset.  The
+``factory-fresh'' default is `na.omit'.</td></tr>
+<tr valign="top"><td><code>offset</code></td>
+<td>
+Can be used to supply a model offset for use in fitting. Note
+that this offset will always be completely ignored when predicting, unlike an offset 
+included in <code>formula</code>: this conforms to the behaviour of
+<code>lm</code> and <code>glm</code>.</td></tr>
+<tr valign="top"><td><code>control</code></td>
+<td>
+A list of fit control parameters returned by 
+<code><a href="gam.control.html">gam.control</a></code>.</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+A list controlling the fitting methods used. This can make a big
+difference to computational speed, and, in some cases, reliability of
+convergence: see <code><a href="gam.method.html">gam.method</a></code> for details.</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+If this is zero then GCV is used for all distributions
+except Poisson and binomial where UBRE is used with scale parameter
+assumed to be 1. If this is greater than 1 it is assumed to be the scale
+parameter/variance and UBRE is used: to use the negative binomial in this case
+<i>theta</i> must be known. If <code>scale</code> is negative  GCV 
+is always used, which means that the scale parameter will be estimated by GCV and the Pearson 
+estimator, or in the case of the negative binomial <i>theta</i> will be estimated 
+in order to force the GCV/Pearson scale estimate to unity (if this is possible). For binomial models in 
+particular, it is probably worth  comparing UBRE and GCV results; for ``over-dispersed Poisson'' GCV is
+probably more appropriate than UBRE.</td></tr>
+<tr valign="top"><td><code>knots</code></td>
+<td>
+this is an optional list containing user specified knot values to be used for basis construction. 
+For the <code>cr</code> and <code>cc</code> bases the user simply supplies the knots to be used, and there must be the same number as the basis
+dimension, <code>k</code>, for the smooth concerned. For the <code>tp</code> basis <code>knots</code> has two uses. Firstly, for large datasets 
+the calculation of the <code>tp</code> basis can be time-consuming. The user can retain most of the advantages of the t.p.r.s. 
+approach by supplying  a reduced set of covariate values from which to obtain the basis - 
+typically the number of covariate values used will be substantially 
+smaller than the number of data, and substantially larger than the basis dimension, <code>k</code>. The second possibility 
+is to avoid the eigen-decomposition used to find the t.p.r.s. basis altogether and simply use 
+the basis implied by the chosen knots: this will happen if the number of knots supplied matches the 
+basis dimension, <code>k</code>. For a given basis dimension the second option is 
+faster, but gives poorer results (and the user must be quite careful in choosing knot locations). 
+Different terms can use different 
+numbers of knots, unless they share a covariate.
+</td></tr>
+<tr valign="top"><td><code>sp</code></td>
+<td>
+A vector of smoothing parameters for each term can be provided here.
+Smoothing parameters must 
+be supplied in the order that the smooth terms appear in the model 
+formula. With fit method <code>"magic"</code> (see <code><a href="gam.control.html">gam.control</a></code> 
+and <code><a href="magic.html">magic</a></code>) then negative elements indicate that the 
+parameter should be estimated, and hence a mixture of fixed and estimated 
+parameters is possible. With fit method <code>"mgcv"</code>, if <code>sp</code> is 
+supplied then all its elements must be positive. Note that <code>fx=TRUE</code> 
+in a smooth term over-rides what is supplied here effectively setting the 
+smoothing parameter to zero.</td></tr>
+<tr valign="top"><td><code>min.sp</code></td>
+<td>
+for fit method <code>"magic"</code> only, lower bounds can be 
+supplied for the smoothing parameters. Note that if this option is used then
+the smoothing parameters <code>sp</code>, in the returned object, will need to be added to
+what is supplied here to get the actual smoothing parameters. Lower bounds on the smoothing 
+parameters can sometimes help stabilize otherwise divergent P-IRLS iterations.</td></tr>
+<tr valign="top"><td><code>H</code></td>
+<td>
+With fit method <code>"magic"</code> a user supplied fixed quadratic 
+penalty on the parameters of the 
+GAM can be supplied, with this as its coefficient matrix. A common use of this term is 
+to add a ridge penalty to the parameters of the GAM in circumstances in which the model
+is close to un-identifiable on the scale of the linear predictor, but perfectly well
+defined on the response scale.</td></tr>
+<tr valign="top"><td><code>gamma</code></td>
+<td>
+It is sometimes useful to inflate the model degrees of 
+freedom in the GCV or UBRE score by a constant multiplier. This allows 
+such a multiplier to be supplied if fit method is <code>"magic"</code>.</td></tr>
+<tr valign="top"><td><code>fit</code></td>
+<td>
+If this argument is <code>TRUE</code> then <code>gam</code> sets up the model and fits it, but if it is
+<code>FALSE</code> then the model is set up and an object <code>G</code> is returned which is the output from 
+<code><a href="gam.setup.html">gam.setup</a></code> plus some extra items required to complete the GAM fitting process.</td></tr>
+<tr valign="top"><td><code>G</code></td>
+<td>
+Usually <code>NULL</code>, but may contain the object returned by a previous call to <code>gam</code> with 
+<code>fit=FALSE</code>, in which case all other arguments are ignored except for <code>gamma</code>, <code>family</code>, <code>control</code> and <code>fit</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments for 
+passing on e.g. to <code>gam.fit</code></td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+A generalized additive model (GAM) is a generalized linear model (GLM) in which the linear 
+predictor is given by a user specified sum of smooth functions of the covariates plus a 
+conventional parametric component of the linear predictor. A simple example is:
+</p><p align="center"><i>log(E(y_i))=f_1(x_1i)+f_2(x_2i)</i></p><p>
+where the (independent) response variables <i>y_i~Poi</i>, and
+<i>f_1</i> and <i>f_2</i> are smooth functions of covariates <i>x_1</i> and 
+<i>x_2</i>. The log is an example of a link function. 
+</p>
+<p>
+If absolutely any smooth functions were allowed in model fitting then maximum likelihood 
+estimation of such models would invariably result in complex overfitting estimates of 
+<i>f_1</i>  and <i>f_2</i>. For this reason the models are usually fit by 
+penalized likelihood 
+maximization, in which the model (negative log) likelihood is modified by the addition of 
+a penalty for each smooth function, penalizing its `wiggliness'. To control the tradeoff 
+between penalizing wiggliness and penalizing badness of fit each penalty is multiplied by 
+an associated smoothing parameter: how to estimate these parameters, and 
+how to practically represent the smooth functions are the main statistical questions 
+introduced by moving from GLMs to GAMs. 
+</p>
+<p>
+The <code>mgcv</code> implementation of <code>gam</code> represents the smooth functions using 
+penalized regression splines, and by default uses basis functions for these splines that 
+are designed to be optimal, given the number basis functions used. The smooth terms can be 
+functions of any number of covariates and the user has some control over how smoothness of 
+the functions is measured. 
+</p>
+<p>
+<code>gam</code> in <code>mgcv</code> solves the smoothing parameter estimation problem by using the 
+Generalized Cross Validation (GCV) criterion or an Un-Biased Risk Estimator criterion 
+(UBRE) which is in practice an approximation to AIC. Smoothing parameters are chosen to 
+minimize the GCV or UBRE score for the model, and the main computational challenge solved 
+by the <code>mgcv</code> package is to do this efficiently and reliably. Two alternative 
+numerical methods are provided, see <code><a href="mgcv.html">mgcv</a></code>, <code><a href="magic.html">magic</a></code> and 
+<code><a href="gam.control.html">gam.control</a></code>. 
+</p>
+<p>
+Broadly <code>gam</code> works by first constructing basis functions and one or more quadratic penalty 
+coefficient matrices for each smooth term in the model formula, obtaining a model matrix for 
+the strictly parametric part of the model formula, and combining these to obtain a 
+complete model matrix (/design matrix) and a set of penalty matrices for the smooth terms. 
+Some linear identifiability constraints are also obtained at this point. The model is 
+fit using <code><a href="gam.fit.html">gam.fit</a></code>, a modification of <code><a href="../../stats/html/glm.html">glm.fit</a></code>. The GAM 
+penalized likelihood maximization problem is solved by penalized Iteratively 
+Reweighted  Least Squares (IRLS) (see e.g. Wood 2000). At each iteration a penalized 
+weighted least squares problem is solved, and the smoothing parameters of that problem are 
+estimated by GCV or UBRE. Eventually both model parameter estimates and smoothing 
+parameter estimates converge. 
+</p>
+<p>
+The fitting approach just described, in which the smoothing parameters are estimated for 
+each approximating linear model of the IRLS process was suggested by Chong Gu (see, e.g. 
+Gu 2002), and is very computationally efficient. However, because the approach neglects 
+the dependence of the iterative weights on the smoothing parameters, it is usually 
+possible to find smoothing parameters which actually yield slightly lower GCV/UBRE score 
+estimates than those resulting from this `performance iteration'. <code>gam</code> therefore also 
+allows the user to `improve' the smoothing parameter estimates, by using O'Sullivan's 
+(1986) suggested method, in which for each trial set of smoothing parameters the IRLS is 
+iterated to convergence before the UBRE/GCV score is evaluated. This requires much less 
+efficient minimisation of the power iteration based on <code><a href="../../stats/html/nlm.html">nlm</a></code>, and is 
+therefore quite slow. 
+</p>
+<p>
+Five alternative basis-penalty types  are built in for representing model
+smooths, but alternatives can easily be added (see <code><a href="smooth.construct.html">smooth.construct</a></code> which
+uses p-splines to illustrate how to add new smooths). 
+The built in alternatives for univariate smooths terms are: a conventional penalized
+cubic regression spline basis, parameterized in terms of the function values at the knots; 
+a cyclic cubic spline with a similar parameterization and thin plate regression splines. 
+The cubic spline bases are computationally very efficient, but require `knot' locations to be 
+chosen (automatically by default). The thin plate regression splines are optimal low rank 
+smooths which do not have knots, but are more computationally costly to set
+up. Smooths of several variables can be represented using thin plate
+regression splines, or tensor products of any available basis 
+including user defined bases (tensor product penalties are obtained automatically form 
+the marginal basis penalties). The t.p.r.s. basis is isotropic, so if this is not appropriate tensor 
+product terms should be used. Tensor product smooths have one penalty and smoothing parameter per marginal 
+basis, which means that the relative scaling of covariates is essentially determined automatically by GCV/UBRE. 
+The t.p.r.s. basis and cubic regression spline bases are both available with
+either conventional `wiggliness penalties' or penalties augmented with a
+shrinkage component: the conventional penalties treat some space of functions
+as `completely smooth' and do not penalize such functions at all; the
+penalties with extra shrinkage will zero a term altogether for high enough
+smoothing parameters: <code><a href="gam.selection.html">gam.selection</a></code> has an example of the use of
+such terms.
+</p>
+<p>
+For any  basis the user specifies the dimension of the basis for each smooth
+term. The dimension of the basis is one more than the maximum degrees of freedom that the 
+term can have, but usually the term will be fitted by penalized
+maximum likelihood estimation and the actual degrees of freedom will be
+chosen by GCV. However, the user can choose to fix the degrees of
+freedom of a term, in which case the actual degrees of freedom will be
+one less than the basis dimension.
+</p>
+<p>
+Thin plate regression splines are constructed by starting with the
+basis for a full thin plate spline and then truncating this basis in
+an optimal manner, to obtain a low rank smoother. Details are given in
+Wood (2003). One key advantage of the approach is that it avoids
+the knot placement problems of conventional regression spline
+modelling, but it also has the advantage that smooths of lower rank
+are nested within smooths of higher rank, so that it is legitimate to
+use conventional hypothesis testing methods to compare models based on
+pure regression splines. The t.p.r.s. basis can become expensive to
+calculate for large datasets. In this case the user can supply a reduced 
+set of knots to use in basis construction (see knots, in the argument list), or 
+use tensor products of cheaper bases.
+</p>
+<p>
+In the case of the cubic regression spline basis, knots  of the spline are placed evenly
+throughout the covariate values to which the term refers:  For
+example, if fitting 101 data with an 11 knot spline of <code>x</code> then
+there would be a knot at every 10th (ordered)  <code>x</code> value. The
+parameterization used represents the spline in terms of its
+values at the knots. The values at neighbouring knots
+are connected by sections of  cubic polynomial constrained to be 
+continuous up to and including second derivative at the knots. The resulting curve
+is a natural cubic  spline through the values at the knots (given two extra conditions specifying 
+that the second derivative of the curve should be zero at the two end 
+knots). This parameterization gives the parameters a nice interpretability. 
+</p>
+<p>
+Details of the underlying fitting methods are given in Wood (2000, 2004a).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+If <code>fit == FALSE</code> the function returns a list <code>G</code> of items needed to
+fit a GAM, but doesn't actually fit it. 
+<br>
+Otherwise the function returns an object of class <code>"gam"</code> as described in <code><a href="gamObject.html">gamObject</a></code>.</p>
+
+<h3>WARNINGS</h3>
+
+<p>
+If fit method <code>"mgcv"</code> is selected, the code does not check for rank deficiency of the
+model matrix that may result from lack of identifiability between the
+parametric and smooth components of the model. 
+</p>
+<p>
+You must have more unique combinations of covariates than the model has total
+parameters. (Total parameters is sum of basis dimensions plus sum of non-spline 
+terms less the number of spline terms). 
+</p>
+<p>
+Automatic smoothing parameter selection is not likely to work well when 
+fitting models to very few response data.
+</p>
+<p>
+With large datasets (more than a few thousand data) the <code>"tp"</code>
+basis gets very slow to use: use the <code>knots</code> argument as discussed above and 
+shown in the examples. Alternatively, for 1-d smooths  you can use the <code>"cr"</code> basis and 
+for multi-dimensional smooths use <code>te</code> smooths.
+</p>
+<p>
+For data with many  zeroes clustered together in the covariate space it is quite easy to set up 
+GAMs which suffer from identifiability problems, particularly when using Poisson or binomial
+families. The problem is that with e.g. log or logit links, mean value zero corresponds to
+an infinite range on the linear predictor scale. Some regularization is possible in such cases: see 
+<code><a href="gam.control.html">gam.control</a></code> for details.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+<p>
+Front end design inspired by the S function of the same name based on the work
+of Hastie and Tibshirani (1990). Underlying methods owe much to the work of
+Wahba (e.g. 1990) and Gu (e.g. 2002).
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Key References on this implementation:
+</p>
+<p>
+Wood, S.N. (2000)  Modelling and Smoothing Parameter Estimation
+with Multiple  Quadratic Penalties. J.R.Statist.Soc.B 62(2):413-428
+</p>
+<p>
+Wood, S.N. (2003) Thin plate regression splines. J.R.Statist.Soc.B 65(1):95-114
+</p>
+<p>
+Wood, S.N. (2004a) Stable and efficient multiple smoothing parameter estimation for
+generalized additive models. J. Amer. Statist. Ass. 99:637-686
+</p>
+<p>
+Wood, S.N. (2004b) On confidence intervals for GAMs based on penalized
+regression splines. Technical Report 04-12 Department of Statistics,
+University of Glasgow.
+</p>
+<p>
+Wood, S.N. (2004c) Low rank scale invariant tensor product smooths for
+generalized additive mixed models. Technical Report 04-13 Department of Statistics,
+University of Glasgow.
+</p>
+<p>
+Key Reference on GAMs and related models:
+</p>
+<p>
+Hastie (1993) in Chambers and Hastie (1993) Statistical Models in S. Chapman
+and Hall.
+</p>
+<p>
+Hastie and Tibshirani (1990) Generalized Additive Models. Chapman and Hall.
+</p>
+<p>
+Wahba (1990) Spline Models of Observational Data. SIAM 
+</p>
+<p>
+Background References:
+</p>
+<p>
+Green and Silverman (1994) Nonparametric Regression and Generalized  Linear Models. Chapman and Hall.
+</p>
+<p>
+Gu and Wahba (1991) Minimizing GCV/GML scores with multiple smoothing parameters via
+the Newton method. SIAM J. Sci. Statist. Comput. 12:383-398
+</p>
+<p>
+Gu (2002) Smoothing Spline ANOVA Models, Springer.
+</p>
+<p>
+O'Sullivan, Yandall and Raynor (1986) Automatic smoothing of regression
+functions in generalized linear models.
+J. Am. Statist.Ass. 81:96-103 
+</p>
+<p>
+Wood (2001) mgcv:GAMs and Generalized Ridge Regression for R. R News 1(2):20-25
+</p>
+<p>
+Wood and Augustin (2002) GAMs with integrated model selection using penalized regression splines and applications 
+to environmental modelling. Ecological Modelling 157:157-177
+</p>
+<p>
+<a href="http://www.stats.gla.ac.uk/~simon/">http://www.stats.gla.ac.uk/~simon/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="gamObject.html">gamObject</a></code>, <code><a href="gam.models.html">gam.models</a></code>, <code><a href="s.html">s</a></code>, <code><a href="predict.gam.html">predict.gam</a></code>,
+<code><a href="plot.gam.html">plot.gam</a></code>, <code><a href="summary.gam.html">summary.gam</a></code>, <code><a href="gam.side.html">gam.side</a></code>,
+<code><a href="gam.selection.html">gam.selection</a></code>,<code><a href="mgcv.html">mgcv</a></code>, <code><a href="gam.control.html">gam.control</a></code>
+<code><a href="gam.check.html">gam.check</a></code>, <code><a href="gam.neg.bin.html">gam.neg.bin</a></code>, <code><a href="magic.html">magic</a></code>,<code><a href="vis.gam.html">vis.gam</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(mgcv)
+set.seed(0) 
+n&lt;-400
+sig&lt;-2
+x0 &lt;- runif(n, 0, 1)
+x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1)
+x3 &lt;- runif(n, 0, 1)
+f &lt;- 2 * sin(pi * x0)
+f &lt;- f + exp(2 * x1) - 3.75
+f &lt;- f+0.2*x2^11*(10*(1-x2))^6+10*(10*x2)^3*(1-x2)^10-1.4
+e &lt;- rnorm(n, 0, sig)
+y &lt;- f + e
+b&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3))
+summary(b)
+plot(b,pages=1,residuals=TRUE)
+# same fit in two parts .....
+G&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),fit=FALSE)
+b&lt;-gam(G=G)
+# an extra ridge penalty (useful with convergence problems) ....
+bp&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),H=diag(0.5,37)) 
+print(b);print(bp);rm(bp)
+# set the smoothing parameter for the first term, estimate rest ...
+bp&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),sp=c(0.01,-1,-1,-1))
+plot(bp,pages=1);rm(bp)
+# set lower bounds on smoothing parameters ....
+bp&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),min.sp=c(0.001,0.01,0,10)) 
+print(b);print(bp);rm(bp)
+
+# now a GAM with 3df regression spline term &amp; 2 penalized terms
+b0&lt;-gam(y~s(x0,k=4,fx=TRUE,bs="tp")+s(x1,k=12)+s(x2,k=15))
+plot(b0,pages=1)
+# now fit a 2-d term to x0,x1
+b1&lt;-gam(y~s(x0,x1)+s(x2)+s(x3))
+par(mfrow=c(2,2))
+plot(b1)
+par(mfrow=c(1,1))
+# now simulate poisson data
+g&lt;-exp(f/4)
+y&lt;-rpois(rep(1,n),g)
+b2&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),family=poisson)
+plot(b2,pages=1)
+# repeat fit using performance iteration
+gm &lt;- gam.method(gam="perf.magic")
+b3&lt;-gam(y~s(x0)+s(x1)+s(x2)+s(x3),family=poisson,method=gm)
+plot(b3,pages=1)
+
+# and a pretty 2-d smoothing example....
+test1&lt;-function(x,z,sx=0.3,sz=0.4)  
+{ (pi**sx*sz)*(1.2*exp(-(x-0.2)^2/sx^2-(z-0.3)^2/sz^2)+
+  0.8*exp(-(x-0.7)^2/sx^2-(z-0.8)^2/sz^2))
+}
+n&lt;-500
+old.par&lt;-par(mfrow=c(2,2))
+x&lt;-runif(n);z&lt;-runif(n);
+xs&lt;-seq(0,1,length=30);zs&lt;-seq(0,1,length=30)
+pr&lt;-data.frame(x=rep(xs,30),z=rep(zs,rep(30,30)))
+truth&lt;-matrix(test1(pr$x,pr$z),30,30)
+contour(xs,zs,truth)
+y&lt;-test1(x,z)+rnorm(n)*0.1
+b4&lt;-gam(y~s(x,z))
+fit1&lt;-matrix(predict.gam(b4,pr,se=FALSE),30,30)
+contour(xs,zs,fit1)
+persp(xs,zs,truth)
+vis.gam(b4)
+par(old.par)
+# very large dataset example using knots
+n&lt;-10000
+x&lt;-runif(n);z&lt;-runif(n);
+y&lt;-test1(x,z)+rnorm(n)
+ind&lt;-sample(1:n,1000,replace=FALSE)
+b5&lt;-gam(y~s(x,z,k=50),knots=list(x=x[ind],z=z[ind]))
+vis.gam(b5)
+# and a pure "knot based" spline of the same data
+b6&lt;-gam(y~s(x,z,k=100),knots=list(x= rep((1:10-0.5)/10,10),
+        z=rep((1:10-0.5)/10,rep(10,10))))
+vis.gam(b6,color="heat")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

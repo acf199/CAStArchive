@@ -1,0 +1,66 @@
+<html><head><title>R: Alternatives to step.gam</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for step.gam {mgcv}"><tr><td>step.gam {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Alternatives to step.gam</h2>
+
+
+<h3>Description</h3>
+
+<p>
+There is no <code>step.gam</code> in package <code>mgcv</code>. The
+<code>mgcv</code> default for model selection is to use MSE/KL-distance criteria
+such as GCV or UBRE/AIC. Since the smoothness estimation part of model
+selection is done in this way it is logically most consistent to perform model
+selection on the basis of such criteria: i.e. to decide which terms to include
+or omit by looking at changes in GCV/UBRE score. 
+</p>
+<p>
+To facilitate fully automatic model selection the package includes 2 classes
+of smoothers (<code>"cs"</code> and <code>"ts"</code>: see <code><a href="s.html">s</a></code>) which can be
+penalized to zero for sufficiently high smoothing parameter estimates: use of
+such smooths provides an effective alternative to step-wise model
+selection. The example below shows an example of the application of this
+approach, where selection is a fully integrated part of model estimation.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## an example of GCV based model selection as
+## an alternative to stepwise selection
+library(mgcv)
+set.seed(0) 
+n&lt;-400;sig&lt;-2
+x0 &lt;- runif(n, 0, 1);x1 &lt;- runif(n, 0, 1)
+x2 &lt;- runif(n, 0, 1);x3 &lt;- runif(n, 0, 1)
+x4 &lt;- runif(n, 0, 1);x5 &lt;- runif(n, 0, 1)
+f &lt;- 2 * sin(pi * x0)
+f &lt;- f + exp(2 * x1) - 3.75887
+f &lt;- f+0.2*x2^11*(10*(1-x2))^6+10*(10*x2)^3*(1-x2)^10-1.396
+e &lt;- rnorm(n, 0, sig)
+y &lt;- f + e
+## Note the increased gamma parameter below to favour
+## slightly smoother models...
+b&lt;-gam(y~s(x0,bs="ts")+s(x1,bs="ts")+s(x2,bs="ts")+
+   s(x3,bs="ts")+s(x4,bs="ts")+s(x5,bs="ts"),gamma=1.4)
+summary(b)
+plot(b,pages=1)
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

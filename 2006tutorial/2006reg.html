@@ -1,0 +1,620 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Exploratory Data Analysis and Regression in R</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Exploratory
+ Data Analysis (EDA) and Regression</span>
+ <br>
+</span></span></big></big></div> <br>   
+This tutorial demonstrates some of the capabilities of R for exploring
+relationships among
+two (or more) quantitative variables. <br> 
+
+
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Bivariate 
+ exploratory data analysis</span></small></span></span></big></big><br> 
+<br>
+We begin by loading the Hipparcos dataset used in the 
+<a href="2006desc.html">descriptive statistics</a> tutorial, found at 
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.html">
+http://astrostatistics.psu.edu/datasets/HIP_star.html</a>.
+Type<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip  &lt;-  read.table("http://astrostatistics.psu.edu/datasets/HIP_star.dat",
+</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; header=T,fill=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(hip)</span><br>
+<br>
+In the 
+<a href="2006desc.html">descriptive statistics</a> tutorial,
+we considered boxplots, a one-dimensional plotting technique.
+We may perform a slightly more sophisticated analysis using boxplots
+to get a glimpse at some bivariate structure.  Let us
+examine the values of Vmag, with objects
+broken into categories according to the B minus V variable: <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(Vmag~cut(B.V,breaks=(-1:6)/2),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; notch=T, varwidth=T, las=1, tcl=.5,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; xlab=expression("B minus V"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; ylab=expression("V magnitude"),</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; main="Can you find the red giants?",</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; cex=1, cex.lab=1.4, cex.axis=.8, cex.main=1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">axis(2, labels=F, at=0:12, tcl=-.25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">axis(4, at=3*(0:4))</span><br>
+<br>
+The notches in the boxes, produced using "notch=T", can be used to test for differences in
+the medians (see 
+<a href="html/graphics/html/boxplot.stats.html">boxplot.stats</a>
+for details).  With "varwidth=T", the box widths are proportional to the square roots of
+the sample sizes.  The "cex" options all give scaling factors, relative to default:  
+"cex" is for plotting text and symbols, "cex.axis" is for axis annotation,
+"cex.lab" is for the x and y labels, and
+"cex.main" is for main titles.
+The two 
+<a href="html/graphics/html/axis.html">axis</a>
+commands are used to add an axis to the current plot.  The first such command
+above adds smaller tick marks at all integers, whereas the second one adds the
+axis on the right.<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;"> 
+Scatterplots</span></small></span></span></big></big><br> 
+<br>
+The 
+<a href="html/graphics/html/boxplot.html">boxplot</a>s
+in the plot above are telling us something about the bivariate relationship
+between the two variables.  Yet it is probably easier to grasp this relationship
+by producing a 
+<a href="html/graphics/html/plot.html">scatter plot</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V)</span><br>
+<br>
+The above plot looks too busy because of the default plotting character,
+set let's use a different one:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V,pch=".")</span><br>
+<br>
+Let's now use exploratory scatterplots to locate the
+Hyades stars.  This open cluster
+should be concentrated both in the sky coordinates RA and DE, and also in the proper
+motion variables pm_RA and pm_DE.  We start by noticing a concentration of stars in the 
+RA distribution:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(RA,DE,pch=".")</span><br>
+<br>
+See the cluster of stars with RA between 50 and 100 and with DE between 
+0 and 25?<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rect(50,0,100,25,border=2)</span><br>
+<br>
+Let's construct a logical (TRUE/FALSE) variable that will select only those stars
+in the appropriate rectangle:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter1 &lt;-  (RA&gt;50 &amp; RA&lt;100 
+&amp; DE&gt;0 &amp; DE&lt;25)</span><br>
+<br>
+Next, we select in the proper motions.  (As our cuts through the data
+are parallel to the axes, this variable-by-variable classification approach
+is sometimes called Classification and Regression
+Trees or CART, a very common multivariate classification procedure.)  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(pmRA[filter1],pmDE[filter1],pch=20)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rect(0,-150,200,50,border=2)</span><br>
+<br>
+Let's replot after zooming in on the rectangle shown in red.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(pmRA[filter1],pmDE[filter1],pch=20,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+xlim=c(0,200),ylim=c(-150,50))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rect(90,-60,130,-10,border=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter2 &lt;- (pmRA>90 &amp; pmRA<130 
+&amp; pmDE>-60 & pmDE< -10) # Space in 'pmDE< -10' is necessary!</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter  &lt;-  filter1 &amp; filter2</span><br>
+<br>
+Let's have a final look at the stars we have
+identified using the
+<a href="html/graphics/html/pairs.html">pairs</a>
+command to produce all bivariate plots for pairs of variables.
+We'll exclude the first and fifth columns (the HIP identifying number
+and the parallax, which is known to lie in a narrow band by construction).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(hip[filter,-c(1,5)],pch=20)</span><br>
+<br>
+Notice that indexing a matrix or vector using negative integers has the effect of
+<i>excluding</i> the corresponding entries.<br>
+<br>
+We see that there is one outlying star in the e_Plx variable,
+indicating that its measurements are not reliable.  We exclude this point:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">filter &lt;- filter &amp; (e_Plx<5)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">pairs(hip[filter,-c(1,5)],pch=20)</span><br>
+<br>
+How many stars have we identified?  The filter variable,
+a vector of TRUE and FALSE, may be summed to reveal the
+number of TRUE's (summation causes R to coerce the logical values to 0's and 1's).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(filter)</span><br>
+<br>
+As a final look at these data, let's consider the HR plot of Vmag versus B.V
+but make the 92 Hyades stars we just identified look bigger (pch=20 instead of 46) and 
+color them red (col=2 instead of 1).
+This shows the Zero Age Main Sequence, plus four
+red giants, with great precision.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(Vmag,B.V,pch=c(46,20)[1+filter], 
+col=1+filter,</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp; 
+ xlim=range(Vmag[filter]), ylim=range(B.V[filter]))</span><br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Linear 
+and polynomial regression</span></small></span></span></big></big><br> 
+<br>
+Let's consider a new dataset, one that comes from NASA's Swift satellite.
+The statistical problem at hand is
+modeling the X-ray afterglow of gamma-ray
+bursts.  First, read in the dataset:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">grb &lt;- read.table
+("http://astrostatistics.psu.edu/datasets/GRB_afterglow.dat", </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;header=T, skip=1)</span><br>
+<br>
+The skip=1 option in the previous statement tells R to ignore the first
+row in the data file.  You will see why this is necessary if you 
+look at the 
+<a href="http://astrostatistics.psu.edu/datasets/GRB_afterglow.dat">file</a>.
+Let's focus on the first two columns, which are times and X-ray fluxes:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(grb[,1:2],xlab="time",ylab="flux")</span><br>
+<br>
+This plot is very hard to interpret because of the scales, so let's take the log of each
+variable:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">x &lt;- log(grb[,1])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y &lt;- log(grb[,2])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+<br>
+The relationship looks roughly linear, so let's try a linear model 
+(<a href="html/stats/html/lm.html">lm</a> in R):<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model1 &lt;- lm(y~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1, col=2, lwd=2)</span><br>
+<br>
+The "response ~ predictor(s)" format seen above is used
+for model formulas in functions like 
+<a href="html/stats/html/lm.html">lm </a>.<br>
+<br>
+The model1 object just created is an object of 
+<a href="html/base/html/class.html">class</a> "lm".   The class of
+an object in R can help to determine how it is treated by functions such as
+<a href="html/base/html/print.html">print</a>
+and 
+<a href="html/base/html/summary.html">summary</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model1 # same as print(model1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(model1)</span><br>
+<br>
+Notice the sigma-hat, the R-squared and adjusted R-squared, 
+and the standard errors of the beta-hats in the output from 
+the summary function.<br>
+<br>
+There is a lot of information contained in model1 that is not displayed by 
+<a href="html/base/html/print.html">print</a>
+or
+<a href="html/base/html/summary.html">summary</a>:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(model1)</span><br>
+<br>
+For instance, we will use the model1$fitted.values and model1$residuals
+information later when we look at some residuals plots.<br>
+<br>
+Notice that the coefficient estimates
+are listed in a regression table, which is standard regression output for
+any software package.  This table gives not only the estimates but their
+standard errors as well, which enables us to determine whether the estimates
+are very different from zero.  It is possible to give individual confidence
+intervals for both the intercept parameter and the slope parameter based on
+this information, but remember that a line really requires both a slope <b>and</b>
+an intercept.  Since our goal is really to estimate a line here, maybe it
+would be better if we could somehow obtain a confidence "interval"
+for the lines themselves.<br>
+<br>
+This may in fact be accomplished.  By viewing a line as a single two-dimensional
+point in (intercept, slope) space, we set up a one-to-one correspondence between
+all (nonvertical) lines and all points in two-dimensional space.  It is
+possible to obtain a two-dimensional confidence <i>ellipse</i> for the 
+(intercept,slope) points, which may then be mapped back into the set of
+lines to see what it looks like.<br>
+<br>
+Performing all the calculations necessary to do this is somewhat tedious,
+but fortunately, someone else has already done it and made it available to all
+R users through CRAN, the Comprehensive R Archive Network.  The necessary 
+functions are
+part of the "car" (companion to applied regression) package, which may
+installed onto the V: drive (we don't have write access to the default
+location where R packages are installed) as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">install.packages("car",lib="V:/")
+# lib=... not always necessary!</span><br>
+<br>
+You will have to choose a CRAN mirror as part of the installation process.
+Once the car package is installed, its contents can be loaded into the current
+R session using the <a href="html/base/html/library.html">library</a> function:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(car,lib.loc="V:/")</span><br>
+<br>
+If all has gone well, there is now a new set of functions, along with
+relevant documentation.
+Here is a 95% confidence ellipse for the (intercept,slope) pairs:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">confidence.ellipse(model1)</span><br>
+<br>
+Remember that each point on the boundary or in the interior of this ellipse
+represents a line.  If we were to plot all of these lines on the original scatterplot,
+the region they described would be a 95% confidence band for the true regression
+line.  A graduate
+student and I wrote a simple function to draw the borders of this band
+on a scatterplot.  You can see this function at 
+<a href="http://www.stat.psu.edu/~dhunter/R/confidence.band.r">
+www.stat.psu.edu/~dhunter/R/confidence.band.r"</a>; to read it into R, use
+the <a href="html/base/html/source.html">source</a> function:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">source(
+"http://www.stat.psu.edu/~dhunter/R/confidence.band.r")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">confidence.band(model1)</span><br>
+<br>
+In this dataset, the confidence band is so narrow that it's hard to see.  
+However, the borders of the band are not straight.  You can see the curvature 
+much better when there are fewer points or more variation, as in:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmpx &lt;- 1:10</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmpy &lt;- 1:10+rnorm(10) 
+# Add random Gaussian noise</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">confidence.band(lm(tmpy~tmpx))</span><br>
+<br>
+Also note that increasing the sample size increases the precision of the
+estimated line, thus narrowing the confidence band.  Compare the previous plot
+with the one obtained by replicating tmpx and tmpy 25 times each:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmpx25 &lt;- rep(tmpx,25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">tmpy25 &lt;- rep(tmpy,25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">confidence.band(lm(tmpy25~tmpx25))</span><br>
+<br>
+A related phenomenon is illustrated if we are given a value of the
+predictor and asked to predict the response.  Two types of intervals
+are commonly reported in this case:  A <i>prediction</i> interval for an
+individual observation with that predictor value, and a <i>confidence</i> 
+interval for the mean of all individuals with that predictor value.  The former
+is always wider than the latter because it accounts for not only the
+uncertainty in estimating the true line 
+but also the individual variation around the true line.  This phenomenon may
+be illustrated as follows.  Again, we use a toy data set here because the effect
+is harder to observe on our astronomical dataset.  As usual, 95% is the
+default confidence level.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">confidence.band(lm(tmpy~tmpx))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">predict(lm(tmpy~tmpx),
+data.frame(tmpx=7), interval="prediction")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">text(c(7,7,7), .Last.value, "P",col=4)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">predict(lm(tmpy~tmpx),
+data.frame(tmpx=7), interval="conf")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">text(c(7,7,7), .Last.value, "C",col=5)</span><br>
+<br>
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;"> 
+Polynomial curve-fitting:  Still linear regression!</span></small></span></span></big></big><br> 
+<br>
+Because there appears to be a bit of a bend in the scatterplot, let's try
+fitting a quadratic curve instead of a linear curve.  <b>Note:  Fitting a 
+quadratic curve is still considered linear regression.</b>  This may seem strange,
+but the reason is that the quadratic regression model assumes that the response y
+is a <i>linear</i> combination of 1, x, and x<sup>2</sup>.  Notice the special
+form of the 
+<a href="html/stats/html/lm.html">lm</a> command when we implement quadratic 
+regression.  The 
+<a href="html/base/html/lm.html">I</a> function means "as is" and it
+resolves any ambiguity in the model formula:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2 &lt;- lm(y~x+I(x^2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(model2)</span><br>
+<br>
+Plotting the quadratic curve is not a simple matter of using the 
+<a href="html/graphics/html/abline.html">abline</a> function.  To obtain
+the plot, we'll first create a sequence of x values, then apply 
+the linear combination implied by the regression model using matrix
+multiplication:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xx &lt;- seq(min(x),max(x),len=200)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">yy &lt;- model2$coef %*% 
+rbind(1,xx,xx^2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx,yy,lwd=2,col=3)</span><br>
+<br>
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;"> 
+Diagnostic residual plots</span></small></span></span></big></big><br> 
+<br>
+Comparing the (red) linear fit with the (green) quadratic fit visually, it
+does appear that the latter looks slightly better.  However, let's check some 
+diagnostic residual plots for these two models.  To do this, we'll use the
+<a href="html/stats/html/plot.lm.html">plot.lm</a> command, which is capable of 
+producing six different types of diagnostic plots.  We will only consider
+two of the six:  A plot of residuals versus fitted values and a normal 
+quantile-quantile (Q-Q) plot.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot.lm(model1, which=1:2)</span><br>
+<br>
+It is not actually necessary to type <a href="html/stats/html/plot.lm.html">plot.lm</a>
+in the previous command; <a href="html/graphics/html/plot.html">plot</a> would have
+worked just as well.  This is because model1 is an object of 
+<a href="html/base/html/class.html">class</a> "lm" -- a
+fact that can be verified by typing "class(model1)" -- and so R knows to apply
+the function <a href="html/stats/html/plot.lm.html">plot.lm</a> if we 
+simply type "plot(model1, which=1:2)".<br>
+<br>
+Looking at the first plot, residuals vs. fitted, we immediately see a problem 
+with model 1.  A "nice" residual plot should have residuals both above and below
+the zero line, with the vertical spread around the line roughly of the same 
+magnitude no matter what the value on the horizontal axis.  Furthermore, there
+should be no obvious curvature pattern.  The red line is a
+<a href="html/stats/html/lowess.html">lowess</a> smoother 
+produced to help discern
+any patterns (more on lowess later), but this line is not necessary in the
+case of model1 to see the clear pattern of negative residuals on the left,
+positive in the middle, and negative on the right.  There is curvature here
+that the model missed!<br>
+<br>
+Pressing the return key to see the second plot reveals a normal quantile-quantile
+plot.  The idea behind this plot is that it will make a random sample from
+a normal distribution look like a straight line.  To the extent that the
+normal Q-Q plot does not look like a straight line, the assumption of 
+normality of the residuals is suspicious.  For model1, the clear S-shaped 
+pattern indicates non-normality of the residuals.<br>
+<br>
+How do the same plots look for the quadratic fit?<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(model2, which=1:2)</span><br>
+<br>
+These plots are much better-looking.  There is a little bit of waviness in the
+residuals vs. fitted plot, but the pattern is nowhere near as obvious as it was 
+before.  And there appear to be several outliers among the residuals on the
+normal Q-Q plot, but the normality assumption looks much less suspect here.<br>
+<br>
+The residuals we have been using in the above plots are the ordinary 
+residuals.  However, it is important to keep in mind that even if all
+of the assumptions of the regression model are perfectly true (including
+the assumption that all errors have the same variance), the variances of 
+the <i>residuals</i> are not equal.  For this reason, it is better to use
+the studentized residuals.  Unfortunately, R reports the ordinary residuals
+by default and it is necessary to call another function to obtain the
+studentized residuals.
+The good news is that in most datasets,
+residual plots using the studentized residuals are essentially indistinguishable
+in shape from residual plots using the ordinary residuals, which means
+that we would come to the same conclusions regardless of which set
+of residuals we use.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rstu = rstudent(model2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(model2$fit, rstu)</span><br>
+<br>
+To see how similar the studentized residuals are to a scaled version of
+the ordinary residuals (called the standardized residuals), we can depict both
+on the same plot:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rsta = rstandard(model2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">points(model2$fit, rsta, col=2, pch=3)</span><br>
+<br>
+
+
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Collinearity and variance inflation factors</span></small></span></span></big></big><br> 
+<br>
+
+Let's check the variance inflation factors (VIFs) for the quadratic fit. 
+The car package that we installed earlier contains a function called
+vif that does this automatically.  Check its help page by
+typing "?vif" if you wish.
+Note that it does not make sense to look at variance inflation factors
+for model1, which has only one term (try it and see what happens).  So we'll
+start by examining model2.
+<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">vif(model2)</span><br>
+<br>
+The VIFs
+of more than 70 indicate a high degree of collinearity between the values of
+x and x^2 (the two predictors).  This is not surprising, since x has a range 
+from about 5 to 13.  In fact, it is easy to visualize
+the collinearity in a plot:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,x^2) # Note highly linear-looking plot</span><br>
+<br>
+To correct the collinearity, we'll replace x and x^2 by (x-m) and (x-m)^2,
+where m is the sample mean of x:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">centered.x  &lt;-  x-mean(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">model2.2  &lt;-  lm(y ~ centered.x
++ I(centered.x^2))</span><br>
+<br>
+This new model has much lower VIFs, which means that we have greatly
+reduced the collinearity.  However, the fit
+is exactly the same:  It is still the best-fitting quadratic curve.  We may 
+demonstrate this by plotting both fits on the same set of axes:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">yy2  &lt;-  model2.2$coef %*%
+rbind(1, xx-mean(x), (xx-mean(x))^2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx, yy, lwd=2, col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx, yy2, lwd=2, col=3, lty=2)</span><br>
+<br>
+
+<br>
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Model 
+selection using AIC and BIC</span></small></span></span></big></big><br> 
+<br>
+Let's compare the AIC and BIC values for the linear and the quadratic fit.  
+Without getting too deeply into details, 
+the idea behind these criteria is that we know the model with more parameters
+(the quadratic model) should achieve a higher maximized log-likelihood 
+than the model with fewer parameters
+(the linear model).  However, it may be that the additional increase in the 
+log-likelihood statistic achieved with more parameters is not worth adding
+the additional parameters.  We may test whether it is worth adding the additional
+parameters by <i>penalizing</i> the log-likeilhood by subtracting some positive
+multiple of the number of parameters.  In practice, for technical reasons
+we take -2 times the log-likelihood, add a positive multiple of the number of
+parameters, and look for the smallest resulting value.  For AIC, the positive
+multiple is 2; for BIC, it is the natural log of n, the number of observations.
+We can obtain both the AIC and BIC results using the 
+<a href="html/stats/html/AIC.html">AIC</a> function.  Remember that
+R is case-sensitive, so "AIC" must be all capital letters.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model1)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model2)</span><br>
+<br>
+The value of AIC for model2 is smaller than that for model1, which indicates 
+that model2 provides a better fit that is worth the additional parameters.  
+However, AIC is known to tend to overfit sometimes, meaning that it 
+sometimes favors models with more parameters than they should have.  The
+BIC uses a larger penalty than AIC, and it often seems to do a slightly
+better job; however, in this case we see there is no difference in
+the conclusion:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">n &lt;- length(x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model1, k=log(n))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(model2, k=log(n))</span><br>
+<br>
+It did not make any difference in the above output that we used model2 (with
+the uncentered x values) instead of model2.2 (with the centered values).  However,
+if we had looked at the AIC or BIC values for a model containing ONLY the
+quadratic term but no linear term, then we would see a dramatic difference.
+Which one of the following would you expect to be higher (i.e., indicating
+a worse fit), and why?<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(lm(y~I(x^2)), k=log(n))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">AIC(lm(y~I(centered.x^2)), k=log(n))</span><br>
+<br>
+
+
+<br> <big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Other methods of 
+ curve-fitting</span></small></span></span></big></big><br> 
+<br>
+Let's try a nonparametric fit, given by 
+<a href="html/stats/html/loess.html">loess</a> or
+<a href="html/stats/html/lowess.html">lowess</a>.
+First we plot the linear (red) and quadratic (green) fits, 
+then we overlay the lowess fit in blue:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1, lwd=2, col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx, yy, lwd=3, col=3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">npmodel1 &lt;- lowess(y~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(npmodel1, col=4, lwd=2)</span><br>
+<br>
+It is hard to see the pattern of the lowess curve in the plot.  Let's replot it with
+no other distractions.  Notice that the "type=n" option to 
+<a href="html/graphics/html/plot.html">plot</a> function causes the axes to
+be plotted but not the points.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux",
+type="n")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(npmodel1, col=4, lwd=2)</span><br>
+<br>
+This appears to be a piecewise linear curve.  An analysis that assumes a piecewise
+linear curve will be carried out on these data later in the week.<br>
+<br>
+In the case of non-polynomial (but still parametric) curve-fitting,
+we can use <a href="html/stats/html/nls.html">nls</a>.
+If we replace the response y by the original (nonlogged) flux values, we might
+posit a parametric model of the form flux = exp(a+b*x),
+where x=log(time) as before.
+Compare a nonlinear approach (in red) with a nonparametric 
+approach (in green) for this case:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">flux &lt;- grb[,2]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">nlsmodel1 &lt;- nls(flux ~ exp(a+b*x),
+start=list(a=0,b=0))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">npmodel2 &lt;- lowess(flux~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x, flux, xlab="log time",
+ylab="flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(xx, exp(9.4602-.9674*xx), col=2, lwd=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(npmodel2, col=3, lwd=2)</span><br>
+<br>
+Interestingly, the coefficients of the nonlinear least squares fit are different
+than the coefficients of the original linear model fit on the logged data,
+even though these coefficients have exactly the same interpretation:  If
+flux = exp(a + b*x), then shouldn't log(flux) = a + b*x?
+The difference arises because these two fitting methods calculate (and subsequently
+minimize) the residuals
+on different scales.  Try plotting exp(a + b*xx) on the scatterplot of x vs. flux
+for both (a,b) solutions to see what happens.  Next, try plotting a + b*xx on
+the scatterplot of x vs. log(flux) to see what happens.<br>
+<br>
+If outliers appear to have too large an influence over the least-squares 
+solution, we can also try resistant regression, using the
+<a href="html/MASS/html/lqs.html">lqs</a> 
+function in the MASS package. 
+The basic idea behind lqs is that the largest residuals (presumably
+corresponding to "bad" outliers) are ignored.
+The results for our log(flux) vs. log(time)
+example look terrible but are
+very revealing.  Can you understand why the output from lqs looks so very
+different from the least-squares output?<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(MASS)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lqsmodel1 &lt;- lqs(y~x, method="lts")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(lqsmodel1,col=3)</span><br>
+<br>
+Finally, let's consider least absolute deviation regression, which may be
+considered a milder form of resistant regression than 
+<a href="html/MASS/html/lqs.html">lqs</a>.  In least absolute deviation
+regression, even large residuals have an influence on the regression line
+(unlike in <a href="html/MASS/html/lqs.html">lqs</a>), but this influence
+is less than in least squares regression.
+To implement it, we'll
+use a function called 
+<a href="html/quantreg/html/rq.html">rq</a>
+(regression quantiles) 
+in the "quantreg" package.  Like the "car" package, this package is 
+not part of the standard distribution of R, so we'll need to download it.
+In order to do this, we must tell R where to store the installed library
+using the
+<a href="html/utils/html/update.packages.html">install.packages</a>
+function.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">install.packages("quantreg",lib="V:/")
+# lib=... not always necessary!</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">library(quantreg, lib.loc="V:/")</span><br>
+<br>
+Assuming the quantreg package is loaded, we may now compare the least-squares fit (red)
+with the least absolute deviations fit (green).  In this example, the two
+fits are nearly identical:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">rqmodel1 &lt;- rq(y~x)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">plot(x,y,xlab="log time",ylab="log flux")</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(model1,col=2)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">abline(rqmodel1,col=3)</span><br>
+<br>
+
+
+
+</body>
+</html>

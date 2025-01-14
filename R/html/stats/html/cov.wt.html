@@ -1,0 +1,95 @@
+<html><head><title>R: Weighted Covariance Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for cov.wt {stats}"><tr><td>cov.wt {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Weighted Covariance Matrices</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Returns a list containing estimates of the weighted covariance matrix
+and the mean of the data, and optionally of the (weighted) correlation
+matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cov.wt(x, wt = rep(1/nrow(x), nrow(x)), cor = FALSE, center = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+a matrix or data frame.  As usual, rows are observations and
+columns are variables.</td></tr>
+<tr valign="top"><td><code>wt</code></td>
+<td>
+a non-negative and non-zero vector of weights for each
+observation.  Its length must equal the number of rows of <code>x</code>.</td></tr>
+<tr valign="top"><td><code>cor</code></td>
+<td>
+A logical indicating whether the estimated correlation
+weighted matrix will be returned as well.</td></tr>
+<tr valign="top"><td><code>center</code></td>
+<td>
+Either a logical or a numeric vector specifying the
+centers to be used when computing covariances.  If <code>TRUE</code>, the
+(weighted) mean of each variable is used, if <code>FALSE</code>, zero is
+used.  If <code>center</code> is numeric, its length must equal the number
+of columns of <code>x</code>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The covariance matrix is divided by one minus the sum of squares of
+the weights, so if the weights are the default (<i>1/n</i>) the conventional
+unbiased estimate of the covariance matrix with divisor <i>(n - 1)</i>
+is obtained.  This differs from the behaviour in S-PLUS.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A list containing the following named components:
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>cov</code></td>
+<td>
+the estimated (weighted) covariance matrix</td></tr>
+<tr valign="top"><td><code>center</code></td>
+<td>
+an estimate for the center (mean) of the data.</td></tr>
+<tr valign="top"><td><code>n.obs</code></td>
+<td>
+the number of observations (rows) in <code>x</code>.</td></tr>
+<tr valign="top"><td><code>wt</code></td>
+<td>
+the weights used in the estimation.  Only returned if given
+as an argument.</td></tr>
+<tr valign="top"><td><code>cor</code></td>
+<td>
+the estimated correlation matrix.  Only returned if
+<code>cor</code> is <code>TRUE</code>.</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="cor.html">cov</a></code> and <code><a href="cor.html">var</a></code>.
+</p>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

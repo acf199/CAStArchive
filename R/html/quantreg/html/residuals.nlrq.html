@@ -1,0 +1,53 @@
+<html><head><title>R: Return residuals of an nlrq object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for residuals.nlrq {quantreg}"><tr><td>residuals.nlrq {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Return residuals of an nlrq object</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Set algorithmic parameters for nlrq (nonlinear quantile regression function)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+residuals.nlrq(object, type = c("response", "rho"), ...) 
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+an `nlrq' object as returned by function `nlrq'</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+the type of residuals to return: "response" is the distance
+between observed and predicted values; "rho" is the weighted distance used
+to calculate the objective function in the minimisation algorithm as 
+tau * pmax(resid, 0) + (1 - tau) * pmin(resid, 0), where resid are the
+simple residuals as above (with type="response").
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments passed to or from other methods.</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="nlrq.html">nlrq</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

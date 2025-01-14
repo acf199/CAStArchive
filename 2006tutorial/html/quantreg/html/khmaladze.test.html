@@ -1,0 +1,98 @@
+<html><head><title>R: Tests of Location and Location Scale Hypothesis for Linear Models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for khmaladze.test {quantreg}"><tr><td>khmaladze.test {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Tests of Location and Location Scale Hypothesis for Linear Models</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Tests of the hypothesis that a linear model specification
+is of the location and location-scale shift form.  The tests are based 
+on the Doob-Meyer transformation approach proposed by Khmaladze(1981)
+for general goodness of fit problems,
+and adapted to quantile regression by Koenker and Xiao (2001).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+khmaladze.test( fit, nullH = "location-scale" ,  trim = c(0.25, 0.75) ) 
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fit</code></td>
+<td>
+an object produced by <code><a href="rqProcess.html">rqProcess</a></code> containing
+components describing the quantile regression process for
+the model.
+</td></tr>
+<tr valign="top"><td><code>nullH</code></td>
+<td>
+a character vector indicating whether the "location-scale" shift hypothesis
+(default) or the "location" shift hypothesis  should be tested.
+</td></tr>
+<tr valign="top"><td><code>trim</code></td>
+<td>
+a vector indicating the lower and upper bound of the quantiles to
+included in the computation of the test statistics (only, not
+estimates). This might be required due to tail behavior.
+</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+an object of class khmaladze  is returned containing:
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>nullH</code></td>
+<td>
+The form of the null hypothesis.</td></tr>
+<tr valign="top"><td><code>Tn</code></td>
+<td>
+Joint test statistic of the hypothesis that all the slope
+parameters of the model satisfy the hypothesis.
+</td></tr>
+<tr valign="top"><td><code>THn</code></td>
+<td>
+Vector of test statistics testing whether individual slope
+parameters satisfy the null hypothesis.
+</td></tr>
+</table>
+
+<h3>References</h3>
+
+<p>
+Khmaladze, E. (1981) ``Martingale Approach in the Theory of
+Goodness-of-fit Tests,'' textit{Theory of Prob. and its Apps}, 26,
+240&ndash;257.
+</p>
+<p>
+Koenker, Roger and Zhijie Xiao (2000), "Inference on the Quantile
+Regression Process'',  textit{Econometrica},  81, 1583&ndash;1612.
+<a href="http://www.econ.uiuc.edu/~roger/research/inference/inference.html">http://www.econ.uiuc.edu/~roger/research/inference/inference.html</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(barro)
+fit &lt;- rqProcess( y.net ~ lgdp2 + fse2 + gedy2 + Iy2 + gcony2, 
+                data = barro, taus = seq(.1,.9,by = .05))
+khmaladze.test(fit, nullH = "location")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,127 @@
+<html><head><title>R: Divide into Groups</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for split {base}"><tr><td>split {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Divide into Groups</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>split</code> divides the data in the vector <code>x</code> into the groups
+defined by <code>f</code>.  The assignment forms replace values
+corresponding to such a division.  Unsplit reverses the effect of
+<code>split</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+split(x, f)
+split(x, f) &lt;- value
+unsplit(value, f)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+vector or data frame containing values to be divided into groups.</td></tr>
+<tr valign="top"><td><code>f</code></td>
+<td>
+a &ldquo;factor&rdquo; such that <code>factor(f)</code> defines the
+grouping, or a list of such factors in which case their interaction
+is used for the grouping.</td></tr>
+<tr valign="top"><td><code>value</code></td>
+<td>
+a list of vectors or data frames compatible with a
+splitting of <code>x</code>. Recycling applies if the lengths do not match.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>split</code> and <code>split&lt;-</code> are generic functions with default and
+<code>data.frame</code> methods.
+</p>
+<p>
+<code>f</code> is recycled as necessary and if the length of <code>x</code> is not
+a multiple of the length of <code>f</code> a warning is printed.
+<code>unsplit</code> works only with  lists of vectors. The data frame
+method can also be used to split a matrix into a list of matrices,
+and the assignment form likewise, provided they are invoked
+explicitly.
+</p>
+<p>
+Any missing values in <code>f</code> are dropped together with the
+corresponding values of <code>x</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+The value returned from <code>split</code> is a list of vectors containing
+the values for the groups.  The components of the list are named by
+the <EM>used</EM> factor levels given by <code>f</code>.  (If <code>f</code> is
+longer than <code>x</code> then some of the components will be of zero length.)
+<br>
+The assignment forms return their right hand side. <code>unsplit</code>
+returns a vector for which <code>split(x, f)</code> equals <code>value</code></p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="cut.html">cut</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+require(stats)
+n &lt;- 10; nn &lt;- 100
+g &lt;- factor(round(n * runif(n * nn)))
+x &lt;- rnorm(n * nn) + sqrt(as.numeric(g))
+xg &lt;- split(x, g)
+boxplot(xg, col = "lavender", notch = TRUE, varwidth = TRUE)
+sapply(xg, length)
+sapply(xg, mean)
+
+## Calculate z-scores by group
+
+z &lt;- unsplit(lapply(split(x, g), scale), g)
+tapply(z, g, mean)
+
+# or
+
+z &lt;- x
+split(z, g) &lt;- lapply(split(x, g), scale)
+tapply(z, g, sd)
+
+## Split a matrix into a list by columns
+ma &lt;- cbind(x = 1:10, y = (-4:5)^2)
+split(ma, col(ma))
+
+split(1:10, 1:2)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

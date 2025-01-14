@@ -1,0 +1,94 @@
+<html><head><title>R: Scatter Plot Smoothing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for lowess {stats}"><tr><td>lowess {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Scatter Plot Smoothing</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function performs the computations for the
+<EM>LOWESS</EM> smoother (see the reference below).
+<code>lowess</code> returns a list containing components
+<code>x</code> and <code>y</code> which give the coordinates of the smooth.
+The smooth should be added to a plot of the original
+points with the function <code>lines</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lowess(x, y = NULL, f = 2/3, iter = 3,
+       delta = 0.01 * diff(range(xy$x[o])))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+vectors giving the coordinates of the points in the scatter plot.
+Alternatively a single plotting structure can be specified.</td></tr>
+<tr valign="top"><td><code>f</code></td>
+<td>
+the smoother span. This gives the proportion of points in
+the plot which influence the smooth at each value.
+Larger values give more smoothness.</td></tr>
+<tr valign="top"><td><code>iter</code></td>
+<td>
+the number of robustifying iterations which should be
+performed.
+Using smaller values of <code>iter</code> will make <code>lowess</code> run faster.</td></tr>
+<tr valign="top"><td><code>delta</code></td>
+<td>
+values of <code>x</code> which lie within <code>delta</code>
+of each other are replaced by a single value in the output from
+<code>lowess</code>.  Defaults to 1/100th of the range of <code>x</code>.</td></tr>
+</table>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+<p>
+Cleveland, W. S. (1979)
+Robust locally weighted regression and smoothing scatterplots.
+<EM>J. Amer. Statist. Assoc.</EM> <B>74</B>, 829&ndash;836.
+</p>
+<p>
+Cleveland, W. S. (1981)
+LOWESS: A program for smoothing scatterplots by robust locally weighted
+regression. <EM>The American Statistician</EM>, <B>35</B>, 54.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="loess.html">loess</a></code>), a newer
+formula based version of <code>lowess</code> (with different defaults!).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+plot(cars, main = "lowess(cars)")
+lines(lowess(cars), col = 2)
+lines(lowess(cars, f=.2), col = 3)
+legend(5, 120, c(paste("f = ", c("2/3", ".2"))), lty = 1, col = 2:3)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

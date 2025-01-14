@@ -1,0 +1,101 @@
+<html><head><title>R: A Trellis Plot Object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for trellis.object {lattice}"><tr><td>trellis.object {lattice}</td><td align="right">R Documentation</td></tr></table>
+<h2>A Trellis Plot Object</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This class of objects is returned by high level lattice display
+functions, and is usually plotted by default by its `print' method.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A trellis object, as returned by high level lattice functions like
+<code><a href="xyplot.html">xyplot</a></code>, is a list with the ``class'' attribute set to
+``trellis''.  Many of the components of this list are simply the
+arguments to the high level function that produced the object.  Among
+them are: <code>as.table</code>, <code>layout</code>, <code>page</code>, <code>panel</code>,
+<code>prepanel</code>, <code>main</code>, <code>sub</code>, <code>par.settings</code>,
+<code>par.strip.text</code>, <code>strip</code>, <code>skip</code>, <code>xlab</code> and
+<code>ylab</code>.  Some other typical components are: 
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code><code>index.cond</code></code></td>
+<td>
+list with index for each of the conditioning variables
+</td></tr>
+<tr valign="top"><td><code><code>perm.cond</code></code></td>
+<td>
+permutation of the order of the conditioning variables
+</td></tr>
+<tr valign="top"><td><code><code>aspect.fill</code></code></td>
+<td>
+logical, whether <code>aspect</code> is ``fill''
+</td></tr>
+<tr valign="top"><td><code><code>aspect.ratio</code></code></td>
+<td>
+numeric, aspect ratio to be used if <code>aspect.fill</code> is
+<code>FALSE</code>
+</td></tr>
+<tr valign="top"><td><code><code>call</code></code></td>
+<td>
+call that generated the object. </td></tr>
+<tr valign="top"><td><code><code>condlevels</code></code></td>
+<td>
+list with levels of the conditioning variables
+</td></tr>
+<tr valign="top"><td><code><code>legend</code></code></td>
+<td>
+list describing the legend(s) to be drawn
+</td></tr>
+<tr valign="top"><td><code><code>panel.args</code></code></td>
+<td>
+a list as long as the number of panels, each element being a list
+itself, containing the arguments in named form to be passed to the
+panel function in that panel.
+</td></tr>
+<tr valign="top"><td><code><code>panel.args.common</code></code></td>
+<td>
+a list containing the arguments common to all the panel functions
+in <code>name=value</code> form
+</td></tr>
+<tr valign="top"><td><code><code>x.scales</code></code></td>
+<td>
+list describing x-scale, can consist of several other lists,
+paralleling panel.args, if x-relation is not ``same''
+</td></tr>
+<tr valign="top"><td><code><code>y.scales</code></code></td>
+<td>
+list describing y-scale, similar to <code>x.scales</code>
+</td></tr>
+<tr valign="top"><td><code><code>x.between</code></code></td>
+<td>
+numeric vector of interpanel x-space </td></tr>
+<tr valign="top"><td><code><code>y.between</code></code></td>
+<td>
+numeric vector of interpanel y-space </td></tr>
+<tr valign="top"><td><code><code>x.limits</code></code></td>
+<td>
+numeric vector of length 2 or list, giving x-axis limits
+</td></tr>
+<tr valign="top"><td><code><code>y.limits</code></code></td>
+<td>
+similar to <code>x.limits</code> </td></tr>
+</table>
+<p>
+
+<br>
+normal-bracket72bracket-normal</p>
+
+
+<hr><div align="center">[Package <em>lattice</em> version 0.11-6 <a href="00Index.html">Index]</a></div>
+
+</body></html>

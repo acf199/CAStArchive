@@ -1,0 +1,81 @@
+<html><head><title>R: Extract the log likelihood for a fitted GAM</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for logLik.gam {mgcv}"><tr><td>logLik.gam {mgcv}</td><td align="right">R Documentation</td></tr></table>
+<h2>Extract the log likelihood for a fitted GAM</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Function to extract the log-likelihood for a fitted <code>gam</code>
+model (note that the models are usually fitted by penalized likelihood maximization).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+logLik.gam(object,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+fitted model objects of class <code>gam</code> as produced by <code>gam()</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+un-used in this case</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Modification of <code>logLik.glm</code> which corrects the degrees of
+freedom for use with <code>gam</code> objects. 
+</p>
+<p>
+The function is provided so that <code><a href="../../stats/html/AIC.html">AIC</a></code> functions correctly with
+<code>gam</code> objects, and uses the appropriate degrees of freedom (accounting
+for penalization). Note,  when using <code>AIC</code> for penalized models, that the
+degrees of freedom are the effective degrees of freedom and not the number of
+parameters, and the model maximizes the penalized likelihood, not the actual likelihood!
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Standard <code>logLik</code> object: see <code><a href="../../stats/html/logLik.html">logLik</a></code>.</p>
+
+<h3>WARNING</h3>
+
+<p>
+Note that the likelihood is evaluated at the maximum of
+the penalized likelihood for most GAMs, rather than at the MLE.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Simon N. Wood <a href="mailto:simon.wood@r-project.org">simon.wood@r-project.org</a> based directly on <code>logLik.glm</code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../stats/html/AIC.html">AIC</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>mgcv</em> version 1.2-3 <a href="00Index.html">Index]</a></div>
+
+</body></html>

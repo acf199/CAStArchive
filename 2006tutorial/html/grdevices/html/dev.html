@@ -1,0 +1,107 @@
+<html><head><title>R: Control Multiple Devices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for dev.xxx {grDevices}"><tr><td>dev.xxx {grDevices}</td><td align="right">R Documentation</td></tr></table>
+<h2>Control Multiple Devices</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These functions provide control over multiple graphics devices.
+</p>
+<p>
+Only one device is the <EM>active</EM> device.  This is the device in
+which all graphics operations occur.
+</p>
+<p>
+Devices are associated with a name (e.g., <code>"X11"</code> or
+<code>"postscript"</code>) and a number; the <code>"null device"</code> is always
+device 1.
+</p>
+<p>
+<code>dev.off</code> shuts down the specified (by default the current) device.
+<code>graphics.off()</code> shuts down all open graphics devices.
+</p>
+<p>
+<code>dev.set</code> makes the specified device the active device.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+dev.cur()
+dev.list()
+dev.next(which = dev.cur())
+dev.prev(which = dev.cur())
+dev.off(which = dev.cur())
+dev.set(which = dev.next())
+graphics.off()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>which</code></td>
+<td>
+An integer specifying a device number</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+<code>dev.cur</code> returns the number and name of the active device,
+or 1, the null device, if none is active.
+<br>
+<code>dev.list</code> returns the numbers of all open devices, except device
+1, the null device.  This is a numeric vector with a names attribute
+giving the names, or <code>NULL</code> is there is no open device.
+<br>
+<code>dev.next</code> and <code>dev.prev</code> return the number and name of the
+next / previous device in the list of devices.  The list is regarded as
+a circular list, and <code>"null device"</code> will be included only if there
+are no open devices.
+<br>
+<code>dev.off</code> returns the name and number of the new active device
+(after the specified device has been shut down).
+<br>
+<code>dev.set</code> returns the name and number of the new active device.</p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Devices.html">Devices</a></code>, such as <code><a href="postscript.html">postscript</a></code>, etc.
+</p>
+<p>
+<code><a href="../../graphics/html/layout.html">layout</a></code> and its links for setting up plotting regions
+on the current device.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+## Unix-specific example
+x11()
+plot(1:10)
+x11()
+plot(rnorm(10))
+dev.set(dev.prev())
+abline(0,1)# through the 1:10 points
+dev.set(dev.next())
+abline(h=0, col="gray")# for the residual plot
+dev.set(dev.prev())
+dev.off(); dev.off()#- close the two X devices
+## End(Not run)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>grDevices</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,93 @@
+<html><head><title>R: Transform an Object, for Example a Data Frame</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for transform {base}"><tr><td>transform {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Transform an Object, for Example a Data Frame</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>transform</code> is a generic function, which&mdash;at least
+currently&mdash;only does anything useful with
+data frames. <code>transform.default</code> converts its first argument to
+a data frame if possible and calls <code>transform.data.frame</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+transform(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+The object to be transformed</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Further arguments of the form <code>tag=value</code></td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The <code>...</code> arguments to <code>transform.data.frame</code> are tagged
+vector expressions, which are evaluated in the data frame
+<code>x</code>.  The tags are matched against <code>names(x)</code>, and for
+those that match, the value replace the corresponding variable in
+<code>x</code>, and the others are appended to <code>x</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+The modified value of <code>x</code>.</p>
+
+<h3>Note</h3>
+
+<p>
+If some of the values are not vectors of the appropriate length,
+you deserve whatever you get!
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Peter Dalgaard
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="subset.html">subset</a></code>,
+<code><a href="list.html">list</a></code>,
+<code><a href="data.frame.html">data.frame</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+transform(airquality, Ozone = -Ozone)
+transform(airquality, new = -Ozone, Temp = (Temp-32)/1.8)
+
+attach(airquality)
+transform(Ozone, logOzone = log(Ozone)) # marginally interesting ...
+detach(airquality)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

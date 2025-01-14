@@ -1,0 +1,114 @@
+<html><head><title>R: Abbreviate Strings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for abbreviate {base}"><tr><td>abbreviate {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Abbreviate Strings</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Abbreviate strings to at least <code>minlength</code> characters,
+such that they remain <EM>unique</EM> (if they were).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+abbreviate(names.arg, minlength = 4, use.classes = TRUE,
+           dot = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>names.arg</code></td>
+<td>
+a vector of names to be abbreviated.</td></tr>
+<tr valign="top"><td><code>minlength</code></td>
+<td>
+the minimum length of the abbreviations.</td></tr>
+<tr valign="top"><td><code>use.classes</code></td>
+<td>
+logical (currently ignored by <font face="Courier New,Courier" color="#666666"><b>R</b></font>).</td></tr>
+<tr valign="top"><td><code>dot</code></td>
+<td>
+logical; should a dot (<code>"."</code>) be appended?</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The algorithm used is similar to that of S.
+First spaces at the beginning of the word are stripped.
+Then any other spaces are stripped.
+Next lower case vowels are removed followed by lower case consonants.
+Finally if the abbreviation is still longer than <code>minlength</code>
+upper case letters are stripped.
+</p>
+<p>
+Letters are always stripped from the end of the word first.
+If an element of <code>names.arg</code> contains more than one word (words
+are separated by space) then at least one letter from each word will be
+retained.
+If a single string is passed it is abbreviated in the same manner as a
+vector of strings.
+</p>
+<p>
+Missing (<code>NA</code>) values are not abbreviated.
+</p>
+<p>
+If <code>use.classes</code> is <code>FALSE</code> then the only distinction is to
+be between letters and space.  This has NOT been implemented.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A character vector containing abbreviations for the strings in its
+first argument.  Duplicates in the original <code>names.arg</code> will be
+given identical abbreviations.  If any non-duplicated elements have
+the same <code>minlength</code> abbreviations then <code>minlength</code> is
+incremented by one and new abbreviations are found for those elements
+only.  This process is repeated until all unique elements of
+<code>names.arg</code> have unique abbreviations.
+<br>
+The character version of <code>names.arg</code> is attached to the returned
+value as a names argument.</p>
+
+<h3>Warning</h3>
+
+<p>
+This is really only suitable for English, and does not work correctly with
+non-ASCII characters in UTF-8 locales.  It will warns if used with
+non-ASCII characters.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="substr.html">substr</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- c("abcd", "efgh", "abce")
+abbreviate(x, 2)
+
+(st.abb &lt;- abbreviate(state.name, 2))
+table(nchar(st.abb))# out of 50, 3 need 4 letters
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,82 @@
+<html><head><title>R: Create a Link for GLM families</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for make.link {stats}"><tr><td>make.link {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Create a Link for GLM families</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function is used with the <code><a href="family.html">family</a></code> functions in
+<code><a href="glm.html">glm</a>()</code>.
+Given a link, it returns a link function, an inverse link
+function, the derivative <i>dmu/deta</i> and a function
+for domain checking.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+make.link(link)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>link</code></td>
+<td>
+character or numeric; one of <code>"logit"</code>,
+<code>"probit"</code>, <code>"cloglog"</code>, <code>"identity"</code>,
+<code>"log"</code>,  <code>"sqrt"</code>,  <code>"1/mu^2"</code>,
+<code>"inverse"</code>, or number, say <i>lambda</i> resulting
+in power link <i>mu ^ lambda</i>.</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+A list with components
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>linkfun</code></td>
+<td>
+Link function <code>function(mu)</code></td></tr>
+<tr valign="top"><td><code>linkinv</code></td>
+<td>
+Inverse link function <code>function(eta)</code></td></tr>
+<tr valign="top"><td><code>mu.eta</code></td>
+<td>
+Derivative <code>function(eta)</code> <i>dmu/deta</i></td></tr>
+<tr valign="top"><td><code>valideta</code></td>
+<td>
+<code>function(eta)</code>{ <code>TRUE</code> if all of
+<code>eta</code> is in the domain of <code>linkinv</code> }.</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="glm.html">glm</a></code>, <code><a href="family.html">family</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+str(make.link("logit"))
+
+l2 &lt;- make.link(2)
+l2$linkfun(0:3)# 0 1 4 9
+l2$mu.eta(eta= 1:2)#= 1/(2*sqrt(eta))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

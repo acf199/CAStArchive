@@ -1,0 +1,65 @@
+<html><head><title>R: Function to choose method for Weighted Quantile Regression</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for rq.wfit {quantreg}"><tr><td>rq.wfit {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Function to choose method for Weighted Quantile Regression</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Weight the data and then call the chosen fitting algorithm.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rq.wfit(x, y, tau=0.5, weights, method="br", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+the design matrix 
+</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+the response variable 
+</td></tr>
+<tr valign="top"><td><code>tau</code></td>
+<td>
+the quantile desired, if tau lies outside (0,1) the whole process 
+is estimated. 
+</td></tr>
+<tr valign="top"><td><code>weights</code></td>
+<td>
+weights used in the fitting
+</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+method of computation:  "br" is Barrodale and Roberts exterior point 
+"fn" is the Frisch-Newton interior point method. 
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Optional arguments passed to fitting routine.
+</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="rq.html">rq</a></code> <code><a href="rq.fit.br.html">rq.fit.br</a></code> <code><a href="rq.fit.fn.html">rq.fit.fn</a></code>
+</p>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

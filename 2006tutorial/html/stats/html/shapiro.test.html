@@ -1,0 +1,91 @@
+<html><head><title>R: Shapiro-Wilk Normality Test</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for shapiro.test {stats}"><tr><td>shapiro.test {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Shapiro-Wilk Normality Test</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Performs the Shapiro-Wilk test for normality.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+shapiro.test(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+a numeric vector of data values, the number of which must be
+between 3 and 5000.  Missing values are allowed.</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+A list with class <code>"htest"</code> containing the following components:
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>statistic</code></td>
+<td>
+the value of the Shapiro-Wilk statistic.</td></tr>
+<tr valign="top"><td><code>p.value</code></td>
+<td>
+the p-value for the test.</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+the character string <code>"Shapiro-Wilk normality test"</code>.</td></tr>
+<tr valign="top"><td><code>data.name</code></td>
+<td>
+a character string giving the name(s) of the data.</td></tr>
+</table>
+
+<h3>References</h3>
+
+<p>
+Patrick Royston (1982)
+An Extension of Shapiro and Wilk's <i>W</i> Test for Normality to Large
+Samples.
+<EM>Applied Statistics</EM>, <B>31</B>, 115&ndash;124.
+</p>
+<p>
+Patrick Royston (1982)
+Algorithm AS 181: The <i>W</i> Test for Normality.
+<EM>Applied Statistics</EM>, <B>31</B>, 176&ndash;180.
+</p>
+<p>
+Patrick Royston (1995)
+A Remark on Algorithm AS 181: The <i>W</i> Test for Normality.
+<EM>Applied Statistics</EM>, <B>44</B>, 547&ndash;551.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../base/html/qqnorm.html">qqnorm</a></code> for producing a normal quantile-quantile plot.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+shapiro.test(rnorm(100, mean = 5, sd = 3))
+shapiro.test(runif(100, min = 2, max = 4))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

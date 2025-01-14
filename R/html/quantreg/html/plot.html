@@ -1,0 +1,84 @@
+<html><head><title>R: Default Ploting Method for rqss()</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for plot {quantreg}"><tr><td>plot {quantreg}</td><td align="right">R Documentation</td></tr></table>
+<h2>Default Ploting Method for rqss()</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Takes a fitted <code>rqss</code> object produced by <code>rqss()</code> and plots
+the component smooth functions that make up the ANOVA decomposition.
+Since the components "omit the intercept" the estimated intercept is added back 
+in &ndash; this facilitates the comparison of quantile fits particularly.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+plot.rqss(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+a fitted <code>rqss</code> object produced by <code>rqss()</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+additional arguments for the plotting algorithm</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<p>
+The function produces plots for the ANOVA components as a side effect.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Roger Koenker
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="rqss.html">rqss</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+n &lt;- 200
+x &lt;- sort(rchisq(n,4))
+z &lt;- x + rnorm(n)
+y &lt;- log(x)+ .1*(log(x))^2 + log(x)*rnorm(n)/4 + z
+plot(x,y-z)
+fit &lt;- rqss(y~qss(x,constraint="N")+z)
+lines(x[-1],fit$coef[1]+fit$coef[-(1:2)])
+fit &lt;- rqss(y~qss(x,constraint="I")+z)
+lines(x[-1],fit$coef[1]+fit$coef[-(1:2)],col="blue")
+fit &lt;- rqss(y~qss(x,constraint="CI")+z)
+lines(x[-1],fit$coef[1]+fit$coef[-(1:2)],col="red")
+#Cleanup
+rm(list=ls())
+#A bivariate example
+data(CobarOre)
+attach(CobarOre)
+fit &lt;- rqss(z~qss(cbind(x,y),lambda=.08))
+plot(fit)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>quantreg</em> version 3.82 <a href="00Index.html">Index]</a></div>
+
+</body></html>

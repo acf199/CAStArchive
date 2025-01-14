@@ -1,0 +1,121 @@
+<html><head><title>R: Arithmetic Operators</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Arithmetic {base}"><tr><td>Arithmetic {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Arithmetic Operators</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These binary operators perform arithmetic on numeric or complex vectors
+(or objects which can be coerced to them).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+x + y
+x - y
+x * y
+x / y
+x ^ y
+x %% y
+x %/% y
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+numeric or complex vectors or objects which can be
+coerced to such, or other objects for which methods have been written.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The binary arithmetic operators are generic functions: methods can be
+written for them individually or via the <code><a href="groupGeneric.html">Ops</a></code>) group generic
+function.
+</p>
+<p>
+If applied to arrays the result will be an array if this is sensible
+(for example it will not if the recycling rule has been invoked).
+</p>
+<p>
+Logical vectors will be coerced to numeric vectors, <code>FALSE</code>
+having value 0 and <code>TRUE</code> having value one.
+</p>
+<p>
+<code>1 ^ y</code> and <code>y ^ 0</code> are <code>1</code>, <EM>always</EM>.
+<code>x ^ y</code> should also give the proper &ldquo;limit&rdquo; result when
+either argument is infinite (i.e., <code>+- <a href="is.finite.html">Inf</a></code>).
+</p>
+<p>
+Objects such as arrays or time-series can be operated on this
+way provided they are conformable.
+</p>
+<p>
+For real arguments, <code>%%</code> can be subject to catastrophic loss of
+accuracy if <code>x</code> is much larger than <code>y</code>, and a warning is
+given if this is detected.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+They return numeric vectors containing the result of the element
+by element operations.  The elements of shorter vectors are recycled
+as necessary (with a <code><a href="warning.html">warning</a></code> when they are recycled only
+<EM>fractionally</EM>).  The operators are <code>+</code> for addition,
+<code>-</code> for subtraction, <code>*</code> for multiplication, <code>/</code> for
+division and <code>^</code> for exponentiation.
+<br>
+<code>%%</code> indicates <code>x mod y</code> and <code>%/%</code> indicates
+integer division.  It is guaranteed that <code>x == (x %% y) + y * ( x
+    %/% y )</code> (up to rounding error) unless <code>y == 0</code>
+where the result is <code><a href="NA.html">NA</a></code> or <code><a href="is.finite.html">NaN</a></code> (depending
+on the <code><a href="typeof.html">typeof</a></code> of the arguments).</p>
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Math.html">sqrt</a></code> for miscellaneous and <code><a href="Special.html">Special</a></code> for special
+mathematical functions.
+</p>
+<p>
+<code><a href="Syntax.html">Syntax</a></code> for operator precedence.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- -1:12
+x + 1
+2 * x + 3
+x %% 2 #-- is periodic
+x %/% 5
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

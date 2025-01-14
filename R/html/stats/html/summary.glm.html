@@ -1,0 +1,169 @@
+<html><head><title>R: Summarizing Generalized Linear Model Fits</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for summary.glm {stats}"><tr><td>summary.glm {stats}</td><td align="right">R Documentation</td></tr></table>
+<h2>Summarizing Generalized Linear Model Fits</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These functions are all <code><a href="../../utils/html/methods.html">methods</a></code> for class <code>glm</code> or
+<code>summary.glm</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'glm':
+summary(object, dispersion = NULL, correlation = FALSE,
+        symbolic.cor = FALSE, ...)
+
+## S3 method for class 'summary.glm':
+print(x, digits = max(3, getOption("digits") - 3),
+      symbolic.cor = x$symbolic.cor,
+      signif.stars = getOption("show.signif.stars"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+an object of class <code>"glm"</code>, usually, a result of a
+call to <code><a href="glm.html">glm</a></code>.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+an object of class <code>"summary.glm"</code>, usually, a result of a
+call to <code>summary.glm</code>.</td></tr>
+<tr valign="top"><td><code>dispersion</code></td>
+<td>
+the dispersion parameter for the fitting family.
+By default it is obtained from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>correlation</code></td>
+<td>
+logical; if <code>TRUE</code>, the correlation matrix of
+the estimated parameters is returned and printed.</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+the number of significant digits to use when printing.</td></tr>
+<tr valign="top"><td><code>symbolic.cor</code></td>
+<td>
+logical. If <code>TRUE</code>, print the correlations in
+a symbolic form (see <code><a href="symnum.html">symnum</a></code>) rather than as numbers.</td></tr>
+<tr valign="top"><td><code>signif.stars</code></td>
+<td>
+logical. If <code>TRUE</code>, &ldquo;significance stars&rdquo;
+are printed for each coefficient.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments passed to or from other methods.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>print.summary.glm</code> tries to be smart about formatting the
+coefficients, standard errors, etc. and additionally gives
+&ldquo;significance stars&rdquo; if <code>signif.stars</code> is <code>TRUE</code>.
+</p>
+<p>
+Aliased coefficients are omitted in the returned object but (as from <font face="Courier New,Courier" color="#666666"><b>R</b></font>
+1.8.0) restored by the <code>print</code> method.
+</p>
+<p>
+Correlations are printed to two decimal places (or symbolically): to
+see the actual correlations print <code>summary(object)$correlation</code>
+directly.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>summary.glm</code> returns an object of class <code>"summary.glm"</code>, a
+list with components
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>call</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>family</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>deviance</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>contrasts</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>df.residual</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>null.deviance</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>df.null</code></td>
+<td>
+the component from <code>object</code>.</td></tr>
+<tr valign="top"><td><code>deviance.resid</code></td>
+<td>
+the deviance residuals:
+see <code><a href="glm.summaries.html">residuals.glm</a></code>.</td></tr>
+<tr valign="top"><td><code>coefficients</code></td>
+<td>
+the matrix of coefficients, standard errors,
+z-values and p-values.  Aliased coefficients are omitted.</td></tr>
+<tr valign="top"><td><code>aliased</code></td>
+<td>
+named logical vector showing if the original
+coefficients are aliased.</td></tr>
+<tr valign="top"><td><code>dispersion</code></td>
+<td>
+either the supplied argument or the estimated
+dispersion if the latter in <code>NULL</code></td></tr>
+<tr valign="top"><td><code>df</code></td>
+<td>
+a 3-vector of the rank of the model and the number of
+residual degrees of freedom, plus number of non-aliased coefficients.</td></tr>
+<tr valign="top"><td><code>cov.unscaled</code></td>
+<td>
+the unscaled (<code>dispersion = 1</code>) estimated covariance
+matrix of the estimated coefficients.</td></tr>
+<tr valign="top"><td><code>cov.scaled</code></td>
+<td>
+ditto, scaled by <code>dispersion</code>.</td></tr>
+<tr valign="top"><td><code>correlation</code></td>
+<td>
+(only if <code>correlation</code> is true.)  The estimated
+correlations of the estimated coefficients.</td></tr>
+<tr valign="top"><td><code>symbolic.cor</code></td>
+<td>
+(only if <code>correlation</code> is true.)  The value
+of the argument <code>symbolic.cor</code>.</td></tr>
+</table>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="glm.html">glm</a></code>, <code><a href="../../base/html/summary.html">summary</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## --- Continuing the Example from  '?glm':
+
+summary(glm.D93)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>stats</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

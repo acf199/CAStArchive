@@ -1,0 +1,98 @@
+<html><head><title>R: Numeric Vectors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for numeric {base}"><tr><td>numeric {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Numeric Vectors</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Creates or tests for objects of type <code>"numeric"</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+numeric(length = 0)
+as.numeric(x, ...)
+is.numeric(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>length</code></td>
+<td>
+desired length.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+object to be coerced or tested.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments passed to or from other methods.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>as.numeric</code> is a generic function, but methods must be
+written for <code><a href="double.html">as.double</a></code>, which it calls.
+</p>
+<p>
+<code>is.numeric</code> is generic: you can write methods to handle
+specific classes of objects, see <a href="zMethods.html">InternalMethods</a>.
+</p>
+<p>
+Note that factors are false for <code>is.numeric</code> since there is a
+<code>"factor"</code> method.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>numeric</code> creates a real vector of the specified length.  The
+elements of the vector are all equal to <code>0</code>.
+<br>
+<code>as.numeric</code> attempts to coerce its argument to numeric type
+(either integer or real).
+<code>as.numeric</code> for factors yields the codes underlying the factor
+levels, not the numeric representation of the labels.
+<br>
+<code>is.numeric</code> returns <code>TRUE</code> if its argument is of type numeric
+or type integer and <code>FALSE</code> otherwise.</p>
+
+<h3>Note</h3>
+
+<p>
+<EM><font face="Courier New,Courier" color="#666666"><b>R</b></font> has no single precision data type.  All real numbers are
+stored in double precision format</EM>.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+as.numeric(c("-.1"," 2.7 ","B")) # (-0.1, 2.7, NA)  +  warning
+as.numeric(factor(5:10))
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

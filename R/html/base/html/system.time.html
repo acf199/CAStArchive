@@ -1,0 +1,102 @@
+<html><head><title>R: CPU Time Used</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for system.time {base}"><tr><td>system.time {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>CPU Time Used</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Return CPU (and other) times that <code>expr</code> used.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+system.time(expr, gcFirst)
+unix.time(expr, gcFirst)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+Valid <font face="Courier New,Courier" color="#666666"><b>R</b></font> expression to be &ldquo;timed&rdquo;</td></tr>
+<tr valign="top"><td><code>gcFirst</code></td>
+<td>
+Logical - should a garbage collection be performed
+immediately before the timing?  Default is <code>FALSE</code>.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+<code>system.time</code> calls the builtin <code><a href="proc.time.html">proc.time</a></code>,
+evaluates <code>expr</code>, and then calls <code>proc.time</code> once more,
+returning the difference between the two <code>proc.time</code> calls.
+</p>
+<p>
+The values returned by the <code>proc.time</code> are (on Unix) those
+returned by the C library function <code>times</code>(3v), if available.
+</p>
+<p>
+<code>unix.time</code> is an alias of <code>system.time</code>, for
+compatibility reasons.
+</p>
+<p>
+Timings of evaluations of the same expression can vary considerably
+depending on whether the evaluation triggers a garbage collection. When
+<code>gcFirst</code> is <code>TRUE</code> a garbage collection (<code><a href="gc.html">gc</a></code>)
+will be performed immediately before the evaluation of <code>expr</code>.
+This will usually produce more consistent timings.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A numeric vector of length 5 containing the user cpu, system cpu, elapsed,
+subproc1, subproc2 times. The subproc times are the user and
+system cpu time used by child processes (and so are usually zero).
+On Windows the subproc times are not available and so are always
+<code>NA</code>. The first two components are not available on Windows 9x,
+and so are reported as <code>NA</code>; they do return real values on
+Windows NT4/2000/XP.
+<br>
+The resolution of the times will be system-specific; it is common for
+them to be recorded to of the order of 1/100 second, and elapsed
+time is rounded to the nearest 1/100.</p>
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="proc.time.html">proc.time</a></code>, <code><a href="../../stats/html/time.html">time</a></code> which is for time series.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+require(stats)
+system.time(for(i in 1:100) mad(runif(1000)))
+## Not run: 
+exT &lt;- function(n = 1000) {
+  # Purpose: Test if system.time works ok;   n: loop size
+  system.time(for(i in 1:n) x &lt;- mean(rt(1000, df=4)))
+}
+#-- Try to interrupt one of the following (using Ctrl-C / Escape):
+exT()                 #- about 3 secs on a 1GHz PIII
+system.time(exT())    #~ +/- same
+## End(Not run)</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

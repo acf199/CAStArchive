@@ -1,0 +1,81 @@
+<html><head><title>R: Delete Files and Directories</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for unlink {base}"><tr><td>unlink {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Delete Files and Directories</h2>
+
+
+<h3>Description</h3>
+
+<p>
+<code>unlink</code> deletes the file(s) or directories specified by <code>x</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>unlink(x, recursive = FALSE)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+a character vector with the names of the file(s) or
+directories to be deleted.
+Wildcards (normally &lsquo;<TT>*</TT>&rsquo; and &lsquo;<TT>?</TT>&rsquo;) are allowed.</td></tr>
+<tr valign="top"><td><code>recursive</code></td>
+<td>
+logical. Should directories be deleted
+recursively?</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+If <code>recursive = FALSE</code> directories are not deleted,
+not even empty ones.
+</p>
+<p>
+<code><a href="files.html">file.remove</a></code> can only remove files, but gives more
+detailed error information.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+<code>0</code> for success, <code>1</code> for failure.
+Not deleting a non-existent file is not a failure.</p>
+
+<h3>Note</h3>
+
+<p>
+Prior to <font face="Courier New,Courier" color="#666666"><b>R</b></font> version 1.2.0 the default on Unix was <code>recursive =
+    TRUE</code>, and on Windows empty directories could be deleted.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="files.html">file.remove</a></code>.
+</p>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

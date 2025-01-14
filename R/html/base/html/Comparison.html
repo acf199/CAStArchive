@@ -1,0 +1,125 @@
+<html><head><title>R: Relational Operators</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for Comparison {base}"><tr><td>Comparison {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Relational Operators</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Binary operators which allow the comparison of values in atomic vectors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+x &lt; y
+x &gt; y
+x &lt;= y
+x &gt;= y
+x == y
+x != y
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+atomic vectors, or other objects for which methods have
+been written.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+The binary comparison operators are generic functions: methods can be
+written for them individually or via the <code><a href="groupGeneric.html">Ops</a></code>) group generic
+function.
+</p>
+<p>
+Comparison of strings in character vectors is lexicographic within the
+strings using the collating sequence of the locale in use: see
+<code><a href="locales.html">locales</a></code>.  The collating sequence of locales such as
+<SAMP>en_US</SAMP> is normally different from <SAMP>C</SAMP> (which should use
+ASCII) and can be surprising.
+</p>
+<p>
+At least one of <code>x</code> and <code>y</code> must be an atomic vector, but if
+the other is a list <font face="Courier New,Courier" color="#666666"><b>R</b></font> attempts to coerce it to the type of the atomic
+vector: this will succeed if the list is made up of elements of length
+one that canbe coerced to the correct type.
+</p>
+<p>
+If the two arguments are atomic vectors of different types, they are
+both coerced to the first of character, complex, numeric, integer and
+logical.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A vector of logicals indicating the result of the element by element
+comparison.  The elements of shorter vectors are recycled as
+necessary.
+<br>
+Objects such as arrays or time-series can be compared this way
+provided they are conformable.</p>
+
+<h3>Note</h3>
+
+<p>
+Don't use <code>==</code> and <code>!=</code> for tests, such as in <code>if</code>
+expressions, where you must get a single <code>TRUE</code> or
+<code>FALSE</code>.  Unless you are absolutely sure that nothing unusual
+can happen, you should use the <code><a href="identical.html">identical</a></code> function
+instead.
+</p>
+<p>
+For numerical values, remember <code>==</code> and <code>!=</code> do not allow
+for the finite representation of fractions, nor for rounding error.
+Using <code><a href="all.equal.html">all.equal</a></code> with <code>identical</code> is almost
+always preferable.  See the examples.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
+<EM>The New S Language</EM>.
+Wadsworth &amp; Brooks/Cole.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="Syntax.html">Syntax</a></code> for operator precedence.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- rnorm(20)
+x &lt; 1
+x[x &gt; 0]
+
+x1 &lt;- 0.5 - 0.3
+x2 &lt;- 0.3 - 0.1
+x1 == x2                           # FALSE on most machines
+identical(all.equal(x1, x2), TRUE) # TRUE everywhere
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

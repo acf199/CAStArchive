@@ -1,0 +1,585 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Descriptive Statistics in R</title>
+</head>
+<body style="background-color: rgb(255, 248, 229);">
+<div style="text-align: center;"><big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;">Descriptive
+ statistics<br>
+</span></span></big></big></div><br>
+In the course of learning a bit about how to generate data summaries in R,
+one will inevitably learn some useful R syntax and commands.  Thus, this
+first tutorial on descriptive statistics
+serves a dual role as a brief introduction to R.  When this tutorial is 
+used online, the bolded, indented lines<br>
+<br> 
+&nbsp;&nbsp; <span style="font-weight: 
+bold;"># like this one</span><br> 
+<br> 
+are meant to be copied and pasted directly into R at the command prompt.<br>
+
+<br>
+<br>
+<big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Obtaining
+astronomical datasets</span></small></span></span></big></big><br>
+<br>
+The astronomical community has a vast complex of on-line
+databases.&nbsp; Many databases are hosted by data centers such as <a
+ href="http://www.adccc.org/members.html">NASA's archive research
+centers</a>, the <a href="http://cdsweb.u-strasbg.fr/">Centre des
+Donnees astronomiques de Strasbourg (CDS)</a>, the <a
+ href="http://ned.ipac.caltech.edu/">NASA/IPAC Extragalactic Database
+(NED)</a>, and the <a
+ href="http://adsabs.harvard.edu/abstract_service.html">Astrophysics
+Data System (ADS)</a>.&nbsp;&nbsp;
+The Virtual Observatory (VO) is developing new flexible tools for
+accessing, mining and combining datasets at distributed
+locations;&nbsp; see
+the Web sites for the <a href="http://www.ivoa.net/">international</a>,
+<a href="http://www.euro-vo.org/">European</a>, and <a
+ href="http://us-vo.org/">U.S</a>. VO for information on recent
+developments.&nbsp; The <a href="http://www.voservices.org/">VO Web
+Services</a>, <a href="http://www.us-vo.org/summer-school/">Summer
+Schools</a>, and <a href="http://us-vo.org/apps/">Core Applications</a>
+provide helpful entries into these new capabilities.<br>
+<br>
+We initially treat here only input of tabular data such as catalogs of
+astronomical sources.&nbsp; We give two examples of interactive
+acquisition
+of tabular data.&nbsp; One of the multivariate tabular datasets used
+here is
+a dataset of stars observed with the European Space Agency's Hipparcos
+satellite during the 1990s.&nbsp; It gives a table with 9 columns and
+2719 rows giving Hipparcos stars lying between 40 and 50 parsecs from
+the Sun. The dataset was acquired using CDS's <a
+ href="http://vizier.u-strasbg.fr/">Vizier Catalogue Service</a> as
+follows:<br>
+<ul>
+<li>In Web browser, go to 
+<a href="http://vizier.u-strasbg.fr/viz-bin/VizieR?-source=I/239/hip_main">
+http://vizier.u-strasbg.fr/viz-bin/VizieR?-source=I/239/hip_main</a><br>
+<li>
+Set Max Entries to 9999, Output layout ASCII table<br>
+<li> Remove
+"Compute r" and "Compute Position" buttons<br>
+<li>
+Set parallax constraint "20 .. 25" to gives stars between 40 and 50 pc<br>
+<li>
+Retrieve 9 properties: HIP, V, RA, Dec, Plx, pmRA, pmDE, e_Plx, and B-V<br>
+<li> Submit
+Query<br>
+<li> Use ASCII editor to trim header to one line with variable
+names <br>
+<li> Trim trailer<br>
+<li> Save ASCII file on disk for ingestion into R
+</ul>
+
+<big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;"><small><span
+ style="font-weight: bold;"><br>
+Reading data into R<br>
+<br>
+</span></small></span></span></big></big>Enter R by typing "R"
+(UNIX) or double-clicking to execute Rgui.exe (Windows) or R.app (Mac).&nbsp; In the
+commands below, we start by extracting
+some <a href="html/base/html/Sys.info.html">system
+and user information</a>, the <a
+ href="html/base/html/Version.html">R.version</a>
+you are using, and some of its <a
+ href="html/base/html/capabilities.html">capabilities</a>.&nbsp;
+<a href="html/utils/html/citation.html">citation</a>
+tells how to cite R in publications.&nbsp; R is released under the GNU
+Public Licence, as indicated by <a
+ href="html/base/html/copyright.html">copyright</a>.
+ Typing a question mark in front of a command opens the help file 
+ for that command.<br> 
+<br> 
+&nbsp;&nbsp; <span style="font-weight: 
+bold;">Sys.info()</span><br> 
+&nbsp;&nbsp; <span style="font-weight: bold;">R.version</span><br> 
+&nbsp;&nbsp; <span style="font-weight: bold;">capabilities()</span><br> 
+&nbsp;&nbsp; <span style="font-weight: bold;">citation()</span><br> 
+&nbsp;&nbsp; <span style="font-weight: bold;">?copyright</span><br> 
+<br> 
+The various capitalizations above are important as R is 
+case-sensitive.  When using R interactively, it is very helpful to know that
+the up-arrow key can retrieve previous commands, 
+which may be edited using the left- and right-arrow keys and the delete key. <br> 
+<br> 
+The last command above, ?copyright, is equivalent to help(copyright) or
+help("copyright").  However, to use this command you have to know 
+that the function called "copyright" exists. Suppose that you knew 
+only that there was a function in R
+that returned copyright information but you could not remember what it
+was called.  In this case, the 
+<a href="html/utils/html/help.search.html">help.search</a> function provides a 
+handy reference tool:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">help.search("copyright")</span><br> 
+<br>
+Last but certainly not least, a vast array of documentation and reference materials
+may be accessed via a simple command:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">help.start()</span><br> 
+<br>
+The initial working directory in R is set by default or by the directory from 
+which R is invoked (if it is invoked on the command line).  It is possible to
+read and set this working directory using the 
+ <a href="html/base/html/getwd.html">getwd</a> or
+  <a href="html/base/html/getwd.html">setwd</a> 
+commands.  A list of the files in the current working directory is given by
+<a href="html/base/html/list.files.html">list.files</a>, which
+has a variety of useful options and is only one of several utilities
+interfacing to the computer's <a href="html/base/html/files.html">files</a>.
+ In the 
+ <a href="html/base/html/getwd.html">setwd</a> 
+ command, note that in Windows, path (directory) names are not case-sensitive and
+ may contain either forward slashes or backward slashes; in the latter case,
+ a backward slash must be written as "\\" when enclosed in quotation marks. <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">getwd()</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">list.files() # what's in this directory?</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;"># The # symbol means that the rest of that
+line is a comment.</span><br>
+<br>
+We wish to read an ASCII data file into an R object using the
+<a href="html/base/html/read.table.html">read.table</a> command or one of its
+ variants.  &nbsp;&nbsp;
+Let's begin with a cleaned-up version of
+the Hipparcos dataset described above, a description of which is given at
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.html">
+http://astrostatistics.psu.edu/datasets/HIP_star.html</a>.  <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip  &lt;-  read.table("http://astrostatistics.psu.edu/datasets/HIP_star.dat",</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-weight: bold;">header=T,fill=T) # T is short for TRUE</span><br>
+<br>
+The "&lt;-", which is actually "less than" followed by "minus", is the R assignment
+operator.  Admittedly, this is a bit hard to type repeatedly, so fortunately R
+also allows the use of a single equals sign (=) for assignment.<br>
+<br>
+Note that no special character must be typed when a command is broken across lines
+as in the example above.  Whenever a line is entered that is not yet syntactically
+complete, R will replace the usual prompt, "&gt" with a + sign to indicate that
+more input is expected.
+The <a href="html/base/html/read.table.html">read.table</a> function can refer
+to a location on the web, though a filename (of a file in the working directory)
+or a pathname would have sufficed.
+The "header=TRUE" option is used because the first row of the file is 
+a header containing the names of the columns.  We used the "fill=TRUE" option
+because some of the columns have only 8 of the 9 columns filled, and "fill=TRUE"
+instructs R to fill in blank fields at the end of the line with missing values,
+denoted by the special R constant <a href="html/base/html/NA.html">NA</a> ("not
+available").  <b>Warning</b>:  This only works in this example because 
+all of the empty cells are in the last column of the table.  (You can verify
+this by checking the ASCII file
+<a href="http://astrostatistics.psu.edu/datasets/HIP_star.dat">HIP_star.dat</a>.)
+Because the read.table function uses delimiters to determine where to break between
+columns, any row containing only 8 values would always put the 
+<a href="html/base/html/NA.html">NA</a> in the
+9th column, regardless of where it was intended to be placed.
+As a general rule, data files with explicit delimiters are to be preferred to
+files that use line position to indicate column number, particularly when missing
+data are present.  If you must use line position, R provides the
+<a href="html/utils/html/read.fortran.html">read.fortran</a> and
+<a href="html/utils/html/read.fortran.html">read.fwf</a> functions for reading
+fixed width format files.<br>
+<br>
+<br>
+<big><big><span
+ style="color: rgb(204, 0, 0);"><span style="font-weight: bold;"><small><span
+ style="font-weight: bold;"><br>
+Summarizing the dataset<br>
+<br>
+</span></small></span></span></big></big>
+
+The following R commands list
+the <a href="html/base/html/dim.html">dimensions</a>
+of the dataset and print the variable <a
+ href="html/base/html/names.html">names</a>
+(from the single-line header).&nbsp; Then
+we list the first row, the first 20 rows for the 7th
+column, and the <a href="html/base/html/sum.html">sum</a>
+of the 3rd column.&nbsp; <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dim(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(hip) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip[1,]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip[1:20,7]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(hip[,3])</span><br>
+<br>
+Note that vectors, matrices, and arrays are indexed using the square brackets
+and that "1:20" is shorthand for the vector containing integers 1 through 20, 
+inclusive.  Even punctuation marks such as the colon have help entries, which
+may be accessed using 
+<a href="html/base/html/seq.html">help(":")</a>.<br>
+<br>
+Next, list the
+<a href="html/base/html/Extremes.html">maximum</a>,
+<a href="html/base/html/Extremes.html">minimum</a>,
+<a href="html/stats/html/median.html">median</a>, and
+<a href="html/stats/html/mad.html">mean absolute deviation</a>
+(similar to standard deviation)&nbsp; of each column.&nbsp; First we do
+this using a 
+<a href="html/base/html/Control.html">for</a>-loop,
+which is a slow process in R.&nbsp; Inside the loop, <a
+ href="html/base/html/c.html">c</a> is
+a generic R function that combines its arguments into a vector
+and <a href="html/base/html/print.html">print</a>
+is a generic R command that prints the contents of an object. 
+After the inefficient but intuitively clear approach using a
+<a href="html/base/html/Control.html">for</a>-loop,
+we then
+do the same job in a more efficient fashion using the 
+<a href="html/base/html/apply.html">apply</a> command.&nbsp; Here
+the "2" refers to columns in the x array; a "1" would refer to
+rows. <br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:ncol(hip)) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;
+print(c(max(hip[,i]), min(hip[,i]), median(hip[,i]), mad(hip[,i]))) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">apply(hip, 2, max) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">apply(hip, 2, min) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">apply(hip, 2, median) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">apply(hip, 2, mad)</span> <br>
+<br>
+The curly braces {} in the for loop above are optional because there is
+only a single command inside.  Notice that the output gives only NA for the last column's
+statistics.  This is because a few values in this column are missing.  We can
+tell how many are missing and which rows they come from as follows:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sum(is.na(hip[,9]))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">which(is.na(hip[,9]))</span><br>
+<br>
+There are a couple of ways to deal with the NA problem.  One is to repeat
+all of the above calculations on a new R object consisting of only those
+rows containing no NAs:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">y  &lt;-  na.omit(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:ncol(y)) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;
+print(c(max(y[,i]), min(y[,i]), median(y[,i]), mad(y[,i]))) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+Another possibility is to use the na.rm (remove NA) option of the summary
+functions.  This solution gives slightly different answers from the
+the solution above; can you see why?<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in 1:ncol(hip)) {</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp;
+print(c(max(hip[,i],na.rm=T), min(hip[,i],na.rm=T), median(hip[,i],na.rm=T), mad(hip[,i],na.rm=T))) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">}</span><br>
+<br>
+
+A vector can be <a
+ href="html/base/html/sort.html">sorted</a>
+using the Shellsort or Quicksort
+algorithms; <a
+ href="html/base/html/rank.html">rank</a>
+returns the order 
+of values in a numeric vector; and <a
+ href="html/base/html/order.html">order</a>
+returns a vector of indices that will sort a vector.  The last of these functions,
+order, is often the most useful of the three, because it allows one to reorder all
+of the rows of a matrix according to one of the columns:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sort(hip[1:10,3])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hip[order(hip[1:10,3]),]</span><br>
+<br>
+Each of the above lines gives the sorted values of the first ten entries of the
+third column, but the second line reorders <i>each</i> of the ten rows in this order.  Note 
+that neither of these commands actually alters the value of x, but we could reassign
+x to equal its sorted values if desired.<br>
+<br>
+<br>
+<big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+Standard errors and confidence intervals</span></small></span></span></big></big><br>
+<br>
+The standard error of an estimator is, by definition, an estimate of the 
+standard deviation of that estimator.  Let's consider an example.<br>
+<br>
+Perhaps the most commonly used estimator is the sample mean (called 
+a <i>statistic</i> because it depends only on the data), which is 
+an estimator of the population mean (called a <i>parameter</i>).  
+Assuming that our sample of data truly consists
+of independent observations of a random variable X, the true standard
+deviation of the sample mean equals stdev(X)/sqrt(n), where n is the sample
+size.  However, we do not usually know stdev(X), so we estimate the standard 
+deviation of the sample mean by replacing stdev(X) by an estimate thereof.<br>
+<br>
+If the Vmag column (the 2nd column) of our dataset may be considered a random sample from
+some larger population, then we may estimate the true mean of this population
+by<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(hip[,2])</span><br>
+<br>
+and the standard error of this estimator is<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">sd(hip[,2]) / sqrt(2719)</span><br>
+<br>
+We know that our estimator of the true population mean is not exactly correct, so 
+a common way to incorporate the uncertainty in our measurements into reporting
+estimates is by reporting a confidence interval.  A confidence interval for 
+some population quantity is always a set of "reasonable" values for that quantity.
+In this case, the Central Limit Theorem tells us that the sample mean
+has a roughly Gaussian, or normal, distribution centered at the true population mean.
+Thus, we may
+use the fact that 95% of the mass of any Gaussian distribution is contained within
+1.96 standard deviations of its mean to construct the following 95% confidence interval
+for the true population mean of Vmag:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">mean(hip[,2]) + 
+c(-1.96,1.96)*sd(hip[,2]) / sqrt(2719)</span><br>
+<br>
+In fact, many confidence intervals in statistics have exactly the form above,
+namely, (estimator) +/- (critical value) * (standard error of estimator).<br>
+<br>
+The precise interpretation of a confidence interval is a bit tricky.  
+For instance, notice that
+the above interval is centered not at the true mean (which is unknown), but
+at the sample mean.  If we were to take a different random sample of the same
+size, <i>the confidence interval would change even though the true mean
+remains fixed.</i>  Thus, the correct way to interpret the "95%" in "95% confidence
+interval" is to say that roughly 95% of all such hypothetical intervals will
+contain the true mean.  In particular, it is <b>not</b> correct to claim,
+based on the previous output, that
+there is a 95% probability that the true mean lies between 8.189 and 8.330.
+Although this latter interpretation is incorrect, 
+if one chooses to use Bayesian estimation procedures, then the analogue of a
+confidence interval is a so-called "credible interval"; and the incorrect
+interpretation of a confidence interval is actually the correct interpretation 
+of a credible interval (!).  
+<br>
+<br>
+<big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">
+More R syntax</span></small></span></span></big></big><br>
+<br>
+<a href="html/base/html/Arithmetic.html">Arithmetic</a>
+in R is straightforward.&nbsp; Some common operators are: + for
+addition, - for subtraction, * for multiplication, / for division, %/%
+for integer division,&nbsp; %% for modular arithmetic,  ^ for exponentiation.&nbsp; 
+The help page for these operators may accessed by typing, say,<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">?'+'</span><br>
+<br>
+Some common
+built-in functions are <a
+ href="html/base/html/Log.html">exp</a>
+for the exponential function, <a
+ href="html/base/html/Math.html">sqrt</a>
+for square root, <a
+ href="html/base/html/Log.html">log10</a>
+for base-10 logarithms, and <a
+ href="html/base/html/Trig.html">cos</a>
+for cosine. The syntax resembles "sqrt(z)".&nbsp;&nbsp; <a
+ href="html/base/html/Comparison.html">Comparisons</a>
+are made using &lt; (less than), &lt;= (less than or equal), ==
+(equal to) with the syntax "a &gt;= b".&nbsp; To test whether a and b
+are exactly equal and return a TRUE/FALSE value (for instance, in an
+"if" statement), use the command <a
+ href="html/base/html/identical.html">identical</a>(a,b)
+rather a==b.&nbsp; Compare the following two ways of comparing the vectors a and b:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">a &lt;- c(1,2);b &lt;- c(1,3)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">a==b</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">identical(a,b)</span><br>
+<br>
+Also note that in the above example, 'all(a==b)' is equivalent to 'identical(a,b)'.<br>
+<br>
+R also has other <a
+ href="html/base/html/Logic.html">logical</a>
+operators such as &amp; (AND), | (OR), ! (NOT).  There is also an xor (exclusive or)
+function.  Each of these four functions performs elementwise comparisons in much the same
+way as arithmetic operators:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">a &lt;- c(TRUE,TRUE,FALSE,FALSE);b &lt;- c(TRUE,FALSE,TRUE,FALSE)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">!a</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">a &amp; b</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">a | b</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">xor(a,b)</span><br>
+<br>
+However, when 'and' and 'or' are used in programming, say in 'if' statements,
+generally the '&amp;&amp;' and '||' forms are preferable.  These longer forms of 'and' 
+and 'or' evaluate left to right, examining only the first element of each vector, 
+and evaluation terminates when a result is determined.
+Some other operators are listed <a
+ href="html/base/html/Syntax.html">here</a>.<br>
+<br>
+The
+expression "y == x^2" evaluates as TRUE or FALSE, depending upon whether
+y equals x squared, and performs no assignment (if either y or x does not
+currently exist as an R object, an error results).<br>
+<br>
+Let's continue with simple characterization of the dataset: find the
+row number of the object with the smallest value of
+the 4th column using which.min.&nbsp; A longer, but instructive, way to
+accomplish this task creates a long vector of logical constants (tmp),
+mostly FALSE with one TRUE, then pick out the row with "TRUE".&nbsp; <br>
+<br>
+<span style="font-weight: bold;">&nbsp;&nbsp; which.min(hip[,4])</span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">&nbsp;&nbsp;
+tmp &lt;-  (hip[,4]==min(hip[,4])) </span><br style="font-weight: bold;">
+<span style="font-weight: bold;">&nbsp;&nbsp;
+(1:nrow(hip))[tmp]&nbsp;&nbsp;&nbsp; #&nbsp;&nbsp; or equivalently, </span><br
+ style="font-weight: bold;">
+<span style="font-weight: bold;">&nbsp;&nbsp; which(tmp) </span><br
+ style="font-weight: bold;">
+<br>
+The <a href="html/base/html/cut.html">cut</a>
+function divides the range of x into intervals and codes the values of
+x according to which interval they fall.&nbsp; It this is a quick way
+to group a vector into bins.&nbsp; Use the "breaks" argument to either
+specify a vector of bin boundaries, or give the number of intervals
+into which x should be cut.&nbsp; Bin string labels can be
+specified.&nbsp; Cut converts numeric vectors into an R object of
+class&nbsp; "<a
+ href="html/base/html/factor.html">factor</a>"
+which can be ordered and otherwise manipulated; e.g. with command <a
+href="html/base/html/levels.html">levels</a>.&nbsp;
+A more flexible method for dividing a vector into groups using
+user-specified rules is given by <a
+ href="html/base/html/split.html">split</a>.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">table(cut(hip[,"Plx"],breaks=20:25))</span><br>
+<br>
+The command above uses several tricks.  Note that a column in a matrix may be referred to by its
+name (e.g., "Plx") instead of its number.  The notation '20:25' is short for 'c(20,21,22,23,24,25)'
+and in general, 'a:b' is the vector of consecutive 
+integers starting with a and ending with b (this also works
+if a is larger than b).  Finally, the 
+<a href="html/base/html/table.html">table</a> command 
+tabulates the values in a vector or factor.<br>
+<br>
+Although R makes it easy for experienced users to invoke multiple functions 
+in a single line, it may help to recognize that the previous command accomplishes
+the same task as following string of commands:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">p &lt;- hip[,"Plx"]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">cuts &lt;- cut(p,breaks=20:25)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">table(cuts)</span><br>
+<br>
+The only difference is that the string of three separate commands creates
+two additional R objects, p and cuts.  The preferred method of carrying out
+these operations depends on whether there will later be any use for these
+additional objects.
+<br> 
+<br>
+<big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">Univariate 
+ plots </span></small></span></span></big></big><br> 
+<br>
+Recall the variable names in the Hipparcos dataset using the 
+<a href="html/base/html/names.html">names</a>
+function.  By using 
+<a href="html/base/html/attach.html">attach</a>,
+we can automatically create temporary variables with these names (these variables
+are not saved as part of the R session, and they are superseded by any other R objects
+of the same names).<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(hip)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">attach(hip)</span><br>
+<br>
+After using the attach command, we can obtain, say, individual 
+<a href="html/base/html/summary.html">summaries</a>
+of the variables:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(Vmag)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">summary(B.V)</span><br>
+<br>
+Next, summarize some of this information graphically using a simple
+yet sometimes effective visualization tool called a dotplot or dotchart, 
+which lets us view all observations of a quantitative variable simultaneously:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">dotchart(B.V)</span><br>
+<br>
+The shape of the distribution of the B.V variable may be viewed using a
+traditional histogram.  If we use the prob=TRUE option for the histogram
+so that the vertical axis is on the probability scale (i.e., the histogram
+has total area 1),  then a so-called <i>kernel density estimate</i>, or
+histogram smoother, can be overlaid:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">hist(B.V,prob=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">d &lt;- density(B.V,na.rm=T)</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">lines(d,col=2,lwd=2,lty=2)</span><br>
+<br>
+The topic of density estimation will be covered in a later tutorial.
+For now, it is important to remember that even though histograms and
+density estimates are drawn in two-dimensional space, they are
+intrinsically <i>univariate</i> analysis techniques here:  We are only
+studying the single variable B.V in this example (though there
+are multivariate versions of these techniques as well).<br>
+<br>
+Check the help file for the 
+<a href="html/graphics/html/par.html">par</a> function (by typing "?par")
+to see what the col, lwd, and lty options accomplish
+in the <a href="html/graphics/html/lines.html">lines</a> function above.<br>
+<br>
+A simplistic histogram-like object for small datasets, which both gives the
+shape of a distribution and displays each observation, is called a stem-and-leaf
+plot.  It is easy to create by hand, but R will create a text version:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">stem(sample(B.V,100))</span><br>
+<br>
+The sample command was used above to obtain a random sample of 100, without
+replacement, from the
+B.V vector.<br>
+<br>
+Finally, we consider
+<a href="html/graphics/html/boxplot.html">box-and-whisker plots</a> 
+(or "boxplots") for the four variables Vmag, pmRA, pmDE, and B.V (the last variable
+used to be B-V, or B minus V, but R does not allow certain characters).  These
+are the 2nd, 6th, 7th, and 9th columns of 'hip'.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">boxplot(hip[,c(2,6,7,9)])</span><br>
+<br>
+Our first attempt above looks pretty bad due to the different scales of
+the variables, so we construct an array of four single-variable plots:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(2,2))</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">for(i in c(2,6,7,9)) </span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">&nbsp;&nbsp; boxplot(hip[,i],main=names(hip)[i])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">par(mfrow=c(1,1))</span><br>
+<br>
+The 
+<a href="html/graphics/html/boxplot.html">boxplot</a>
+command does more than produce plots; it also returns output that can be
+more closely examined.  Below, we produce boxplots
+ <i>and</i> save the output.<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">b &lt;- boxplot(hip[,c(2,6,7,9)])</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">names(b)</span><br>
+<br>
+'b' is an object called a list.  To understand its contents, read the help for
+<a href="html/graphics/html/boxplot.html">boxplot</a>.  Suppose we wish to see
+all of the outliers in the pmRA variable, which is the second of the four variables
+in the current boxplot:<br>
+<br>
+&nbsp;&nbsp; <span style="font-weight: bold;">b$names[2]</span><br>
+&nbsp;&nbsp; <span style="font-weight: bold;">b$out[b$group==2]</span></p>
+<p>
+
+
+<big><big><span style="color: rgb(204, 0, 0);"><span
+ style="font-weight: bold;"><small><span style="font-weight: bold;">R
+scripts</span></small></span></span></big></big><br>
+<br>
+While R is often run interactively, one often wants to carefully
+construct R scripts and run them later.&nbsp;  A file containing R code can be run using the <a
+ href="html/base/html/source.html">source</a>
+command.  In addition, R may be run in batch mode.<br>
+<br>
+The editor Emacs, together with "<a href="http://ess.r-project.org/">Emacs speaks statistics</a>",
+provides a nice way to produce R scripts.
+<br>
+
+
+<br>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<html><head><title>R: Contrast Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for contr.SAS {nlme}"><tr><td>contr.SAS {nlme}</td><td align="right">R Documentation</td></tr></table>
+<h2>Contrast Matrices</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Return a matrix of contrasts corresponding to the parameterization for
+a factor used in SAS.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+contr.SAS(n, contrasts=TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>n</code></td>
+<td>
+a vector of levels for a factor, or the number of levels.</td></tr>
+<tr valign="top"><td><code>contrasts</code></td>
+<td>
+a logical indicating whether contrasts should be
+computed.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+This function is used for creating contrast matrices for use in
+fitting analysis of variance and regression models.  The columns of
+the resulting matrix contain contrasts which can be used for coding
+a factor with <code>n</code> levels.  The returned value contains the
+computed contrasts.  If the argument <code>contrasts</code> is <code>FALSE</code>
+then a square indicator matrix is returned.
+</p>
+<p>
+These contrasts are similar to those from <code>contr.treatment</code>
+except that they represent shifts relative to the last level of the
+factor, not the first level.  This generates the same parameterization for a
+linear model as is used in SAS (see <a href="http://www.sas.com">http://www.sas.com</a>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+A matrix with <code>n</code> rows and <code>k</code> columns, with <code>k=n-1</code> if
+<code>contrasts</code> is <code>TRUE</code> and <code>k=n</code> if <code>contrasts</code> is
+<code>FALSE</code>.</p>
+
+<h3>Author(s)</h3>
+
+<p>
+Jose Pinheiro <a href="mailto:jcp@research.bell-labs.com">jcp@research.bell-labs.com</a>, Douglas Bates
+<a href="mailto:bates@stat.wisc.edu">bates@stat.wisc.edu</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../base/html/contrast.html">contr.treatment</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+contr.SAS(4)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>nlme</em> version 3.1-57 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,230 @@
+<html><head><title>R: Group Generic Functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for groupGeneric {base}"><tr><td>groupGeneric {base}</td><td align="right">R Documentation</td></tr></table>
+<h2>Group Generic Functions</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Group generic functions can be defined with either S3 and S4 methods
+(with different groups).  Methods are defined for the group of functions
+as a whole.
+</p>
+<p>
+A method defined for an individual member of the group takes
+precedence over a method defined for the group as a whole.
+</p>
+<p>
+When package <STRONG>methods</STRONG> is attached there are objects visible with
+the names of the group generics: these functions should never be
+called directly (a suitable error message will result if they are).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 methods have prototypes:
+Math(x, ...)
+Ops(e1, e2)
+Summary(x, ...)
+Complex(z)
+
+## S4 methods have prototypes:
+Arith(e1, e2)
+Compare(e1, e2)
+Ops(e1, e2)
+Math(x)
+Math2(x, digits)
+Summary(x, ..., na.rm = FALSE)
+Complex(z)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, z, e1, e2</code></td>
+<td>
+objects.</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+number of digits to be used in <code>round</code> or <code>signif</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+further arguments passed to or from methods.</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+logical: should missing values be removed?</td></tr>
+</table>
+
+<h3>S3 Group Dispatching</h3>
+
+<p>
+There are four <EM>groups</EM> for which S3 methods can be written,
+namely the <code>"Math"</code>, <code>"Ops"</code>, <code>"Summary"</code> and
+<code>"Complex"</code> groups.  These are not <font face="Courier New,Courier" color="#666666"><b>R</b></font> objects, but methods can be
+supplied for them and base <font face="Courier New,Courier" color="#666666"><b>R</b></font> contains <code><a href="factor.html">factor</a></code>,
+<code><a href="data.frame.html">data.frame</a></code> and <code><a href="difftime.html">difftime</a></code> methods for
+the first three groups.
+(There are also a <code><a href="factor.html">ordered</a></code> method for <code>Ops</code>,
+<code><a href="DateTimeClasses.html">POSIXt</a></code> methods for <code>Math</code> and <code>Ops</code>, as well as a
+<code><a href="../../stats/html/ts.html">ts</a></code> method for <code>Ops</code> in package <STRONG>stats</STRONG>.)
+</p>
+
+<ol>
+<li>Group <code>"Math"</code>:
+<ul>
+<li><code>abs</code>, <code>sign</code>, <code>sqrt</code>, <br>
+<code>floor</code>, <code>ceiling</code>, <code>trunc</code>,<br>
+<code>round</code>, <code>signif</code>
+<li><code>exp</code>, <code>log</code>, <br>
+<code>cos</code>, <code>sin</code>, <code>tan</code>,<br>
+<code>acos</code>, <code>asin</code>, <code>atan</code>
+</p>
+<p>
+<code>cosh</code>, <code>sinh</code>, <code>tanh</code>,<br>
+<code>acosh</code>, <code>asinh</code>, <code>atanh</code>
+<li><code>lgamma</code>, <code>gamma</code>, <code>gammaCody</code>,<br>
+<code>digamma</code>, <code>trigamma</code>
+<li><code>cumsum</code>, <code>cumprod</code>, <code>cummax</code>, <code>cummin</code>
+</ul>
+<li>Group <code>"Ops"</code>:
+<ul>
+<li><code>"+"</code>, <code>"-"</code>, <code>"*"</code>, <code>"/"</code>,
+<code>"^"</code>, <code>"%%"</code>, <code>"%/%"</code>
+<li><code>"&amp;"</code>, <code>"|"</code>, <code>"!"</code>
+<li><code>"=="</code>, <code>"!="</code>,
+<code>"&lt;"</code>, <code>"&lt;="</code>, <code>"&gt;="</code>, <code>"&gt;"</code>
+</ul>
+<li>Group <code>"Summary"</code>:
+<ul>
+<li><code>all</code>, <code>any</code>
+<li><code>sum</code>, <code>prod</code>
+<li><code>min</code>, <code>max</code>
+<li><code>range</code>
+</ul>
+<li>Group <code>Complex</code>:
+<ul>
+<li><code>Arg</code>, <code>Conj</code>, <code>Im</code>, <code>Mod</code>, <code>Re</code>
+</ul>
+</ol>
+
+<p>
+Note that a method will used for either one of these groups or one of
+its members <EM>only</EM> if it corresponds to a <code>"class"</code>
+attribute, as the internal code dispatches on <code><a href="class.html">oldClass</a></code>
+and not on <code><a href="class.html">class</a></code>.  This is for efficiency: having to
+dispatch on, say, <code>Ops.integer</code> would be too slow.
+</p>
+<p>
+The number of arguments supplied for <code>"Math"</code> group generic
+methods is not checked prior to dispatch. (Most have default methods
+expecting one argument, but three expect two.)
+</p>
+
+
+<h3>S4 Group Dispatching</h3>
+
+<p>
+When package <STRONG>methods</STRONG> is attached (which it is by default),
+formal (S4) methods can be defined for groups.
+</p>
+<p>
+The functions belonging to the various groups are as follows:
+<dl>
+<dt><code>Arith</code></dt><dd><code>"+"</code>, <code>"-"</code>, <code>"*"</code>, <code>"^"</code>,
+<code>"%%"</code>, <code>"%/%"</code>, <code>"/"</code></dd>
+<dt><code>Compare</code></dt><dd><code>"=="</code>, <code>"&gt;"</code>, <code>"&lt;"</code>,
+<code>"!="</code>, <code>"&lt;="</code>, <code>"&gt;="</code></dd>
+<dt><code>Ops</code></dt><dd><code>"Arith"</code>, <code>"Compare"</code></dd>
+<dt><code>Math</code></dt><dd><code>"log"</code>, <code>"sqrt"</code>, <code>"log10"</code>,
+<code>"cumprod"</code>, <code>"abs"</code>, <code>"acos"</code>, <code>"acosh"</code>,
+<code>"asin"</code>, <code>"asinh"</code>, <code>"atan"</code>, <code>"atanh"</code>,
+<code>"ceiling"</code>, <code>"cos"</code>, <code>"cosh"</code>, <code>"cumsum"</code>,
+<code>"exp"</code>, <code>"floor"</code>, <code>"gamma"</code>, <code>"lgamma"</code>,
+<code>"sin"</code>, <code>"sinh"</code>, <code>"tan"</code>, <code>"tanh"</code>,
+<code>"trunc"</code></dd>
+<dt><code>Math2</code></dt><dd><code>"round"</code>, <code>"signif"</code></dd>
+<dt><code>Summary</code></dt><dd><code>"max"</code>, <code>"min"</code>, <code>"range"</code>,
+<code>"prod"</code>, <code>"sum"</code>, <code>"any"</code>, <code>"all"</code></dd>
+<dt><code>Complex</code></dt><dd><code>"Arg"</code>, <code>"Conj"</code>, <code>"Im"</code>,
+<code>"Mod"</code>, <code>"Re"</code></dd>
+</dl>
+<p>
+Functions with the group names exist in the <STRONG>methods</STRONG> package but
+should not be called directly.
+</p>
+<p>
+All the functions in these groups (other than the group generics
+themselves) are basic functions in <font face="Courier New,Courier" color="#666666"><b>R</b></font>.  They are not by default S4 generic
+functions, and many of them are defined as primitives, meaning that
+they do not have formal arguments.  However, you can still define
+formal methods for them.  The effect of doing so is to create an S4 generic
+function with the appropriate arguments, in the environment where the
+method definition is to be stored.  It all works more or less as you
+might expect, admittedly via a bit of trickery in the background.
+</p>
+<p>
+Note: currently those members which are not primitive functions must
+have been converted to S4 generic functions (preferably
+<EM>before</EM> setting an S4 group generic method) as it only sets
+methods for known S4 generics.  This can be done by a call to
+<code>setGeneric</code>, for example <code>setGeneric("round", group="Math2")</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>
+Appendix A, <EM>Classes and Methods</EM> of<br>
+Chambers, J. M.  and Hastie, T. J. eds (1992)
+<EM>Statistical Models in S.</EM>
+Wadsworth &amp; Brooks/Cole.
+</p>
+<p>
+Chambers, J. M. (1998) <EM>Programming with Data.</EM> Springer, pp. 352&ndash;4.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="../../utils/html/methods.html">methods</a></code> for methods of non-Internal generic functions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+methods("Math")
+methods("Ops")
+methods("Summary")
+
+d.fr &lt;- data.frame(x=1:9, y=rnorm(9))
+data.class(1 + d.fr) == "data.frame" ##-- add to d.f. ...
+
+if(.isMethodsDispatchOn()) {# package "methods" is attached or loaded
+  setClass("testComplex", representation(zz = "complex"))
+  ## method for whole group "Complex"
+  setMethod("Complex", "testComplex",
+            function(z) c("groupMethod", callGeneric(z@zz)))
+  ## exception for Arg() :
+  setMethod("Arg", "testComplex",
+            function(z) c("ArgMethod", Arg(z@zz)))
+  z1 &lt;- 1+2i
+  z2 &lt;- new("testComplex", zz = z1)
+  stopifnot(identical(Mod(z2), c("groupMethod", Mod(z1))))
+  stopifnot(identical(Arg(z2), c("ArgMethod", Arg(z1))))
+}
+</pre>
+
+
+
+<hr><div align="center">[Package <em>base</em> version 2.1.0 <a href="00Index.html">Index]</a></div>
+
+</body></html>
